@@ -11,18 +11,18 @@ data class Page(
 
 val pages = listOf(
     Page(
-        title = "Title 1",
-        description = "Description 1",
-        image = R.drawable.ic_launcher_background
+        title = "Dapatkan info terbaru tentang film",
+        description = "Dari film yang sedang diputar di bioskop hingga film yang populer",
+        image = R.drawable.onboarding_01
     ),
     Page(
         title = "Title 2",
         description = "Description 2",
-        image = R.drawable.ic_launcher_background
+        image = R.drawable.onboarding_02
     ),
     Page(
         title = "Title 3",
         description = "Description 3",
-        image = R.drawable.ic_launcher_background
+        image = R.drawable.onboarding_03
     ),
 )
