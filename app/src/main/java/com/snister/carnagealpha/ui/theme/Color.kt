@@ -14,3 +14,7 @@ val cEEEEEE = Color(0xFFEEEEEE)
 val c686D76 = Color(0xFF686D76)
 val c373A40 = Color(0xFF373A40)
 val cDC5F00 = Color(0xFFDC5F00)
+
+val c151515 = Color(0xFF151515);
+val cA91D3A = Color(0xFFA91D3A);
+val cC73659 = Color(0xFFC73659);

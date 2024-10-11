@@ -24,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.snister.carnagealpha.presentation.shared.BalanceCard
+import com.snister.carnagealpha.presentation.shared.MainMenu
+import com.snister.carnagealpha.presentation.shared.SpendingHighlights
 import com.snister.carnagealpha.presentation.shared.TopBar
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 
@@ -67,6 +69,16 @@ fun MainScreen(name: String, modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(30.dp))
         BalanceCard(
             modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        MainMenu(
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        SpendingHighlights(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
         )
     }
 }
