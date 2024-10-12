@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,19 +72,28 @@ fun MenuItem(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Box(modifier = Modifier
-            .clip(CircleShape)
-            .size(60.dp)
-            .background(color),
-            contentAlignment = Alignment.Center){
-
-            Icon(
-                painter = icon,
-                contentDescription = title,
+        ElevatedCard (
+            onClick = {  },
+            modifier = Modifier
+                .size(60.dp),
+            shape = RoundedCornerShape(50.dp)
+        ){
+            Box(
                 modifier = Modifier
-                    .size(iconSize),
-                tint = cEEEEEE
-            )
+//                    .clip(CircleShape)
+                    .size(60.dp)
+                    .background(cC73659),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Icon(
+                    painter = icon,
+                    contentDescription = title,
+                    modifier = Modifier
+                        .size(iconSize),
+                    tint = cEEEEEE
+                )
+            }
         }
 
         Text(

@@ -78,6 +78,12 @@ dependencies {
     kapt libs.hilt.compiler
     implementation libs.androidx.hilt.navigation.compose
 
+    // Koin
+    implementation libs.koin.android
+
+    // Okhttp
+    implementation libs.okhttp
+
     // Retrofit
     implementation libs.retrofit
     implementation libs.converter.gson

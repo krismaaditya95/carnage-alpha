@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,7 +53,8 @@ fun TopBar (
                         Box(
                             modifier = Modifier
                                 .clip(CircleShape)
-                                .size(40.dp)
+                                .width(250.dp)
+                                .height(40.dp)
                                 .background(cC73659)
                                 .align(Alignment.CenterStart)
                         )
@@ -60,21 +63,26 @@ fun TopBar (
                             text = "Catatan Pengeluaran",
                             fontSize = 24.sp,
                             //fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = cEEEEEE,
                             modifier = Modifier
                                 .padding(start = 12.dp)
                                 .align(Alignment.CenterStart)
                         )
                     }
 
-                    Box {
+                    Box (
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(44.dp)
+                            .background(cC73659)
+                    ){
                         Image(
                             painter = painterResource(id = R.drawable.profile_picture),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(40.dp)
                                 //.clip(RoundedCornerShape(12.dp))
-                                .align(Alignment.CenterStart)
+                                .align(Alignment.Center)
                         )
                     }
                 }

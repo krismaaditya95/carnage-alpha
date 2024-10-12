@@ -80,6 +80,30 @@ fun MainScreen(name: String, modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(20.dp)
         )
+        Spacer(modifier = Modifier.height(10.dp))
+        SpendingHighlights(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        SpendingHighlights(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        SpendingHighlights(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        SpendingHighlights(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        )
     }
 }
 
