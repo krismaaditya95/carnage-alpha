@@ -1,4 +1,4 @@
-package com.snister.carnagealpha.presentation.onboarding
+package com.snister.carnagealpha.core.presentation.onboarding
 
 import androidx.annotation.DrawableRes
 import com.snister.carnagealpha.R

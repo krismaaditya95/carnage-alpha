@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrainsKotlinSerialization)
+    alias(libs.plugins.compose.compiler)
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
 
@@ -80,6 +82,11 @@ dependencies {
 
     // Koin
     implementation libs.koin.android
+    implementation libs.koin.core
+    implementation libs.koin.androidx.compose
+
+    // Kotlinx Serialization
+    implementation libs.kotlinx.serialization.json
 
     // Okhttp
     implementation libs.okhttp
@@ -102,10 +109,10 @@ dependencies {
     implementation libs.androidx.paging.compose
 
     // Room
-    def room_version = "2.6.1"
     implementation libs.androidx.room.runtime
     //noinspection KaptUsageInsteadOfKsp
-    kapt "androidx.room:room-compiler:$room_version"
+    implementation libs.androidx.room.ktx
+    kapt libs.androidx.room.compiler
 
     // CameraX core library using the camera2 implementation
     def camerax_version = "1.5.0-alpha02"

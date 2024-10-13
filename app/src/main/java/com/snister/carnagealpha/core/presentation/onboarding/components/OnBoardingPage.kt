@@ -1,4 +1,4 @@
-package com.snister.carnagealpha.presentation.onboarding.components
+package com.snister.carnagealpha.core.presentation.onboarding.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -19,10 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.snister.carnagealpha.R
-import com.snister.carnagealpha.presentation.Dimensions.MediumPadding24dp
-import com.snister.carnagealpha.presentation.Dimensions.MediumPadding30dp
-import com.snister.carnagealpha.presentation.onboarding.Page
-import com.snister.carnagealpha.presentation.onboarding.pages
+import com.snister.carnagealpha.core.presentation.Dimensions.MediumPadding24dp
+import com.snister.carnagealpha.core.presentation.Dimensions.MediumPadding30dp
+import com.snister.carnagealpha.core.presentation.onboarding.Page
+import com.snister.carnagealpha.core.presentation.onboarding.pages
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 
 @Composable

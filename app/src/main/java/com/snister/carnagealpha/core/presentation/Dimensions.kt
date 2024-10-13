@@ -1,4 +1,4 @@
-package com.snister.carnagealpha.presentation
+package com.snister.carnagealpha.core.presentation
 
 import androidx.compose.ui.unit.dp
 

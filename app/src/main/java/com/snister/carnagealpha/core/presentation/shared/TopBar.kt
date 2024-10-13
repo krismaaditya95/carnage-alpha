@@ -1,4 +1,4 @@
-package com.snister.carnagealpha.presentation.shared
+package com.snister.carnagealpha.core.presentation.shared
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
