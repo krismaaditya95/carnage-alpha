@@ -30,12 +30,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.R
 import com.snister.carnagealpha.ui.theme.*
+import org.w3c.dom.Text
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar (
     modifier: Modifier = Modifier,
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
+    appBarTitle: String = "Catatan Pengeluaran"
 ){
     TopAppBar(
         title = {
@@ -60,7 +62,7 @@ fun TopBar (
                         )
 
                         Text(
-                            text = "Catatan Pengeluaran",
+                            text = appBarTitle,
                             fontSize = 24.sp,
                             //fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                             color = cEEEEEE,

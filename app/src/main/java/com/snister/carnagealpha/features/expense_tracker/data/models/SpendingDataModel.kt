@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class SpendingDataModel(
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val spendingId: Int? = null,
 
     val spendingName: String,
