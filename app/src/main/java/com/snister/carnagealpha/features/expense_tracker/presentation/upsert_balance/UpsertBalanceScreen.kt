@@ -1,4 +1,4 @@
-package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard
+package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_balance
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,14 +35,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun UpsertBalanceScreen(
     modifier: Modifier = Modifier,
-    viewModel: DashboardViewModel = koinViewModel(),
+    viewModel: UpsertBalanceViewModel = koinViewModel(),
     onSaveClick: () -> Unit
 ) {
-    UpsertCoreScreen(
+    UpsertBalanceCoreScreen(
         state = viewModel.state,
         onAction = viewModel::onAction,
         onSaveClick = {
-            viewModel.onAction(DashboardBalanceAction.OnBalanceSaved)
+            viewModel.onAction(UpsertBalanceAction.OnBalanceSaved)
             onSaveClick()
         }
     )
@@ -49,9 +50,9 @@ fun UpsertBalanceScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpsertCoreScreen(
-    state: DashboardBalanceState,
-    onAction: (DashboardBalanceAction) -> Unit,
+fun UpsertBalanceCoreScreen(
+    state: UpsertBalanceState,
+    onAction: (UpsertBalanceAction) -> Unit,
     onSaveClick: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
@@ -89,6 +90,7 @@ fun UpsertCoreScreen(
                             .align(Alignment.CenterStart),
                         text = "Rp. ${state.balance}",
                         fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
                         color = cEEEEEE,
                     )
                 }
@@ -99,7 +101,7 @@ fun UpsertCoreScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 16.dp),
                     onValueChange = {
-                        onAction(DashboardBalanceAction.OnBalanceChanged(
+                        onAction(UpsertBalanceAction.OnBalanceChanged(
                             it.toDoubleOrNull() ?: 0.0
                         ))
                     },
@@ -138,8 +140,8 @@ fun UpsertCoreScreen(
 @Composable
 fun UpsertCoreScreenPreview(modifier: Modifier = Modifier) {
     CarnageAlphaTheme {
-        UpsertCoreScreen(
-            state = DashboardBalanceState(),
+        UpsertBalanceCoreScreen(
+            state = UpsertBalanceState(),
             onAction = {  },
             onSaveClick = {
 

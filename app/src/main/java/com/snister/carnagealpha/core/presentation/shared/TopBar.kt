@@ -37,7 +37,7 @@ import org.w3c.dom.Text
 fun TopBar (
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior,
-    appBarTitle: String = "Catatan Pengeluaran"
+    appBarTitle: String = "Money Manager v1.0"
 ){
     TopAppBar(
         title = {

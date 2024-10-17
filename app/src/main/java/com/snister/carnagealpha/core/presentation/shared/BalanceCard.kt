@@ -2,6 +2,7 @@ package com.snister.carnagealpha.core.presentation.shared
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,11 @@ import com.snister.carnagealpha.R
 import com.snister.carnagealpha.ui.theme.*
 
 @Composable
-fun BalanceCard(modifier: Modifier = Modifier) {
+fun BalanceCard(
+    modifier: Modifier = Modifier,
+    onBalanceClick: () -> Unit,
+    balanceDouble: Double
+) {
     Box(modifier = modifier) {
         ElevatedCard(
             modifier = Modifier
@@ -40,14 +45,20 @@ fun BalanceCard(modifier: Modifier = Modifier) {
             shape = RoundedCornerShape(12.dp)
         ){
             CardContent(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                onBalanceClick = onBalanceClick,
+                balanceDouble = balanceDouble
             )
         }
     }
 }
 
 @Composable
-fun CardContent(modifier: Modifier = Modifier) {
+fun CardContent(
+    modifier: Modifier = Modifier,
+    onBalanceClick: () -> Unit,
+    balanceDouble: Double
+) {
     Box(
         modifier = modifier.background(
             brush = Brush.linearGradient(
@@ -73,10 +84,13 @@ fun CardContent(modifier: Modifier = Modifier) {
                 fontSize = 22.sp
             )
             Text(
-                text = "Rp. 4.839.900,00",
+                text = "Rp. $balanceDouble",
                 color = cDC5F00.copy(0.6f),
                 fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                fontSize = 28.sp
+                fontSize = 28.sp,
+                modifier = Modifier.clickable (enabled = true){
+                    onBalanceClick()
+                }
             )
         }
 

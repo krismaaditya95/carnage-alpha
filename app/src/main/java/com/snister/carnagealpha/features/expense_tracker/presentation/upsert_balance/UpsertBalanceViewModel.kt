@@ -1,4 +1,4 @@
-package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard
+package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_balance
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,11 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import kotlinx.coroutines.launch
 
-class DashboardViewModel(
+class UpsertBalanceViewModel(
     private val localRepository: LocalRepository
 ) : ViewModel(){
 
-    var state by mutableStateOf(DashboardBalanceState())
+    var state by mutableStateOf(UpsertBalanceState())
         private set
 
     init {
@@ -23,15 +23,15 @@ class DashboardViewModel(
         }
     }
 
-    fun onAction(action: DashboardBalanceAction){
+    fun onAction(action: UpsertBalanceAction){
         when (action){
-            is DashboardBalanceAction.OnBalanceChanged -> {
+            is UpsertBalanceAction.OnBalanceChanged -> {
                 state = state.copy(
                     balance = action.newBalance
                 )
             }
 
-            DashboardBalanceAction.OnBalanceSaved -> {
+            UpsertBalanceAction.OnBalanceSaved -> {
                 viewModelScope.launch {
                     localRepository.updateBalance(state.balance)
                 }

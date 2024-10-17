@@ -25,29 +25,37 @@ import com.snister.carnagealpha.R
 import com.snister.carnagealpha.ui.theme.*
 
 @Composable
-fun MainMenu(modifier: Modifier = Modifier) {
+fun MainMenu(
+    modifier: Modifier = Modifier,
+    onAddSpendingClick: () -> Unit,
+    onAddIncomeClick: () -> Unit,
+    onOtherClick: () -> Unit
+) {
     Row (
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceAround,
     ){
         MenuItem(
             icon = painterResource(id = R.drawable.send_money),
-            title = "Transfer",
+            title = "Pengeluaran",
             color = cC73659,
-            iconSize = 30.dp
+            iconSize = 30.dp,
+            onClick = onAddSpendingClick
         )
         MenuItem(
             icon = painterResource(id = R.drawable.receive_money),
-            title = "Receive",
+            title = "Pemasukan",
             color = cC73659,
-            iconSize = 30.dp
+            iconSize = 30.dp,
+            onClick = onAddIncomeClick
         )
         MenuItem(
             icon = painterResource(id = R.drawable.other_menu),
-            title = "Others",
+            title = "Lainnya",
             color = cC73659,
-            iconSize = 24.dp
+            iconSize = 24.dp,
+            onClick = onOtherClick
         )
     }
 }
@@ -58,14 +66,15 @@ fun MenuItem(
     icon: Painter,
     iconSize: Dp,
     title: String,
-    color: Color
+    color: Color,
+    onClick: () -> Unit
 ) {
     Column (
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         ElevatedCard (
-            onClick = {  },
+            onClick = { onClick() },
             modifier = Modifier
                 .size(60.dp),
             shape = RoundedCornerShape(50.dp)
