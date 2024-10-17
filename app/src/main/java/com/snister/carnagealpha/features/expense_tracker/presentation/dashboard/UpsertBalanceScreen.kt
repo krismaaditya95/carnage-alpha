@@ -1,9 +1,13 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
@@ -13,7 +17,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -22,16 +28,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.core.presentation.shared.TopBar
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
-import com.snister.carnagealpha.ui.theme.cEEEEEE
+import com.snister.carnagealpha.ui.theme.*
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun DashboardMainScreen(
+fun UpsertBalanceScreen(
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = koinViewModel(),
     onSaveClick: () -> Unit
 ) {
-    DashboardCoreScreen(
+    UpsertCoreScreen(
         state = viewModel.state,
         onAction = viewModel::onAction,
         onSaveClick = {
@@ -43,7 +49,7 @@ fun DashboardMainScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardCoreScreen(
+fun UpsertCoreScreen(
     state: DashboardBalanceState,
     onAction: (DashboardBalanceAction) -> Unit,
     onSaveClick: () -> Unit
@@ -66,17 +72,32 @@ fun DashboardCoreScreen(
             Column(
                 modifier = Modifier.padding(padding)
             ) {
-                Text(
-                    text = "${state.balance}",
-                    fontSize = 20.sp,
-                    color = cEEEEEE
-                )
+                Box {
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 16.dp, top = 16.dp)
+                            .clip(CircleShape)
+                            .width(200.dp)
+                            .height(40.dp)
+                            .background(cDC5F00)
+                            .align(Alignment.CenterStart),
+                    )
+
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 26.dp, top = 16.dp)
+                            .align(Alignment.CenterStart),
+                        text = "Rp. ${state.balance}",
+                        fontSize = 20.sp,
+                        color = cEEEEEE,
+                    )
+                }
 
                 OutlinedTextField(
                     value = state.balance.toString(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
                     onValueChange = {
                         onAction(DashboardBalanceAction.OnBalanceChanged(
                             it.toDoubleOrNull() ?: 0.0
@@ -115,9 +136,9 @@ fun DashboardCoreScreen(
 
 @Preview
 @Composable
-fun DashboardCoreScreenPreview(modifier: Modifier = Modifier) {
+fun UpsertCoreScreenPreview(modifier: Modifier = Modifier) {
     CarnageAlphaTheme {
-        DashboardCoreScreen(
+        UpsertCoreScreen(
             state = DashboardBalanceState(),
             onAction = {  },
             onSaveClick = {
