@@ -27,13 +27,15 @@ import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.R
+import com.snister.carnagealpha.core.utils.CurrencyFormatter
 import com.snister.carnagealpha.ui.theme.*
+import java.text.NumberFormat
 
 @Composable
 fun BalanceCard(
     modifier: Modifier = Modifier,
     onBalanceClick: () -> Unit,
-    balanceDouble: Double
+    balance: Long
 ) {
     Box(modifier = modifier) {
         ElevatedCard(
@@ -47,7 +49,7 @@ fun BalanceCard(
             CardContent(
                 modifier = Modifier.fillMaxSize(),
                 onBalanceClick = onBalanceClick,
-                balanceDouble = balanceDouble
+                balance = balance
             )
         }
     }
@@ -57,7 +59,7 @@ fun BalanceCard(
 fun CardContent(
     modifier: Modifier = Modifier,
     onBalanceClick: () -> Unit,
-    balanceDouble: Double
+    balance: Long
 ) {
     Box(
         modifier = modifier.background(
@@ -84,7 +86,8 @@ fun CardContent(
                 fontSize = 22.sp
             )
             Text(
-                text = "Rp. $balanceDouble",
+//                text = "Rp. $balance",
+                text = CurrencyFormatter.formatToRupiah(balance),
                 color = cDC5F00.copy(0.6f),
                 fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                 fontSize = 28.sp,

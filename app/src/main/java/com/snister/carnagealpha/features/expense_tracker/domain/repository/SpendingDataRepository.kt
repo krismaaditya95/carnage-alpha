@@ -11,7 +11,7 @@ interface SpendingDataRepository {
 
     suspend fun upsertSpending(spendingEntity: SpendingEntity)
 
-    suspend fun getTotalSpend(): Double
+    suspend fun getTotalSpend(): Long
 
     suspend fun deleteSpending(id: Int)
 

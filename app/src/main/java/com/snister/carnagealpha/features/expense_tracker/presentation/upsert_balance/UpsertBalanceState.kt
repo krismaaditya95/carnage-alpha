@@ -1,5 +1,6 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_balance
 
 data class UpsertBalanceState(
-    val balance: Double = 0.0
+    val balance: Long = 0,
+    val income: String = ""
 )

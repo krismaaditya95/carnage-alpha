@@ -79,7 +79,7 @@ fun DashboardOverviewCoreScreen(
             BalanceCard(
                 modifier = Modifier.fillMaxWidth(),
                 onBalanceClick = onBalanceClick,
-                balanceDouble = state.balance
+                balance = state.balance
             )
             Spacer(modifier = Modifier.height(4.dp))
             MainMenu(

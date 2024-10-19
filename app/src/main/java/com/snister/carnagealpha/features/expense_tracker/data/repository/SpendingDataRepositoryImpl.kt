@@ -26,8 +26,8 @@ class SpendingDataRepositoryImpl(
         dao.upsertSpending(spendingEntity.toSpendingDataModel())
     }
 
-    override suspend fun getTotalSpend(): Double {
-        return dao.getTotalSpend() ?: 0.0
+    override suspend fun getTotalSpend(): Long {
+        return dao.getTotalSpend() ?: 0
     }
 
     override suspend fun deleteSpending(id: Int) {

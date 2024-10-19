@@ -11,11 +11,11 @@ class LocalRepositoryImpl(
         private const val KEY_BALANCE = "KEY_BALANCE"
     }
 
-    override suspend fun getBalance(): Double {
-        return prefs.getFloat(KEY_BALANCE, 0f).toDouble()
+    override suspend fun getBalance(): Long {
+        return prefs.getLong(KEY_BALANCE, 0)
     }
 
-    override suspend fun updateBalance(balance: Double) {
-        prefs.edit().putFloat(KEY_BALANCE, balance.toFloat()).apply()
+    override suspend fun updateBalance(balance: Long) {
+        prefs.edit().putLong(KEY_BALANCE, balance).apply()
     }
 }

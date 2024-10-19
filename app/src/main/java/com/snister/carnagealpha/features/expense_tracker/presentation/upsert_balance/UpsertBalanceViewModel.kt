@@ -27,7 +27,8 @@ class UpsertBalanceViewModel(
         when (action){
             is UpsertBalanceAction.OnBalanceChanged -> {
                 state = state.copy(
-                    balance = action.newBalance
+                    balance = (state.balance + action.newBalance),
+                    income = action.newBalance.toString()
                 )
             }
 

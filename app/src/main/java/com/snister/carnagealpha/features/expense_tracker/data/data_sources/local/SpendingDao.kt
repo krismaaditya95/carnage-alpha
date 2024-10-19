@@ -18,7 +18,7 @@ interface SpendingDao {
     suspend fun getSpending(id: Int): SpendingDataModel
 
     @Query("SELECT SUM(spendingAmount) FROM spendingdatamodel")
-    suspend fun getTotalSpend(): Double?
+    suspend fun getTotalSpend(): Long?
 
     @Query("DELETE FROM spendingdatamodel WHERE spendingId = :id")
     suspend fun deleteSpending(id: Int)

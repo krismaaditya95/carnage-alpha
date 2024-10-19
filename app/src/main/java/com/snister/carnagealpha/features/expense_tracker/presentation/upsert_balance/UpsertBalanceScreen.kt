@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.core.presentation.shared.TopBar
+import com.snister.carnagealpha.core.utils.CurrencyFormatter
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 import com.snister.carnagealpha.ui.theme.*
 import org.koin.androidx.compose.koinViewModel
@@ -88,7 +89,7 @@ fun UpsertBalanceCoreScreen(
                         modifier = Modifier
                             .padding(start = 26.dp, top = 16.dp)
                             .align(Alignment.CenterStart),
-                        text = "Rp. ${state.balance}",
+                        text = CurrencyFormatter.formatToRupiah(state.balance),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = cEEEEEE,
@@ -96,14 +97,22 @@ fun UpsertBalanceCoreScreen(
                 }
 
                 OutlinedTextField(
-                    value = state.balance.toString(),
+                    value = state.income,
+                    placeholder = {
+                        Text(text = state.income)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 16.dp),
-                    onValueChange = {
+                    onValueChange = { newValue ->
                         onAction(UpsertBalanceAction.OnBalanceChanged(
-                            it.toDoubleOrNull() ?: 0.0
+                            newValue.toLongOrNull() ?: 0,
+                            newIncome = newValue
                         ))
+
+//                        onAction(UpsertBalanceAction.OnNewIncomeChanged(
+//                            newValue.toLongOrNull() ?: 0,
+//                        ))
                     },
                     label = {
                         Text(
@@ -115,7 +124,7 @@ fun UpsertBalanceCoreScreen(
                     ),
                     maxLines = 1,
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number
+                        keyboardType = KeyboardType.Decimal
                     )
                 )
 
