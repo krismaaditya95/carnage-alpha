@@ -18,7 +18,8 @@ class UpsertBalanceViewModel(
     init {
         viewModelScope.launch {
             state = state.copy(
-                balance = localRepository.getBalance()
+                initialBalance = localRepository.getBalance(),
+                tempBalance = localRepository.getBalance()
             )
         }
     }
@@ -27,14 +28,14 @@ class UpsertBalanceViewModel(
         when (action){
             is UpsertBalanceAction.OnBalanceChanged -> {
                 state = state.copy(
-                    balance = (state.balance + action.newBalance),
-                    income = action.newBalance.toString()
+                    tempBalance = (state.initialBalance + (action.newIncomeInput.toLongOrNull() ?: 0)),
+                    income = action.newIncomeInput
                 )
             }
 
             UpsertBalanceAction.OnBalanceSaved -> {
                 viewModelScope.launch {
-                    localRepository.updateBalance(state.balance)
+                    localRepository.updateBalance(state.tempBalance)
                 }
             }
         }

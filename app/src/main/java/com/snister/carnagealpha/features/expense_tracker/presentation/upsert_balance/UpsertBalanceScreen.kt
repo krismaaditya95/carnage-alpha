@@ -89,7 +89,7 @@ fun UpsertBalanceCoreScreen(
                         modifier = Modifier
                             .padding(start = 26.dp, top = 16.dp)
                             .align(Alignment.CenterStart),
-                        text = CurrencyFormatter.formatToRupiah(state.balance),
+                        text = CurrencyFormatter.formatToRupiah(state.tempBalance),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = cEEEEEE,
@@ -105,18 +105,11 @@ fun UpsertBalanceCoreScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 16.dp),
                     onValueChange = { newValue ->
-                        onAction(UpsertBalanceAction.OnBalanceChanged(
-                            newValue.toLongOrNull() ?: 0,
-                            newIncome = newValue
-                        ))
-
-//                        onAction(UpsertBalanceAction.OnNewIncomeChanged(
-//                            newValue.toLongOrNull() ?: 0,
-//                        ))
+                        onAction(UpsertBalanceAction.OnBalanceChanged(newValue,))
                     },
                     label = {
                         Text(
-                            text = "Enter balance"
+                            text = "Masukkan nominal pemasukan"
                         )
                     },
                     textStyle = TextStyle(
