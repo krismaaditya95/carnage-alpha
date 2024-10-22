@@ -85,9 +85,6 @@ fun IncomeListWidget(modifier: Modifier = Modifier) {
             }
         }
     }
-
-
-
 }
 
 @Composable

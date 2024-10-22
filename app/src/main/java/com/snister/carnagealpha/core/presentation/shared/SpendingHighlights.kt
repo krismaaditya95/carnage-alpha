@@ -82,10 +82,10 @@ fun SpendingHighlights(modifier: Modifier = Modifier) {
                 text = "Pengeluaran",
                 color = cDC5F00,
                 fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             LazyRow{
                 itemsIndexed(spendingItem){

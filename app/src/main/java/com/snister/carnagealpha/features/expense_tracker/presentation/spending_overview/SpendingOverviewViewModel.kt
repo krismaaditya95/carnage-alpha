@@ -9,7 +9,13 @@ import com.snister.carnagealpha.features.expense_tracker.domain.entities.Spendin
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 class SpendingOverviewViewModel(
     private val spendingDataRepository: SpendingDataRepository,
@@ -19,12 +25,15 @@ class SpendingOverviewViewModel(
     var state by mutableStateOf(SpendingOverviewState())
         private set
 
+    private var isDatePickerVisible by mutableStateOf(false)
+
     fun onAction(action: SpendingOverviewAction){
         when (action){
 
             SpendingOverviewAction.LoadSpendingOverviewAndBalance -> loadSpendingListAndBalance()
             is SpendingOverviewAction.OnDateChange -> TODO()
             is SpendingOverviewAction.OnDeleteSpending -> TODO()
+            SpendingOverviewAction.ShowDatePicker -> showDatePicker()
         }
     }
 
@@ -40,6 +49,28 @@ class SpendingOverviewViewModel(
                 datesList = allDates.reversed()
             )
         }
+    }
+
+    private fun showDatePicker(){
+        viewModelScope.launch {
+            isDatePickerVisible = true
+        }
+    }
+
+    private fun convertMillisToZonedDateTime(millis: Long): ZonedDateTime{
+        val formattedZonedDateTime = ZonedDateTime.ofInstant(
+            Instant.ofEpochMilli(millis), ZoneId.systemDefault())
+
+        return formattedZonedDateTime
+    }
+
+    private fun convertMillisToZonedDateTimeString(millis: Long): String{
+        val zonedDateTime = ZonedDateTime.ofInstant(
+            Instant.ofEpochMilli(millis), ZoneId.systemDefault())
+
+        val formattedZonedDateTime = DateTimeFormatter
+            .ofPattern("dd/MMMM/yyyy").format(zonedDateTime)
+        return formattedZonedDateTime.toString()
     }
 
     private suspend fun getSpendingListByDate(date: ZonedDateTime): List<SpendingEntity>{
