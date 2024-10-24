@@ -64,7 +64,9 @@ fun SpendingOverviewCoreScreen(
         topBar = {
             TopBar(
                 scrollBehavior = scrollBehavior,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                appBarTitle = "Your spendings",
+                navigationIcon = true
             )
         }
     ) { innerPadding ->
