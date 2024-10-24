@@ -25,15 +25,14 @@ class SpendingOverviewViewModel(
     var state by mutableStateOf(SpendingOverviewState())
         private set
 
-    private var isDatePickerVisible by mutableStateOf(false)
-
     fun onAction(action: SpendingOverviewAction){
         when (action){
 
             SpendingOverviewAction.LoadSpendingOverviewAndBalance -> loadSpendingListAndBalance()
-            is SpendingOverviewAction.OnDateChange -> TODO()
+            is SpendingOverviewAction.OnDateChange -> onDatePickerSelected(action.selectedDate)
             is SpendingOverviewAction.OnDeleteSpending -> TODO()
             SpendingOverviewAction.ShowDatePicker -> showDatePicker()
+            SpendingOverviewAction.HideDatePicker -> hideDatePicker()
         }
     }
 
@@ -53,7 +52,24 @@ class SpendingOverviewViewModel(
 
     private fun showDatePicker(){
         viewModelScope.launch {
-            isDatePickerVisible = true
+            state = state.copy(
+                isDatePickerVisible = true
+            )
+        }
+    }
+    private fun hideDatePicker(){
+        viewModelScope.launch {
+            state = state.copy(
+                isDatePickerVisible = false
+            )
+        }
+    }
+
+    private fun onDatePickerSelected(millis: Long){
+        viewModelScope.launch {
+            state = state.copy(
+                selectedDateFromDatePicker = convertMillisToZonedDateTimeString(millis)
+            )
         }
     }
 
@@ -69,7 +85,7 @@ class SpendingOverviewViewModel(
             Instant.ofEpochMilli(millis), ZoneId.systemDefault())
 
         val formattedZonedDateTime = DateTimeFormatter
-            .ofPattern("dd/MMMM/yyyy").format(zonedDateTime)
+            .ofPattern("dd-MMMM-yyyy").format(zonedDateTime)
         return formattedZonedDateTime.toString()
     }
 

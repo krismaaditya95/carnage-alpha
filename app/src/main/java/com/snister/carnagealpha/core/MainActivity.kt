@@ -26,6 +26,7 @@ import com.snister.carnagealpha.config.ScreenRoutes
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewCoreScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewState
+import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_balance.UpsertBalanceScreen
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 
@@ -49,19 +50,26 @@ fun Navigation(modifier: Modifier = Modifier) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = ScreenRoutes.SpendingOverview,
+        startDestination = ScreenRoutes.DashboardOverview,
 //        enterTransition = EnterTransition.None,
 //        exitTransition = ExitTransition.None
         ){
 
-        composable<ScreenRoutes.SpendingOverview>{
+        composable<ScreenRoutes.DashboardOverview>{
             DashboardOverviewScreen(
                 onBalanceClick = {
                     navController.navigate(ScreenRoutes.Balance)
                 },
                 onAddSpendingClick = {
-                    navController.navigate(ScreenRoutes.SpendingDetails)
+                    navController.navigate(ScreenRoutes.SpendingOverview)
                 }
+            )
+        }
+
+        composable<ScreenRoutes.SpendingOverview>{
+            SpendingOverviewScreen(
+                onBalanceClick = {},
+                onAddSpendingClick = {}
             )
         }
 

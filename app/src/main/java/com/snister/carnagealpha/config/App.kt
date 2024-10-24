@@ -4,6 +4,7 @@ import android.app.Application
 import com.snister.carnagealpha.core.dependency_injection.mainBindings
 import com.snister.carnagealpha.features.expense_tracker.bindings.balanceBinding
 import com.snister.carnagealpha.features.expense_tracker.bindings.dashboardOverviewBinding
+import com.snister.carnagealpha.features.expense_tracker.bindings.spendingOverviewBinding
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -17,7 +18,8 @@ class App: Application() {
             modules(
                 mainBindings,
                 balanceBinding,
-                dashboardOverviewBinding
+                dashboardOverviewBinding,
+                spendingOverviewBinding
             )
         }
     }
