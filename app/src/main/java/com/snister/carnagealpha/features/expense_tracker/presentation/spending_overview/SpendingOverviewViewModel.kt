@@ -36,13 +36,78 @@ class SpendingOverviewViewModel(
         }
     }
 
+    val dummySpendingList = listOf(
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli Seblak",
+            spendingAmount = 10000.0
+        ),
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli martabak",
+            spendingAmount = 10000.0
+        ),
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli Terang bulan",
+            spendingAmount = 10000.0
+        ),
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli Terang bulan",
+            spendingAmount = 10000.0
+        ),
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli Terang bulan",
+            spendingAmount = 10000.0
+        ),
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli Terang bulan",
+            spendingAmount = 10000.0
+        ),
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli Terang bulan",
+            spendingAmount = 10000.0
+        ),
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli Terang bulan",
+            spendingAmount = 10000.0
+        ),
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli Terang bulan",
+            spendingAmount = 10000.0
+        ),
+        SpendingEntity(
+            spendingId = 1,
+            dateTime = ZonedDateTime.now(),
+            spendingName = "Beli Terang bulan",
+            spendingAmount = 10000.0
+        )
+    )
     private fun loadSpendingListAndBalance(){
         viewModelScope.launch {
             val allDates = spendingDataRepository.getAllDates()
             state = state.copy(
-                spendingList = getSpendingListByDate(
-                    allDates.lastOrNull() ?: ZonedDateTime.now()
-                ),
+                // nanti ini diuncomment
+//                spendingList = getSpendingListByDate(
+//                    allDates.lastOrNull() ?: ZonedDateTime.now()
+//                ),
+                // sementara pakai data dummy
+                spendingList = dummySpendingList,
                 balance = localRepository.getBalance() - spendingDataRepository.getTotalSpend(),
                 pickedDate = allDates.lastOrNull() ?: ZonedDateTime.now(),
                 datesList = allDates.reversed()
@@ -68,7 +133,9 @@ class SpendingOverviewViewModel(
     private fun onDatePickerSelected(millis: Long){
         viewModelScope.launch {
             state = state.copy(
-                selectedDateFromDatePicker = convertMillisToZonedDateTimeString(millis)
+                selectedDateFromDatePicker = convertMillisToZonedDateTimeString(millis),
+                pickedDate = convertMillisToZonedDateTime(millis),
+                spendingList = getSpendingListByDate(convertMillisToZonedDateTime(millis))
             )
         }
     }
@@ -93,5 +160,15 @@ class SpendingOverviewViewModel(
         return spendingDataRepository
             .getSpendingsByDate(date)
             .reversed()
+    }
+
+    private suspend fun deleteSpendingById(id: Int){
+        spendingDataRepository.deleteSpending(id)
+        viewModelScope.launch {
+            state = state.copy(
+                spendingList = getSpendingListByDate(state.pickedDate),
+                balance = localRepository.getBalance() - spendingDataRepository.getTotalSpend(),
+            )
+        }
     }
 }
