@@ -85,7 +85,7 @@ fun SpendingItemWidget(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .background(cEEEEEE)
+                .background(Color.White)
                 .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,

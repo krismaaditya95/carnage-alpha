@@ -59,37 +59,16 @@ fun TopBar (
 
     TopAppBar(
         title = {
-            Row {
-                Row(
+            Box{
+                Text(
+                    text = appBarTitle,
+                    fontSize = 24.sp,
+                    //fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+                    color = cDC5F00,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 20.dp)
-                        .align(Alignment.Top),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Box(
-//                        modifier = Modifier.padding(end = 20.dp),
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .width(250.dp)
-                                .height(40.dp)
-                                .background(cC73659)
-                                .align(Alignment.CenterStart)
-                        )
-
-                        Text(
-                            text = appBarTitle,
-                            fontSize = 24.sp,
-                            //fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                            color = cEEEEEE,
-                            modifier = Modifier
-                                .padding(start = 12.dp)
-                                .align(Alignment.CenterStart)
-                        )
-                    }
-                }
+                        .padding(start = 12.dp)
+                        .align(Alignment.CenterStart)
+                )
             }
 
         },
@@ -106,16 +85,7 @@ fun TopBar (
             }
         },
         actions = {
-//            IconButton(
-//                onClick = {}
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Filled.Notifications,
-//                    contentDescription = "Notification")
-//            }
-
             IconButton(
-//                modifier = modifier.padding(end = 4.dp),
                 onClick = {}
             ) {
                 BadgedBox(
@@ -130,14 +100,6 @@ fun TopBar (
                         }
                     }
                 ) {
-                    //                IconButton(
-                    //                    onClick = {}
-                    //                ) {
-                    //                    Icon(
-                    //                        imageVector = Icons.Filled.Notifications,
-                    //                        contentDescription = "Notification"
-                    //                    )
-                    //                }
                     Icon(
                         imageVector = Icons.Filled.Notifications,
                         contentDescription = "Notification"
