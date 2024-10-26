@@ -5,6 +5,6 @@ import java.time.ZonedDateTime
 data class SpendingEntity(
     val spendingId: Int?,
     val spendingName: String,
-    val spendingAmount: Double,
+    val spendingAmount: Long,
     val dateTime: ZonedDateTime,
 )

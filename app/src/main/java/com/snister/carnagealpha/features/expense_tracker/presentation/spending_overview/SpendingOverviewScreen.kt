@@ -135,7 +135,7 @@ fun SpendingOverviewCoreScreen(
 
                     FloatingActionButton(
                         onClick = {
-
+                            onAddSpendingClick()
                         },
                         containerColor = cC73659,
                     ) {

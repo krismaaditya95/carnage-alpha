@@ -12,7 +12,7 @@ data class SpendingDataModel(
 
     val spendingName: String,
 
-    val spendingAmount: Double,
+    val spendingAmount: Long,
 
     val dateTime: String,
 )

@@ -28,6 +28,7 @@ import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewState
 import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_balance.UpsertBalanceScreen
+import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_spending.UpsertSpendingScreen
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 
 class MainActivity : ComponentActivity() {
@@ -68,18 +69,21 @@ fun Navigation(modifier: Modifier = Modifier) {
 
         composable<ScreenRoutes.SpendingOverview>{
             SpendingOverviewScreen(
-                onBalanceClick = {},
-                onAddSpendingClick = {}
+                onBalanceClick = {
+                    navController.navigate(ScreenRoutes.Balance)
+                },
+                onAddSpendingClick = {
+                    navController.navigate(ScreenRoutes.SpendingDetails(-1))
+                }
             )
         }
 
         composable<ScreenRoutes.SpendingDetails> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ){
-                Text(text = "Spending Details")
-            }
+            UpsertSpendingScreen(
+                onSaveClick = {
+                    navController.popBackStack()
+                }
+            )
         }
 
         composable<ScreenRoutes.Balance> (

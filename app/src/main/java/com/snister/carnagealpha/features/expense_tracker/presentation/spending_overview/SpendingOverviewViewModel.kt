@@ -41,61 +41,61 @@ class SpendingOverviewViewModel(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Seblak",
-            spendingAmount = 10000.0
+            spendingAmount = 10000
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli martabak",
-            spendingAmount = 10000.0
+            spendingAmount = 30000
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 10000.0
+            spendingAmount = 23000
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 10000.0
+            spendingAmount = 23000
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 10000.0
+            spendingAmount = 23000
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 10000.0
+            spendingAmount = 23000
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 10000.0
+            spendingAmount = 23000
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 10000.0
+            spendingAmount = 23000
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 10000.0
+            spendingAmount = 23000
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 10000.0
+            spendingAmount = 23000
         )
     )
     private fun loadSpendingListAndBalance(){
@@ -103,12 +103,12 @@ class SpendingOverviewViewModel(
             val allDates = spendingDataRepository.getAllDates()
             state = state.copy(
                 // nanti ini diuncomment
-//                spendingList = getSpendingListByDate(
-//                    allDates.lastOrNull() ?: ZonedDateTime.now()
-//                ),
+                spendingList = getSpendingListByDate(
+                    allDates.lastOrNull() ?: ZonedDateTime.now()
+                ),
                 // sementara pakai data dummy
-                spendingList = dummySpendingList,
-                balance = localRepository.getBalance() - spendingDataRepository.getTotalSpend(),
+//                spendingList = dummySpendingList,
+                balance = localRepository.getBalance(),
                 pickedDate = allDates.lastOrNull() ?: ZonedDateTime.now(),
                 datesList = allDates.reversed()
             )

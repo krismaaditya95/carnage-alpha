@@ -130,7 +130,7 @@ fun SpendingItemWidgetPreview(modifier: Modifier = Modifier) {
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli seblak",
-            spendingAmount = 10000.0
+            spendingAmount = 10000
         )
     )
 }

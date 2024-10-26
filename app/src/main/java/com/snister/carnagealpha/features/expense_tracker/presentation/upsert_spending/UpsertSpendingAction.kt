@@ -3,7 +3,10 @@ package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_sp
 sealed interface UpsertSpendingAction {
 
     data class OnSpendingAmountChanged(
-        val newSpendingAmountInput: String,
+        val newSpendingAmountInput: String
+    ): UpsertSpendingAction
+
+    data class OnSpendingNameChanged(
         val newSpendingNameInput: String
     ): UpsertSpendingAction
 

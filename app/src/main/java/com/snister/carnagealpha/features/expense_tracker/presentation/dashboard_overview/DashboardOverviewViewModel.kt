@@ -35,7 +35,7 @@ class DashboardOverviewViewModel(
                 spendingList = getSpendingListByDate(
                     allDates.lastOrNull() ?: ZonedDateTime.now()
                 ),
-                balance = localRepository.getBalance() - spendingDataRepository.getTotalSpend(),
+                balance = localRepository.getBalance(),
                 pickedDate = allDates.lastOrNull() ?: ZonedDateTime.now(),
                 datesList = allDates.reversed()
             )
