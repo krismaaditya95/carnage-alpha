@@ -9,7 +9,7 @@ fun SpendingDataModel.toSpendingEntity() : SpendingEntity = SpendingEntity(
     spendingId = spendingId ?: 0,
     spendingName = spendingName,
     spendingAmount = spendingAmount,
-    dateTime = Instant.parse(dateTime).atZone(ZoneId.of("UTC"))
+    dateTime = Instant.parse(dateTime).atZone(ZoneId.systemDefault())
 )
 
 fun SpendingEntity.toSpendingDataModel() : SpendingDataModel = SpendingDataModel(

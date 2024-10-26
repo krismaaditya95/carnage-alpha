@@ -103,6 +103,8 @@ fun SpendingItemWidget(
                 )
 
                 Text(
+//                    text = "${spendingItem.dateTime.dayOfMonth}-${spendingItem.dateTime.month}-${spendingItem.dateTime.year}" +
+//                            "at ${spendingItem.dateTime.hour}:${spendingItem.dateTime.minute}",
                     text = "${spendingItem.dateTime.hour}:${spendingItem.dateTime.minute}",
                     color = cC73659,
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),

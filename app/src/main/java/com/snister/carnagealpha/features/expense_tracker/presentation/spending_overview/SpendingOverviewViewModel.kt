@@ -9,13 +9,10 @@ import com.snister.carnagealpha.features.expense_tracker.domain.entities.Spendin
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
 
 class SpendingOverviewViewModel(
     private val spendingDataRepository: SpendingDataRepository,
@@ -103,13 +100,16 @@ class SpendingOverviewViewModel(
             val allDates = spendingDataRepository.getAllDates()
             state = state.copy(
                 // nanti ini diuncomment
-                spendingList = getSpendingListByDate(
-                    allDates.lastOrNull() ?: ZonedDateTime.now()
-                ),
+//                spendingList = getSpendingListByDate(
+//                    allDates.lastOrNull() ?: ZonedDateTime.now()
+//                ),
+                spendingList = getSpendingListByDate(ZonedDateTime.now()),
                 // sementara pakai data dummy
 //                spendingList = dummySpendingList,
                 balance = localRepository.getBalance(),
-                pickedDate = allDates.lastOrNull() ?: ZonedDateTime.now(),
+
+//                pickedDate = allDates.lastOrNull() ?: ZonedDateTime.now(),
+                pickedDate = ZonedDateTime.now(),
                 datesList = allDates.reversed()
             )
         }
