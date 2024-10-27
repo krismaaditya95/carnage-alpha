@@ -3,7 +3,9 @@ package com.snister.carnagealpha.features.expense_tracker.presentation.income_ov
 sealed interface IncomeOverviewAction {
     data object LoadIncomeOverviewAndBalance: IncomeOverviewAction
 
-    data class OnDateChange(val newDate: Int): IncomeOverviewAction
+    data object ShowDatePicker: IncomeOverviewAction
+    data object HideDatePicker: IncomeOverviewAction
+    data class OnDateChange(val selectedDate: Long): IncomeOverviewAction
 
     data class OnDeleteIncome(val spendingId: Int): IncomeOverviewAction
 }

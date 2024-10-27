@@ -5,6 +5,6 @@ import java.time.ZonedDateTime
 data class IncomeEntity(
     val incomeId: Int?,
     val incomeSourceName: String,
-    val incomeAmount: Double,
+    val incomeAmount: Long,
     val dateTime: ZonedDateTime,
 )

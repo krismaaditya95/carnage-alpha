@@ -9,7 +9,13 @@ sealed interface ScreenRoutes {
     data object SpendingOverview: ScreenRoutes
 
     @kotlinx.serialization.Serializable
+    data object IncomeOverview: ScreenRoutes
+
+    @kotlinx.serialization.Serializable
     data class SpendingDetails(val spendingId: Int = -1) : ScreenRoutes
+
+    @kotlinx.serialization.Serializable
+    data class IncomeDetails(val incomeId: Int = -1) : ScreenRoutes
 
     @kotlinx.serialization.Serializable
     data object Balance: ScreenRoutes

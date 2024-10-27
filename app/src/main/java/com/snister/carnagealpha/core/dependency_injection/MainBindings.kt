@@ -2,9 +2,12 @@ package com.snister.carnagealpha.core.dependency_injection
 
 import android.content.Context
 import androidx.room.Room
+import com.snister.carnagealpha.features.expense_tracker.data.data_sources.local.IncomeDatabase
 import com.snister.carnagealpha.features.expense_tracker.data.data_sources.local.SpendingDatabase
 import com.snister.carnagealpha.features.expense_tracker.data.repository.LocalRepositoryImpl
 import com.snister.carnagealpha.features.expense_tracker.data.repository.SpendingDataRepositoryImpl
+import com.snister.carnagealpha.features.expense_tracker.data.repository.IncomeDataRepositoryImpl
+import com.snister.carnagealpha.features.expense_tracker.domain.repository.IncomeDataRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
 import org.koin.android.ext.koin.androidApplication
@@ -26,11 +29,16 @@ val mainBindings = module {
     }
 
     single{
+        get<IncomeDatabase>().dao
+    }
+
+    single{
         androidApplication().getSharedPreferences(
             "spending_tracker_preferences", Context.MODE_PRIVATE
         )
     }
 
     singleOf(::SpendingDataRepositoryImpl).bind<SpendingDataRepository>()
+    singleOf(::IncomeDataRepositoryImpl).bind<IncomeDataRepository>()
     singleOf(::LocalRepositoryImpl).bind<LocalRepository>()
 }

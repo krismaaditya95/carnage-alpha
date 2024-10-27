@@ -2,7 +2,11 @@ package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_ba
 
 sealed interface UpsertBalanceAction {
     data class OnBalanceChanged(
-        val newIncomeInput: String
+        val newIncomeAmountInput: String
+    ): UpsertBalanceAction
+
+    data class OnIncomeSourceNameChanged(
+        val newIncomeSourceNameInput: String
     ): UpsertBalanceAction
 
     data object OnBalanceSaved : UpsertBalanceAction

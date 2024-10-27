@@ -3,5 +3,6 @@ package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_ba
 data class UpsertBalanceState(
     val initialBalance: Long = 0,
     val tempBalance: Long = 0,
-    val income: String = ""
+    val incomeAmountInput: String = "",
+    val incomeSourceNameInput: String = ""
 )

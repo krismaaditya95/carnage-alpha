@@ -11,7 +11,7 @@ data class IncomeDataModel(
 
     val incomeSourceName: String,
 
-    val incomeAmount: Double,
+    val incomeAmount: Long,
 
     val dateTime: String,
 )

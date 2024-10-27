@@ -47,7 +47,7 @@ class SpendingDataRepositoryImpl(
     override suspend fun getAllDates(): List<ZonedDateTime> {
         val uniqueDates = mutableSetOf<ZonedDateTime>()
         return dao.getAllDates()
-            .map { Instant.parse(it).atZone(ZoneId.of("UTC")) }
+            .map { Instant.parse(it).atZone(ZoneId.systemDefault()) }
             .filter {
                 uniqueDates.add(it)
             }
