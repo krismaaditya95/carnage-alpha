@@ -1,4 +1,4 @@
-package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_balance
+package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_income
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,15 +13,15 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 
-class UpsertBalanceViewModel(
+class UpsertIncomeViewModel(
     private val localRepository: LocalRepository,
     private val upsertIncomeUseCase: UpsertIncomeUseCase
 ) : ViewModel(){
 
-    var state by mutableStateOf(UpsertBalanceState())
+    var state by mutableStateOf(UpsertIncomeState())
         private set
 
-    private val _upsertBalanceEventChannel = Channel<UpsertBalanceEvents>()
+    private val _upsertBalanceEventChannel = Channel<UpsertIncomeEvents>()
     val event = _upsertBalanceEventChannel.receiveAsFlow()
 
     init {
@@ -33,28 +33,28 @@ class UpsertBalanceViewModel(
         }
     }
 
-    fun onAction(action: UpsertBalanceAction){
+    fun onAction(action: UpsertIncomeAction){
         when (action){
-            is UpsertBalanceAction.OnBalanceChanged -> {
+            is UpsertIncomeAction.OnIncomeAmountChanged -> {
                 state = state.copy(
                     tempBalance = (state.initialBalance + (action.newIncomeAmountInput.toLongOrNull() ?: 0)),
                     incomeAmountInput = action.newIncomeAmountInput
                 )
             }
 
-            is UpsertBalanceAction.OnIncomeSourceNameChanged -> {
+            is UpsertIncomeAction.OnIncomeSourceNameChanged -> {
                 state = state.copy(
                     incomeSourceNameInput = action.newIncomeSourceNameInput
                 )
             }
 
-            UpsertBalanceAction.OnBalanceSaved -> {
+            UpsertIncomeAction.OnIncomeSaved -> {
                 viewModelScope.launch {
                     if(saveIncome()){
-                        _upsertBalanceEventChannel.send(UpsertBalanceEvents.UpsertBalanceSuccess)
+                        _upsertBalanceEventChannel.send(UpsertIncomeEvents.UpsertIncomeSuccess)
                         localRepository.updateBalance(state.tempBalance)
                     }else{
-                        _upsertBalanceEventChannel.send(UpsertBalanceEvents.UpsertBalanceFailed)
+                        _upsertBalanceEventChannel.send(UpsertIncomeEvents.UpsertIncomeFailed)
                     }
                 }
             }

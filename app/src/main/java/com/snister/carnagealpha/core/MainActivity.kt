@@ -4,20 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -30,7 +20,7 @@ import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewState
 import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewScreen
-import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_balance.UpsertBalanceScreen
+import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_income.UpsertBalanceScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_spending.UpsertSpendingScreen
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 
@@ -56,7 +46,7 @@ fun Navigation(modifier: Modifier = Modifier) {
         navController = navController,
         startDestination = ScreenRoutes.DashboardOverview,
         enterTransition = { slideInHorizontally { it } },
-        popEnterTransition = { slideInHorizontally { it } },
+        popEnterTransition = { slideInHorizontally { -it } },
         exitTransition = { slideOutHorizontally { -it } },
         popExitTransition = { slideOutHorizontally { -it } },
 
@@ -106,28 +96,7 @@ fun Navigation(modifier: Modifier = Modifier) {
             )
         }
 
-        composable<ScreenRoutes.Balance> (
-//            enterTransition = {
-//                fadeIn(
-//                    animationSpec = tween(
-//                        300, easing = LinearEasing
-//                    )
-//                ) + slideIntoContainer(
-//                    animationSpec = tween(300, easing = EaseIn),
-//                    towards = AnimatedContentTransitionScope.SlideDirection.Start
-//                )
-//            },
-//            exitTransition = {
-//                fadeOut(
-//                    animationSpec = tween(
-//                        300, easing = LinearEasing
-//                    )
-//                ) + slideOutOfContainer(
-//                    animationSpec = tween(300, easing = EaseOut),
-//                    towards = AnimatedContentTransitionScope.SlideDirection.End
-//                )
-//            }
-        ){
+        composable<ScreenRoutes.Balance> {
             UpsertBalanceScreen(
                 onSaveClick = {
                     navController.popBackStack()

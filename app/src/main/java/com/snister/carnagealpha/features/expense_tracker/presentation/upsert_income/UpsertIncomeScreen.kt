@@ -1,4 +1,4 @@
-package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_balance
+package com.snister.carnagealpha.features.expense_tracker.presentation.upsert_income
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -32,14 +32,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.core.presentation.shared.TopBar
 import com.snister.carnagealpha.core.utils.CurrencyFormatter
-import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_spending.UpsertSpendingAction
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 import com.snister.carnagealpha.ui.theme.*
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UpsertBalanceScreen(
-    viewModel: UpsertBalanceViewModel = koinViewModel(),
+    viewModel: UpsertIncomeViewModel = koinViewModel(),
     onSaveClick: () -> Unit
 ) {
     val currentContext = LocalContext.current
@@ -47,12 +46,12 @@ fun UpsertBalanceScreen(
     LaunchedEffect(key1 = true) {
         viewModel.event.collect{ event ->
             when(event){
-                UpsertBalanceEvents.UpsertBalanceFailed -> {
+                UpsertIncomeEvents.UpsertIncomeFailed -> {
                     Toast.makeText(
                         currentContext, "ERROR", Toast.LENGTH_LONG
                     ).show()
                 }
-                UpsertBalanceEvents.UpsertBalanceSuccess -> {
+                UpsertIncomeEvents.UpsertIncomeSuccess -> {
                     Toast.makeText(
                         currentContext, "SUCCESS", Toast.LENGTH_LONG
                     ).show()
@@ -62,20 +61,20 @@ fun UpsertBalanceScreen(
         }
     }
 
-    UpsertBalanceCoreScreen(
+    UpsertIncomeCoreScreen(
         state = viewModel.state,
         onAction = viewModel::onAction,
         onSaveClick = {
-            viewModel.onAction(UpsertBalanceAction.OnBalanceSaved)
+            viewModel.onAction(UpsertIncomeAction.OnIncomeSaved)
         }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpsertBalanceCoreScreen(
-    state: UpsertBalanceState,
-    onAction: (UpsertBalanceAction) -> Unit,
+fun UpsertIncomeCoreScreen(
+    state: UpsertIncomeState,
+    onAction: (UpsertIncomeAction) -> Unit,
     onSaveClick: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
@@ -127,7 +126,7 @@ fun UpsertBalanceCoreScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
                     onValueChange = { newValue ->
-                        onAction(UpsertBalanceAction.OnBalanceChanged(newValue,))
+                        onAction(UpsertIncomeAction.OnIncomeAmountChanged(newValue,))
                     },
                     label = {
                         Text(
@@ -152,7 +151,7 @@ fun UpsertBalanceCoreScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp, vertical = 2.dp),
                     onValueChange = { newValue ->
-                        onAction(UpsertBalanceAction.OnIncomeSourceNameChanged(newValue))
+                        onAction(UpsertIncomeAction.OnIncomeSourceNameChanged(newValue))
                     },
                     label = {
                         Text(
@@ -189,8 +188,8 @@ fun UpsertBalanceCoreScreen(
 @Composable
 fun UpsertCoreScreenPreview(modifier: Modifier = Modifier) {
     CarnageAlphaTheme {
-        UpsertBalanceCoreScreen(
-            state = UpsertBalanceState(),
+        UpsertIncomeCoreScreen(
+            state = UpsertIncomeState(),
             onAction = {  },
             onSaveClick = {
 

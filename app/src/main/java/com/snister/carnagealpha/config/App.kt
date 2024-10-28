@@ -20,10 +20,10 @@ class App: Application() {
             androidContext(this@App)
             modules(
                 mainBindings,
-                balanceBinding,
                 dashboardOverviewBinding,
                 spendingOverviewBinding,
                 incomeOverviewBinding,
+                upsertIncomeBinding,
                 upsertSpendingBinding,
 //                upsertIncomeBinding
             )

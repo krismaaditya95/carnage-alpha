@@ -27,10 +27,10 @@ class IncomeOverviewViewModel(
     fun onAction(action: IncomeOverviewAction){
         when (action){
             IncomeOverviewAction.LoadIncomeOverviewAndBalance -> loadIncomeListAndBalance()
-            is IncomeOverviewAction.OnDateChange -> onDatePickerSelected(action.selectedDate)
+            is IncomeOverviewAction.OnIncomeDateChange -> onDatePickerSelected(action.selectedDate)
             is IncomeOverviewAction.OnDeleteIncome -> TODO()
-            IncomeOverviewAction.HideDatePicker -> showDatePicker()
-            IncomeOverviewAction.ShowDatePicker -> hideDatePicker()
+            IncomeOverviewAction.ShowIncomeDatePicker -> showDatePicker()
+            IncomeOverviewAction.HideIncomeDatePicker -> hideDatePicker()
         }
     }
 

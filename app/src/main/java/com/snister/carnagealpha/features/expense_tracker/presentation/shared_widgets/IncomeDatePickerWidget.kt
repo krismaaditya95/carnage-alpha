@@ -55,7 +55,7 @@ fun IncomeDatePickerWidget(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        onAction(IncomeOverviewAction.ShowDatePicker)
+                        onAction(IncomeOverviewAction.ShowIncomeDatePicker)
                     }
                 ) {
                     Icon(
@@ -76,7 +76,7 @@ fun IncomeDatePickerWidget(
                         awaitFirstDown(pass = PointerEventPass.Initial)
                         val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
                         if (upEvent != null) {
-                            onAction(IncomeOverviewAction.ShowDatePicker)
+                            onAction(IncomeOverviewAction.ShowIncomeDatePicker)
                         }
                     }
                 },
@@ -114,7 +114,7 @@ fun BottomSheetIncomeDatePickerWidget(
                 sheetState.hide()
             }.invokeOnCompletion {
                 if(!sheetState.isVisible){
-                    onAction(IncomeOverviewAction.HideDatePicker)
+                    onAction(IncomeOverviewAction.HideIncomeDatePicker)
                 }
             }
         },
@@ -134,7 +134,7 @@ fun BottomSheetIncomeDatePickerWidget(
                             sheetState.hide()
                         }.invokeOnCompletion {
                             if(!sheetState.isVisible){
-                                onAction(IncomeOverviewAction.HideDatePicker)
+                                onAction(IncomeOverviewAction.HideIncomeDatePicker)
                             }
                         }
                     }
@@ -146,7 +146,7 @@ fun BottomSheetIncomeDatePickerWidget(
                     onClick = {
                         datePickerState.selectedDateMillis?.let {
                             onAction(
-                                IncomeOverviewAction.OnDateChange(
+                                IncomeOverviewAction.OnIncomeDateChange(
                                     selectedDate = it
                                 )
                             )
@@ -156,7 +156,7 @@ fun BottomSheetIncomeDatePickerWidget(
                             sheetState.hide()
                         }.invokeOnCompletion {
                             if(!sheetState.isVisible){
-                                onAction(IncomeOverviewAction.HideDatePicker)
+                                onAction(IncomeOverviewAction.HideIncomeDatePicker)
                             }
                         }
                     }
