@@ -24,6 +24,14 @@ val mainBindings = module {
         ).build()
     }
 
+    single {
+        Room.databaseBuilder(
+            androidApplication(),
+            IncomeDatabase::class.java,
+            "income_database_db"
+        ).build()
+    }
+
     single{
         get<SpendingDatabase>().dao
     }

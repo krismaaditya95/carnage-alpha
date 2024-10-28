@@ -11,6 +11,8 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
@@ -26,6 +28,7 @@ import com.snister.carnagealpha.config.ScreenRoutes
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewCoreScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewState
+import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_balance.UpsertBalanceScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_spending.UpsertSpendingScreen
@@ -52,8 +55,11 @@ fun Navigation(modifier: Modifier = Modifier) {
         modifier = modifier,
         navController = navController,
         startDestination = ScreenRoutes.DashboardOverview,
-//        enterTransition = EnterTransition.None,
-//        exitTransition = ExitTransition.None
+        enterTransition = { slideInHorizontally { it } },
+        popEnterTransition = { slideInHorizontally { it } },
+        exitTransition = { slideOutHorizontally { -it } },
+        popExitTransition = { slideOutHorizontally { -it } },
+
         ){
 
         composable<ScreenRoutes.DashboardOverview>{
@@ -63,6 +69,9 @@ fun Navigation(modifier: Modifier = Modifier) {
                 },
                 onAddSpendingClick = {
                     navController.navigate(ScreenRoutes.SpendingOverview)
+                },
+                onIncomeOverviewClick = {
+                    navController.navigate(ScreenRoutes.IncomeOverview)
                 }
             )
         }
@@ -78,6 +87,17 @@ fun Navigation(modifier: Modifier = Modifier) {
             )
         }
 
+        composable<ScreenRoutes.IncomeOverview>{
+            IncomeOverviewScreen(
+                onBalanceClick = {
+                    navController.navigate(ScreenRoutes.Balance)
+                },
+                onAddIncomeClick = {
+                    navController.navigate(ScreenRoutes.IncomeDetails(-1))
+                }
+            )
+        }
+
         composable<ScreenRoutes.SpendingDetails> {
             UpsertSpendingScreen(
                 onSaveClick = {
@@ -87,26 +107,26 @@ fun Navigation(modifier: Modifier = Modifier) {
         }
 
         composable<ScreenRoutes.Balance> (
-            enterTransition = {
-                fadeIn(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                ) + slideIntoContainer(
-                    animationSpec = tween(300, easing = EaseIn),
-                    towards = AnimatedContentTransitionScope.SlideDirection.Start
-                )
-            },
-            exitTransition = {
-                fadeOut(
-                    animationSpec = tween(
-                        300, easing = LinearEasing
-                    )
-                ) + slideOutOfContainer(
-                    animationSpec = tween(300, easing = EaseOut),
-                    towards = AnimatedContentTransitionScope.SlideDirection.End
-                )
-            }
+//            enterTransition = {
+//                fadeIn(
+//                    animationSpec = tween(
+//                        300, easing = LinearEasing
+//                    )
+//                ) + slideIntoContainer(
+//                    animationSpec = tween(300, easing = EaseIn),
+//                    towards = AnimatedContentTransitionScope.SlideDirection.Start
+//                )
+//            },
+//            exitTransition = {
+//                fadeOut(
+//                    animationSpec = tween(
+//                        300, easing = LinearEasing
+//                    )
+//                ) + slideOutOfContainer(
+//                    animationSpec = tween(300, easing = EaseOut),
+//                    towards = AnimatedContentTransitionScope.SlideDirection.End
+//                )
+//            }
         ){
             UpsertBalanceScreen(
                 onSaveClick = {
@@ -125,6 +145,7 @@ fun MainActivityPreview() {
         onAction = {},
         onBalanceClick = {},
         onAddSpendingClick = {},
+        onIncomeOverviewClick = {},
         onDeleteSpending = {}
     )
 }

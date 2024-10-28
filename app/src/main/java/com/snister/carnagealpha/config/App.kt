@@ -4,6 +4,7 @@ import android.app.Application
 import com.snister.carnagealpha.core.dependency_injection.mainBindings
 import com.snister.carnagealpha.features.expense_tracker.bindings.balanceBinding
 import com.snister.carnagealpha.features.expense_tracker.bindings.dashboardOverviewBinding
+import com.snister.carnagealpha.features.expense_tracker.bindings.incomeOverviewBinding
 import com.snister.carnagealpha.features.expense_tracker.bindings.spendingOverviewBinding
 import com.snister.carnagealpha.features.expense_tracker.bindings.upsertIncomeBinding
 import com.snister.carnagealpha.features.expense_tracker.bindings.upsertSpendingBinding
@@ -22,8 +23,9 @@ class App: Application() {
                 balanceBinding,
                 dashboardOverviewBinding,
                 spendingOverviewBinding,
+                incomeOverviewBinding,
                 upsertSpendingBinding,
-                upsertIncomeBinding
+//                upsertIncomeBinding
             )
         }
     }

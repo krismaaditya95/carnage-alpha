@@ -22,15 +22,17 @@ import com.snister.carnagealpha.core.presentation.shared.BalanceCard
 import com.snister.carnagealpha.core.presentation.shared.MainMenu
 import com.snister.carnagealpha.core.presentation.shared.SpendingHighlights
 import com.snister.carnagealpha.core.presentation.shared.TopBar
+import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.IncomeDatePickerWidget
+import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.MinimizedBalanceCard
+import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewViewModel
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun IncomeOverviewScreen(
-    modifier: Modifier = Modifier,
     viewModel: IncomeOverviewViewModel = koinViewModel(),
     onBalanceClick: () -> Unit,
-    onAddSpendingClick: () -> Unit,
+    onAddIncomeClick: () -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         viewModel.onAction(IncomeOverviewAction.LoadIncomeOverviewAndBalance)
@@ -40,7 +42,7 @@ fun IncomeOverviewScreen(
         state = viewModel.state,
         onAction = viewModel::onAction,
         onBalanceClick = onBalanceClick,
-        onAddSpendingClick = onAddSpendingClick,
+        onAddIncomeClick = onAddIncomeClick,
         onDeleteIncome = {
             viewModel.onAction(IncomeOverviewAction.OnDeleteIncome(it))
         }
@@ -53,7 +55,7 @@ fun IncomeOverviewCoreScreen(
     state: IncomeOverviewState,
     onAction: (IncomeOverviewAction) -> Unit,
     onBalanceClick: () -> Unit,
-    onAddSpendingClick: () -> Unit,
+    onAddIncomeClick: () -> Unit,
     onDeleteIncome: (Int) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
@@ -66,7 +68,8 @@ fun IncomeOverviewCoreScreen(
             TopBar(
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier.fillMaxWidth(),
-                appBarTitle = "Income Overview"
+                appBarTitle = "Your Incomes",
+                navigationIcon = true
             )
         }
     ){ padding ->
@@ -77,24 +80,23 @@ fun IncomeOverviewCoreScreen(
                 .fillMaxSize()
         ){
             Spacer(modifier = Modifier.height(30.dp))
-            BalanceCard(
+            MinimizedBalanceCard(
                 modifier = Modifier.fillMaxWidth(),
                 onBalanceClick = onBalanceClick,
                 balance = state.balance
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            MainMenu(
-                modifier = Modifier.fillMaxWidth(),
-                onAddSpendingClick = {onAddSpendingClick()},
-                onAddIncomeClick = {onAddSpendingClick()},
-                onOtherClick = {}
+            IncomeDatePickerWidget(
+                onAction = onAction,
+                state = state
             )
+
             Spacer(modifier = Modifier.height(10.dp))
-            SpendingHighlights(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
+
+            IncomeListWidget(
+                state = state,
+                onDeleteIncome = onDeleteIncome
             )
+
         }
     }
 }
@@ -107,7 +109,7 @@ fun UpsertCoreScreenPreview(modifier: Modifier = Modifier) {
             state = IncomeOverviewState(),
             onAction = {  },
             onBalanceClick = {},
-            onAddSpendingClick = {},
+            onAddIncomeClick = {},
             onDeleteIncome = {}
         )
     }

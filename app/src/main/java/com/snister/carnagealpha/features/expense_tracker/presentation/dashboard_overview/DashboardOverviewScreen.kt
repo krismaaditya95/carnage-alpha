@@ -31,6 +31,7 @@ fun DashboardOverviewScreen(
     viewModel: DashboardOverviewViewModel = koinViewModel(),
     onBalanceClick: () -> Unit,
     onAddSpendingClick: () -> Unit,
+    onIncomeOverviewClick: () -> Unit
 ) {
     LaunchedEffect(key1 = true) {
         viewModel.onAction(DashboardOverviewAction.LoadSpendingOverviewAndBalance)
@@ -41,6 +42,7 @@ fun DashboardOverviewScreen(
         onAction = viewModel::onAction,
         onBalanceClick = onBalanceClick,
         onAddSpendingClick = onAddSpendingClick,
+        onIncomeOverviewClick = onIncomeOverviewClick,
         onDeleteSpending = {
             viewModel.onAction(DashboardOverviewAction.OnDeleteSpending(it))
         }
@@ -55,6 +57,7 @@ fun DashboardOverviewCoreScreen(
     onAction: (DashboardOverviewAction) -> Unit,
     onBalanceClick: () -> Unit,
     onAddSpendingClick: () -> Unit,
+    onIncomeOverviewClick: () -> Unit,
     onDeleteSpending: (Int) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
@@ -85,7 +88,7 @@ fun DashboardOverviewCoreScreen(
             MainMenu(
                 modifier = Modifier.fillMaxWidth(),
                 onAddSpendingClick = {onAddSpendingClick()},
-                onAddIncomeClick = {onAddSpendingClick()},
+                onAddIncomeClick = {onIncomeOverviewClick()},
                 onOtherClick = {}
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -107,6 +110,7 @@ fun DashboardOverviewScreenPreview(modifier: Modifier = Modifier) {
         onAction = {},
         onBalanceClick = {},
         onAddSpendingClick = {},
+        onIncomeOverviewClick = {},
         onDeleteSpending = {}
     )
 }

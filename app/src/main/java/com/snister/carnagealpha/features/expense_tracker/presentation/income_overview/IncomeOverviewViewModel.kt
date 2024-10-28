@@ -11,7 +11,10 @@ import com.snister.carnagealpha.features.expense_tracker.domain.repository.Incom
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class IncomeOverviewViewModel(
     private val incomeDataRepository: IncomeDataRepository,
@@ -23,24 +26,87 @@ class IncomeOverviewViewModel(
 
     fun onAction(action: IncomeOverviewAction){
         when (action){
-            IncomeOverviewAction.LoadIncomeOverviewAndBalance -> TODO()
-            is IncomeOverviewAction.OnDateChange -> TODO()
+            IncomeOverviewAction.LoadIncomeOverviewAndBalance -> loadIncomeListAndBalance()
+            is IncomeOverviewAction.OnDateChange -> onDatePickerSelected(action.selectedDate)
             is IncomeOverviewAction.OnDeleteIncome -> TODO()
+            IncomeOverviewAction.HideDatePicker -> showDatePicker()
+            IncomeOverviewAction.ShowDatePicker -> hideDatePicker()
         }
     }
 
+    val dummyIncomeList = listOf(
+        IncomeEntity(
+            incomeId = 1,
+            incomeAmount = 4000000,
+            incomeSourceName = "Gaji bulan ini",
+            dateTime = ZonedDateTime.now()
+        ),
+        IncomeEntity(
+            incomeId = 1,
+            incomeAmount = 1000000,
+            incomeSourceName = "Dikasih tante",
+            dateTime = ZonedDateTime.now()
+        ),
+        IncomeEntity(
+            incomeId = 1,
+            incomeAmount = 500000,
+            incomeSourceName = "Ditransfer kakak",
+            dateTime = ZonedDateTime.now()
+        ),
+    )
     private fun loadIncomeListAndBalance(){
         viewModelScope.launch {
             val allDates = incomeDataRepository.getAllDates()
             state = state.copy(
-                incomeList = getIncomeListByDate(
-                    allDates.lastOrNull() ?: ZonedDateTime.now()
-                ),
+
+                incomeList = dummyIncomeList,
+//                incomeList = getIncomeListByDate(ZonedDateTime.now()),
                 balance = localRepository.getBalance(), /*incomeDataRepository.getTotalIncome(),*/
-                pickedDate = allDates.lastOrNull() ?: ZonedDateTime.now(),
+                pickedDate = ZonedDateTime.now(),
                 datesList = allDates.reversed()
             )
         }
+    }
+
+    private fun showDatePicker(){
+        viewModelScope.launch {
+            state = state.copy(
+                isDatePickerVisible = true
+            )
+        }
+    }
+    private fun hideDatePicker(){
+        viewModelScope.launch {
+            state = state.copy(
+                isDatePickerVisible = false
+            )
+        }
+    }
+
+    private fun onDatePickerSelected(millis: Long){
+        viewModelScope.launch {
+            state = state.copy(
+                selectedDateFromDatePicker = convertMillisToZonedDateTimeString(millis),
+                pickedDate = convertMillisToZonedDateTime(millis),
+                incomeList = getIncomeListByDate(convertMillisToZonedDateTime(millis))
+            )
+        }
+    }
+
+    private fun convertMillisToZonedDateTime(millis: Long): ZonedDateTime{
+        val formattedZonedDateTime = ZonedDateTime.ofInstant(
+            Instant.ofEpochMilli(millis), ZoneId.systemDefault())
+
+        return formattedZonedDateTime
+    }
+
+    private fun convertMillisToZonedDateTimeString(millis: Long): String{
+        val zonedDateTime = ZonedDateTime.ofInstant(
+            Instant.ofEpochMilli(millis), ZoneId.systemDefault())
+
+        val formattedZonedDateTime = DateTimeFormatter
+            .ofPattern("dd-MMMM-yyyy").format(zonedDateTime)
+        return formattedZonedDateTime.toString()
     }
 
     private suspend fun getIncomeListByDate(date: ZonedDateTime): List<IncomeEntity>{
