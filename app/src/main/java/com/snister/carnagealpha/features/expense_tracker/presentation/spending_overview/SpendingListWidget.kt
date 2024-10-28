@@ -79,13 +79,13 @@ fun SpendingItemWidget(
             .fillMaxWidth()
             .height(80.dp)
             .padding(bottom = 14.dp)
-            .border(1.dp, cDC5F00, RoundedCornerShape(4.dp)),
+            .border(1.dp, cA91D3A, RoundedCornerShape(4.dp)),
         shape = RoundedCornerShape(4.dp),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+//                .background(Color.White)
                 .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -93,7 +93,7 @@ fun SpendingItemWidget(
             Column{
                 Text(
                     text = spendingItem.spendingName,
-                    color = c151515,
+//                    color = c151515,
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 16.sp,
                     maxLines = 1,

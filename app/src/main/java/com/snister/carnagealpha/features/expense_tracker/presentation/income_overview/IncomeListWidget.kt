@@ -76,7 +76,7 @@ fun IncomeItemWidget(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+//                .background(Color.White)
                 .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -84,7 +84,7 @@ fun IncomeItemWidget(
             Column{
                 Text(
                     text = incomeItem.incomeSourceName,
-                    color = c151515,
+//                    color = c151515,
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -97,7 +97,7 @@ fun IncomeItemWidget(
 //                    text = "${spendingItem.dateTime.dayOfMonth}-${spendingItem.dateTime.month}-${spendingItem.dateTime.year}" +
 //                            "at ${spendingItem.dateTime.hour}:${spendingItem.dateTime.minute}",
                     text = "${incomeItem.dateTime.hour}:${incomeItem.dateTime.minute}",
-                    color = c151515,
+//                    color = c151515,
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 12.sp
                 )

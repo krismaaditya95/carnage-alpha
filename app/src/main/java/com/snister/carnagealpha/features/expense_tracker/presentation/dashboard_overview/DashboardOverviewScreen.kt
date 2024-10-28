@@ -20,8 +20,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.snister.carnagealpha.core.presentation.shared.BalanceCard
 import com.snister.carnagealpha.core.presentation.shared.MainMenu
+import com.snister.carnagealpha.core.presentation.shared.MainMenuv2
 import com.snister.carnagealpha.core.presentation.shared.SpendingHighlights
 import com.snister.carnagealpha.core.presentation.shared.TopBar
+import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.MinimizedBalanceCard
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -79,24 +81,24 @@ fun DashboardOverviewCoreScreen(
                 .fillMaxSize()
         ){
             Spacer(modifier = Modifier.height(30.dp))
-            BalanceCard(
+            MinimizedBalanceCard(
                 modifier = Modifier.fillMaxWidth(),
                 onBalanceClick = onBalanceClick,
                 balance = state.balance
             )
             Spacer(modifier = Modifier.height(4.dp))
-            MainMenu(
+            MainMenuv2(
                 modifier = Modifier.fillMaxWidth(),
                 onAddSpendingClick = {onAddSpendingClick()},
                 onAddIncomeClick = {onIncomeOverviewClick()},
                 onOtherClick = {}
             )
             Spacer(modifier = Modifier.height(10.dp))
-            SpendingHighlights(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
-            )
+//            SpendingHighlights(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(20.dp)
+//            )
         }
     }
 }

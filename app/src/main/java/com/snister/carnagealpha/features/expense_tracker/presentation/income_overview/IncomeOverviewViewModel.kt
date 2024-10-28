@@ -59,8 +59,8 @@ class IncomeOverviewViewModel(
             val allDates = incomeDataRepository.getAllDates()
             state = state.copy(
 
-                incomeList = dummyIncomeList,
-//                incomeList = getIncomeListByDate(ZonedDateTime.now()),
+//                incomeList = dummyIncomeList,
+                incomeList = getIncomeListByDate(ZonedDateTime.now()),
                 balance = localRepository.getBalance(), /*incomeDataRepository.getTotalIncome(),*/
                 pickedDate = ZonedDateTime.now(),
                 datesList = allDates.reversed()
