@@ -41,7 +41,8 @@ fun MainMenuv2(
 ) {
     Row (
         modifier = modifier
-            .padding(start = 20.dp, end = 20.dp),
+            .padding(start = 16.dp, end = 16.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ){
@@ -49,13 +50,15 @@ fun MainMenuv2(
             icon = painterResource(id = R.drawable.receive_money),
             title = "Income",
             color = cmykGreen,
-            onClick = onAddIncomeClick
+            onClick = onAddIncomeClick,
+            modifier = modifier.weight(1f)
         )
         MenuItemv2(
             icon = painterResource(id = R.drawable.send_money),
             title = "Expense",
             color = cC73659,
-            onClick = onAddSpendingClick
+            onClick = onAddSpendingClick,
+            modifier = modifier.weight(1f)
         )
 //        MenuItemv2(
 //            icon = painterResource(id = R.drawable.other_menu),
@@ -69,6 +72,7 @@ fun MainMenuv2(
 
 @Composable
 fun MenuItemv2(
+    modifier: Modifier,
     icon: Painter,
     title: String,
     color: Color,
@@ -76,10 +80,9 @@ fun MenuItemv2(
 ) {
     ElevatedCard (
         onClick = { onClick() },
-        modifier = Modifier
-            .width(IntrinsicSize.Max)
+        modifier = modifier
+            .padding(start = 4.dp, end = 4.dp)
             .border(1.dp, color, RoundedCornerShape(10.dp)),
-//            .fillMaxSize(0.4f),
         shape = RoundedCornerShape(10.dp)
     ){
         Row {
