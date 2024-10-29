@@ -143,7 +143,6 @@ fun SpendingOverviewCoreScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ){
-//            Spacer(modifier = Modifier.height(4.dp))
             MinimizedBalanceCard(
                 modifier = Modifier.fillMaxWidth(),
                 onBalanceClick = onBalanceClick,

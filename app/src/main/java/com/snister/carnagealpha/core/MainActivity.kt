@@ -7,17 +7,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.snister.carnagealpha.config.ScreenRoutes
-import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewCoreScreen
+import com.snister.carnagealpha.core.presentation.shared.CustomBottomNav
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewScreen
-import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewState
 import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_income.UpsertBalanceScreen
@@ -31,15 +33,40 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CarnageAlphaTheme {
-                Navigation(modifier = Modifier.fillMaxSize())
+                val navController = rememberNavController()
+                MainActivityCoreScreen(
+                    navController = navController
+                )
             }
         }
     }
 }
 
 @Composable
-fun Navigation(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
+fun MainActivityCoreScreen(
+    navController: NavHostController
+) {
+    Scaffold(
+        bottomBar = {
+            CustomBottomNav(navController = navController)
+        }
+    ) { paddingValues ->
+
+        Navigation(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = paddingValues.calculateBottomPadding()),
+            navController = navController,
+        )
+    }
+}
+
+@Composable
+fun Navigation(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
+) {
+
 
     NavHost(
         modifier = modifier,
@@ -109,12 +136,16 @@ fun Navigation(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun MainActivityPreview() {
-    DashboardOverviewCoreScreen(
-        state = DashboardOverviewState(),
-        onAction = {},
-        onBalanceClick = {},
-        onAddSpendingClick = {},
-        onIncomeOverviewClick = {},
-        onDeleteSpending = {}
+//    DashboardOverviewCoreScreen(
+//        state = DashboardOverviewState(),
+//        onAction = {},
+//        onBalanceClick = {},
+//        onAddSpendingClick = {},
+//        onIncomeOverviewClick = {},
+//        onDeleteSpending = {}
+//    )
+
+    MainActivityCoreScreen(
+        navController = rememberNavController()
     )
 }

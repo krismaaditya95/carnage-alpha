@@ -80,7 +80,6 @@ fun DashboardOverviewCoreScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ){
-            Spacer(modifier = Modifier.height(30.dp))
             MinimizedBalanceCard(
                 modifier = Modifier.fillMaxWidth(),
                 onBalanceClick = onBalanceClick,
