@@ -112,6 +112,10 @@ class SpendingOverviewViewModel(
                 pickedDate = ZonedDateTime.now(),
                 datesList = allDates.reversed()
             )
+
+            state = state.copy(
+                totalSpendingByDate = getTotalSpendByDate()
+            )
         }
     }
 
@@ -132,10 +136,15 @@ class SpendingOverviewViewModel(
 
     private fun onDatePickerSelected(millis: Long){
         viewModelScope.launch {
+            val millisToZonedDateTime = convertMillisToZonedDateTime(millis)
             state = state.copy(
                 selectedDateFromDatePicker = convertMillisToZonedDateTimeString(millis),
-                pickedDate = convertMillisToZonedDateTime(millis),
-                spendingList = getSpendingListByDate(convertMillisToZonedDateTime(millis))
+                pickedDate = millisToZonedDateTime,
+                spendingList = getSpendingListByDate(millisToZonedDateTime)
+            )
+            // calculate total spending from state.spendingList
+            state = state.copy(
+                totalSpendingByDate = getTotalSpendByDate()
             )
         }
     }
@@ -160,6 +169,16 @@ class SpendingOverviewViewModel(
         return spendingDataRepository
             .getSpendingsByDate(date)
             .reversed()
+    }
+
+    private fun getTotalSpendByDate(): Long{
+        var totalSpendByDate: Long = 0
+
+        for (item in state.spendingList){
+            totalSpendByDate += item.spendingAmount
+        }
+
+        return totalSpendByDate
     }
 
     private suspend fun deleteSpendingById(id: Int){

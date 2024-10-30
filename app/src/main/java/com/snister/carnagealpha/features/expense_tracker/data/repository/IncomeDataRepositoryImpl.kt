@@ -43,6 +43,8 @@ class IncomeDataRepositoryImpl(
                         incomeEntity.dateTime.year == dateTimeUtc.year
 
             }
+            // TODO : filter for start and end date
+
     }
 
     override suspend fun getAllDates(): List<ZonedDateTime> {

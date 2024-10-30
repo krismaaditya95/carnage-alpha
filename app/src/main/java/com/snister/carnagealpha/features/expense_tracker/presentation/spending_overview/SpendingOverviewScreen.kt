@@ -1,6 +1,7 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,11 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.R
 import com.snister.carnagealpha.core.presentation.shared.TopBar
+import com.snister.carnagealpha.core.utils.CurrencyFormatter
 import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.DatePickerWidget
 import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.MinimizedBalanceCard
-import com.snister.carnagealpha.ui.theme.c151515
-import com.snister.carnagealpha.ui.theme.cC73659
-import com.snister.carnagealpha.ui.theme.cEEEEEE
+import com.snister.carnagealpha.ui.theme.*
 import org.koin.androidx.compose.koinViewModel
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -79,7 +79,9 @@ fun SpendingOverviewCoreScreen(
         state = rememberTopAppBarState()
     )
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(bottom = 50.dp),
         topBar = {
             TopBar(
                 scrollBehavior = scrollBehavior,
@@ -90,20 +92,20 @@ fun SpendingOverviewCoreScreen(
         },
         bottomBar = {
             BottomAppBar(
-                containerColor = cEEEEEE
+                modifier = modifier
             ){
                 Row(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(cEEEEEE)
+                        .fillMaxWidth()
+//                        .background(cEEEEEE)
                         .padding(14.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Column {
                         Text(
-                            text = "Total Spendings - [datehere]",
-                            color = c151515,
+                            text = "Total Spendings - ${state.selectedDateFromDatePicker}",
+//                            color = c151515,
                             fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                             fontSize = 12.sp,
                             maxLines = 1,
@@ -113,7 +115,7 @@ fun SpendingOverviewCoreScreen(
                         )
 
                         Text(
-                            text = "Rp. 100,000",
+                            text = CurrencyFormatter.formatToRupiah(state.totalSpendingByDate),
 //                            text = "time : ${ZonedDateTime.now()}",
                             color = cC73659,
                             fontFamily = Font(R.font.roboto_regular).toFontFamily(),

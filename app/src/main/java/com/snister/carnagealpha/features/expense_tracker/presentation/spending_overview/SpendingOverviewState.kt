@@ -9,6 +9,8 @@ data class SpendingOverviewState(
     val datesList: List<ZonedDateTime> = emptyList(),
     val balance: Long = 0,
     val selectedDateFromDatePicker: String = DateTimeFormatter.ofPattern("dd-MMMM-yyyy").format(ZonedDateTime.now()),
+    val totalSpending: Long = 0,
+    val totalSpendingByDate: Long = 0,
     val pickedDate: ZonedDateTime = ZonedDateTime.now(),
     val isDatePickerVisible: Boolean = false,
 )

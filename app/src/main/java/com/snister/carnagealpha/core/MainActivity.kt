@@ -55,7 +55,7 @@ fun MainActivityCoreScreen(
         Navigation(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = paddingValues.calculateBottomPadding()),
+                .padding(bottom = paddingValues.calculateTopPadding()),
             navController = navController,
         )
     }
