@@ -10,6 +10,8 @@ data class IncomeOverviewState(
     val datesList: List<ZonedDateTime> = emptyList(),
     val balance: Long = 0,
     val selectedDateFromDatePicker: String = DateTimeFormatter.ofPattern("dd-MMMM-yyyy").format(ZonedDateTime.now()),
+    val selectedDateRangeFromDateRangePicker: String = DateTimeFormatter.ofPattern("dd-MMMM-yyyy").format(ZonedDateTime.now()),
     val pickedDate: ZonedDateTime = ZonedDateTime.now(),
+    val pickedDateRange: Pair<ZonedDateTime, ZonedDateTime> = Pair(ZonedDateTime.now(), ZonedDateTime.now()),
     val isDatePickerVisible: Boolean = false,
 )

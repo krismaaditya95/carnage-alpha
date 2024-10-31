@@ -1,5 +1,6 @@
 package com.snister.carnagealpha.features.expense_tracker.data.repository
 
+import android.util.Log
 import com.snister.carnagealpha.features.expense_tracker.data.data_sources.local.IncomeDao
 import com.snister.carnagealpha.features.expense_tracker.data.mapper.toIncomeDataModel
 import com.snister.carnagealpha.features.expense_tracker.data.mapper.toIncomeEntity
@@ -45,6 +46,24 @@ class IncomeDataRepositoryImpl(
             }
             // TODO : filter for start and end date
 
+    }
+
+    override suspend fun getIncomesByDateRange(dateTimeRange: Pair<ZonedDateTime, ZonedDateTime>): List<IncomeEntity> {
+        Log.d("dateTimeRange COMPARE | first.dayOfMonth => ", "${dateTimeRange.first.dayOfMonth}")
+        Log.d("dateTimeRange COMPARE | second.dayOfMonth => ", "${dateTimeRange.second.dayOfMonth}")
+
+        return dao.getAllIncomes()
+            .map {it.toIncomeEntity()}
+            .filter { incomeEntity ->
+                incomeEntity.dateTime.dayOfMonth >= dateTimeRange.first.dayOfMonth &&
+                incomeEntity.dateTime.dayOfMonth <= dateTimeRange.second.dayOfMonth
+                        &&
+                        incomeEntity.dateTime.month >= dateTimeRange.first.month &&
+                        incomeEntity.dateTime.month <= dateTimeRange.second.month &&
+                        incomeEntity.dateTime.year >= dateTimeRange.first.year &&
+                        incomeEntity.dateTime.year <= dateTimeRange.second.year
+
+            }
     }
 
     override suspend fun getAllDates(): List<ZonedDateTime> {

@@ -31,6 +31,7 @@ class IncomeOverviewViewModel(
             is IncomeOverviewAction.OnDeleteIncome -> TODO()
             IncomeOverviewAction.ShowIncomeDatePicker -> showDatePicker()
             IncomeOverviewAction.HideIncomeDatePicker -> hideDatePicker()
+            is IncomeOverviewAction.OnIncomeDateRangePickerChange -> onIncomeDateRangePickerChange(action.selectedDateRange)
         }
     }
 
@@ -93,6 +94,16 @@ class IncomeOverviewViewModel(
         }
     }
 
+    private fun onIncomeDateRangePickerChange(selectedDateRange: Pair<Long?, Long?>){
+        viewModelScope.launch {
+            state = state.copy(
+                selectedDateRangeFromDateRangePicker = convertDateRangeToZonedDateTimeString(selectedDateRange),
+                pickedDateRange = convertDateRangeToZonedDateTime(selectedDateRange),
+                incomeList = getIncomeListByDateRange(convertDateRangeToZonedDateTime(selectedDateRange))
+            )
+        }
+    }
+
     private fun convertMillisToZonedDateTime(millis: Long): ZonedDateTime{
         val formattedZonedDateTime = ZonedDateTime.ofInstant(
             Instant.ofEpochMilli(millis), ZoneId.systemDefault())
@@ -109,9 +120,41 @@ class IncomeOverviewViewModel(
         return formattedZonedDateTime.toString()
     }
 
+    private fun convertDateRangeToZonedDateTime(selectedDateRange: Pair<Long?, Long?>): Pair<ZonedDateTime, ZonedDateTime>{
+        val startZonedDateTime = ZonedDateTime.ofInstant(
+            selectedDateRange.first?.let { Instant.ofEpochMilli(it) }, ZoneId.systemDefault())
+
+        val endZonedDateTime = ZonedDateTime.ofInstant(
+            selectedDateRange.second?.let { Instant.ofEpochMilli(it) }, ZoneId.systemDefault())
+
+        return Pair(startZonedDateTime, endZonedDateTime)
+    }
+
+    private fun convertDateRangeToZonedDateTimeString(selectedDateRange: Pair<Long?, Long?>): String{
+        val startZonedDateTime = ZonedDateTime.ofInstant(
+            selectedDateRange.first?.let { Instant.ofEpochMilli(it) }, ZoneId.systemDefault())
+
+        val endZonedDateTime = ZonedDateTime.ofInstant(
+            selectedDateRange.second?.let { Instant.ofEpochMilli(it) }, ZoneId.systemDefault())
+
+        val formattedStartZonedDateTime = DateTimeFormatter
+            .ofPattern("dd MMM yyyy").format(startZonedDateTime)
+
+        val formattedEndZonedDateTime = DateTimeFormatter
+            .ofPattern("dd MMM yyyy").format(endZonedDateTime)
+
+        return "$formattedStartZonedDateTime - $formattedEndZonedDateTime"
+    }
+
     private suspend fun getIncomeListByDate(date: ZonedDateTime): List<IncomeEntity>{
         return incomeDataRepository
             .getIncomesByDate(date)
+            .reversed()
+    }
+
+    private suspend fun getIncomeListByDateRange(dateRange: Pair<ZonedDateTime, ZonedDateTime>): List<IncomeEntity>{
+        return incomeDataRepository
+            .getIncomesByDateRange(dateRange)
             .reversed()
     }
 }

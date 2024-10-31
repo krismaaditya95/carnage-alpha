@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +22,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,7 +46,8 @@ fun IncomeDatePickerWidget(
         modifier = modifier.fillMaxWidth()
     ) {
         OutlinedTextField(
-            value = state.selectedDateFromDatePicker,
+//            value = state.selectedDateFromDatePicker,
+            value = state.selectedDateRangeFromDateRangePicker,
             onValueChange = {
 
             },
@@ -71,7 +74,10 @@ fun IncomeDatePickerWidget(
 //                .clickable (enabled = true){
 //                    onAction(SpendingOverviewAction.ShowDatePicker)
 //                },
-                .pointerInput(state.selectedDateFromDatePicker) {
+                .pointerInput(
+//                    state.selectedDateFromDatePicker
+                    state.selectedDateRangeFromDateRangePicker
+                ) {
                     awaitEachGesture {
                         awaitFirstDown(pass = PointerEventPass.Initial)
                         val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
@@ -103,6 +109,8 @@ fun BottomSheetIncomeDatePickerWidget(
     onAction: (IncomeOverviewAction) -> Unit,
 ) {
     val datePickerState = rememberDatePickerState()
+    val datePickerRangeState = rememberDateRangePickerState()
+
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
@@ -121,9 +129,13 @@ fun BottomSheetIncomeDatePickerWidget(
         sheetState = sheetState,
     ) {
         Column {
-            DatePicker(
-                state = datePickerState,
-                showModeToggle = false
+//            DatePicker(
+//                state = datePickerState,
+//                showModeToggle = false
+//            )
+
+            DateRangePicker(
+                state = datePickerRangeState
             )
             Row(
                 modifier = modifier.align(Alignment.End),
@@ -144,13 +156,22 @@ fun BottomSheetIncomeDatePickerWidget(
 
                 TextButton(
                     onClick = {
-                        datePickerState.selectedDateMillis?.let {
-                            onAction(
-                                IncomeOverviewAction.OnIncomeDateChange(
-                                    selectedDate = it
+//                        datePickerState.selectedDateMillis?.let {
+//                            onAction(
+//                                IncomeOverviewAction.OnIncomeDateChange(
+//                                    selectedDate = it
+//                                )
+//                            )
+//                        }
+
+                        onAction(
+                            IncomeOverviewAction.OnIncomeDateRangePickerChange(
+                                selectedDateRange = Pair(
+                                    datePickerRangeState.selectedStartDateMillis,
+                                    datePickerRangeState.selectedEndDateMillis
                                 )
                             )
-                        }
+                        )
 
                         sheetScope.launch {
                             sheetState.hide()
