@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -135,6 +136,7 @@ fun BottomSheetIncomeDatePickerWidget(
 //            )
 
             DateRangePicker(
+                modifier = modifier.fillMaxHeight(0.6f),
                 state = datePickerRangeState
             )
             Row(

@@ -99,8 +99,7 @@ fun Navigation(
                     navController.navigate(ScreenRoutes.Balance)
                 },
                 onAddSpendingClick = {
-//                    navController.navigate(ScreenRoutes.SpendingDetails(-1))
-                    navController.navigate(ScreenRoutes.Balance)
+                    navController.navigate(ScreenRoutes.SpendingDetails(-1))
                 }
             )
         }
@@ -111,7 +110,8 @@ fun Navigation(
                     navController.navigate(ScreenRoutes.Balance)
                 },
                 onAddIncomeClick = {
-                    navController.navigate(ScreenRoutes.IncomeDetails(-1))
+//                    navController.navigate(ScreenRoutes.IncomeDetails(-1))
+                    navController.navigate(ScreenRoutes.Balance)
                 }
             )
         }

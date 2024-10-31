@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.R
 import com.snister.carnagealpha.core.utils.CurrencyFormatter
+import com.snister.carnagealpha.core.utils.StringDateFormatter
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.IncomeEntity
 import com.snister.carnagealpha.ui.theme.*
 import java.time.ZonedDateTime
@@ -84,7 +85,6 @@ fun IncomeItemWidget(
             Column{
                 Text(
                     text = incomeItem.incomeSourceName,
-//                    color = c151515,
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -94,17 +94,14 @@ fun IncomeItemWidget(
                 )
 
                 Text(
-//                    text = "${spendingItem.dateTime.dayOfMonth}-${spendingItem.dateTime.month}-${spendingItem.dateTime.year}" +
-//                            "at ${spendingItem.dateTime.hour}:${spendingItem.dateTime.minute}",
-                    text = "${incomeItem.dateTime.hour}:${incomeItem.dateTime.minute}",
-//                    color = c151515,
+                    text = StringDateFormatter.toDayMonthYearAtHourMinute(incomeItem.dateTime),
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                    fontSize = 12.sp
+                    fontSize = 11.sp
                 )
             }
 
             Text(
-                text = "+ ${CurrencyFormatter.formatToRupiah(incomeItem.incomeAmount.toLong())}",
+                text = "+ ${CurrencyFormatter.formatToRupiah(incomeItem.incomeAmount)}",
                 color = cmykGreen,
                 fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                 fontWeight = FontWeight.Bold,

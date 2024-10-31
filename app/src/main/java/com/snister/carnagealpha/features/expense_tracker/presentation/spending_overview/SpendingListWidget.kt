@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.R
 import com.snister.carnagealpha.core.presentation.shared.SpendingItem
 import com.snister.carnagealpha.core.utils.CurrencyFormatter
+import com.snister.carnagealpha.core.utils.StringDateFormatter
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
 import com.snister.carnagealpha.ui.theme.*
 import java.time.ZonedDateTime
@@ -93,7 +94,6 @@ fun SpendingItemWidget(
             Column{
                 Text(
                     text = spendingItem.spendingName,
-//                    color = c151515,
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -103,12 +103,9 @@ fun SpendingItemWidget(
                 )
 
                 Text(
-//                    text = "${spendingItem.dateTime.dayOfMonth}-${spendingItem.dateTime.month}-${spendingItem.dateTime.year}" +
-//                            "at ${spendingItem.dateTime.hour}:${spendingItem.dateTime.minute}",
-                    text = "${spendingItem.dateTime.hour}:${spendingItem.dateTime.minute}",
-                    color = cC73659,
+                    text = StringDateFormatter.toDayMonthYearAtHourMinute(spendingItem.dateTime),
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                    fontSize = 12.sp
+                    fontSize = 11.sp
                 )
             }
 
