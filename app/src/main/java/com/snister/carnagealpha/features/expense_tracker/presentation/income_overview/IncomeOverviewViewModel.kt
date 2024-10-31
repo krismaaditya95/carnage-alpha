@@ -58,13 +58,25 @@ class IncomeOverviewViewModel(
     private fun loadIncomeListAndBalance(){
         viewModelScope.launch {
             val allDates = incomeDataRepository.getAllDates()
+            val defaultStartDate = ZonedDateTime.of(
+                ZonedDateTime.now().year,
+                ZonedDateTime.now().month.value,
+                1, 0, 0, 0, 0, ZoneId.systemDefault())
+
+            val defaultEndDate = ZonedDateTime.now()
+
             state = state.copy(
 
 //                incomeList = dummyIncomeList,
-                incomeList = getIncomeListByDate(ZonedDateTime.now()),
+//                incomeList = getIncomeListByDate(ZonedDateTime.now()),
+                selectedDateRangeFromDateRangePicker = convertZonedDateTimeRangeToString(Pair(defaultStartDate, defaultEndDate)),
+                incomeList = getIncomeListByDateRange(Pair(defaultStartDate, defaultEndDate)),
                 balance = localRepository.getBalance(), /*incomeDataRepository.getTotalIncome(),*/
-                pickedDate = ZonedDateTime.now(),
                 datesList = allDates.reversed()
+            )
+
+            state = state.copy(
+                totalIncomesBySelectedDateRange = getTotalIncomesBySelectedDateRange()
             )
         }
     }
@@ -101,9 +113,15 @@ class IncomeOverviewViewModel(
                 pickedDateRange = convertDateRangeToZonedDateTime(selectedDateRange),
                 incomeList = getIncomeListByDateRange(convertDateRangeToZonedDateTime(selectedDateRange))
             )
+            state = state.copy(
+                totalIncomesBySelectedDateRange = getTotalIncomesBySelectedDateRange()
+            )
         }
     }
 
+    // ---------------------------------
+    // Conversion for normal date picker
+    // ---------------------------------
     private fun convertMillisToZonedDateTime(millis: Long): ZonedDateTime{
         val formattedZonedDateTime = ZonedDateTime.ofInstant(
             Instant.ofEpochMilli(millis), ZoneId.systemDefault())
@@ -118,6 +136,21 @@ class IncomeOverviewViewModel(
         val formattedZonedDateTime = DateTimeFormatter
             .ofPattern("dd-MMMM-yyyy").format(zonedDateTime)
         return formattedZonedDateTime.toString()
+    }
+
+    // ---------------------------------
+    // Conversion for date range picker
+    // ---------------------------------
+    private fun convertZonedDateTimeRangeToString(
+        selectedDateRangeInZonedDateTimeFormat: Pair<ZonedDateTime, ZonedDateTime>
+    ): String{
+        val formattedStartZonedDateTime = DateTimeFormatter
+            .ofPattern("dd MMM yyyy").format(selectedDateRangeInZonedDateTimeFormat.first)
+
+        val formattedEndZonedDateTime = DateTimeFormatter
+            .ofPattern("dd MMM yyyy").format(selectedDateRangeInZonedDateTimeFormat.second)
+
+        return "$formattedStartZonedDateTime - $formattedEndZonedDateTime"
     }
 
     private fun convertDateRangeToZonedDateTime(selectedDateRange: Pair<Long?, Long?>): Pair<ZonedDateTime, ZonedDateTime>{
@@ -156,5 +189,15 @@ class IncomeOverviewViewModel(
         return incomeDataRepository
             .getIncomesByDateRange(dateRange)
             .reversed()
+    }
+
+    private fun getTotalIncomesBySelectedDateRange(): Long{
+        var totalIncomesBySelectedDateRange: Long = 0
+
+        for (item in state.incomeList){
+            totalIncomesBySelectedDateRange += item.incomeAmount
+        }
+
+        return totalIncomesBySelectedDateRange
     }
 }

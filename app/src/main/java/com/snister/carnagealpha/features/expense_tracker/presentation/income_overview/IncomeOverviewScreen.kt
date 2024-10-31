@@ -1,6 +1,8 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.income_overview
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,24 +10,34 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.toFontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.snister.carnagealpha.core.presentation.shared.BalanceCard
-import com.snister.carnagealpha.core.presentation.shared.MainMenu
-import com.snister.carnagealpha.core.presentation.shared.SpendingHighlights
+import androidx.compose.ui.unit.sp
+import com.snister.carnagealpha.R
 import com.snister.carnagealpha.core.presentation.shared.TopBar
+import com.snister.carnagealpha.core.utils.CurrencyFormatter
 import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.IncomeDatePickerWidget
 import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.MinimizedBalanceCard
-import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewViewModel
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
+import com.snister.carnagealpha.ui.theme.*
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -63,7 +75,9 @@ fun IncomeOverviewCoreScreen(
     )
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .padding(bottom = 50.dp),
         topBar = {
             TopBar(
                 scrollBehavior = scrollBehavior,
@@ -71,6 +85,50 @@ fun IncomeOverviewCoreScreen(
                 appBarTitle = "Your Incomes",
                 navigationIcon = true
             )
+        },
+        bottomBar = {
+            BottomAppBar(
+                modifier = Modifier
+            ){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Column {
+                        Text(
+                            text = "Total Incomes - ${state.selectedDateRangeFromDateRangePicker}",
+                            fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+                            fontSize = 12.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Text(
+                            text = CurrencyFormatter.formatToRupiah(state.totalIncomesBySelectedDateRange),
+                            color = cmykGreen,
+                            fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+                            fontSize = 16.sp
+                        )
+                    }
+
+                    FloatingActionButton(
+                        onClick = {
+                            onAddIncomeClick()
+                        },
+                        containerColor = cmykGreen,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            tint = cEEEEEE,
+                            contentDescription = "Add Income"
+                        )
+                    }
+                }
+            }
         }
     ){ padding ->
         Column(
