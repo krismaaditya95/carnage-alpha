@@ -6,9 +6,9 @@ import com.snister.carnagealpha.features.expense_tracker.data.models.SourceLedge
 import com.snister.carnagealpha.features.expense_tracker.data.models.SpendingDataModel
 
 @Database(
-    entities = [SpendingDataModel::class, SourceLedgerDataModel::class],
+    entities = [SourceLedgerDataModel::class, SpendingDataModel::class],
     version = 1
 )
-abstract class SpendingDatabase: RoomDatabase() {
-    abstract val dao: SpendingDao
+abstract class SourceLedgerDatabase: RoomDatabase() {
+    abstract val sourceLedgerDao: SourceLedgerDao
 }

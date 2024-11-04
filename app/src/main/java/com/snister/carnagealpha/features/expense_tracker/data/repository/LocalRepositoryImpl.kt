@@ -9,6 +9,7 @@ class LocalRepositoryImpl(
 
     companion object {
         private const val KEY_BALANCE = "KEY_BALANCE"
+        private const val KEY_FIRST_TIME_SETUP = "KEY_FIRST_TIME_SETUP"
     }
 
     override suspend fun getBalance(): Long {
@@ -17,5 +18,13 @@ class LocalRepositoryImpl(
 
     override suspend fun updateBalance(balance: Long) {
         prefs.edit().putLong(KEY_BALANCE, balance).apply()
+    }
+
+    override suspend fun hasPerformedInitialSetup(): Boolean {
+        return prefs.getBoolean(KEY_FIRST_TIME_SETUP, false)
+    }
+
+    override suspend fun initialSetupDone() {
+        prefs.edit().putBoolean(KEY_FIRST_TIME_SETUP, true).apply()
     }
 }

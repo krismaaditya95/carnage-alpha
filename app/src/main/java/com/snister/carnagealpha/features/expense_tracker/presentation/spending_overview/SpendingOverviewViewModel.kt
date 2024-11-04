@@ -38,61 +38,71 @@ class SpendingOverviewViewModel(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Seblak",
-            spendingAmount = 10000
+            spendingAmount = 10000,
+            sourceLedgerId = 1
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli martabak",
-            spendingAmount = 30000
+            spendingAmount = 30000,
+            sourceLedgerId = 1
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 23000
+            spendingAmount = 23000,
+            sourceLedgerId = 1
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 23000
+            spendingAmount = 23000,
+            sourceLedgerId = 1
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 23000
+            spendingAmount = 23000,
+            sourceLedgerId = 1
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 23000
+            spendingAmount = 23000,
+            sourceLedgerId = 1
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 23000
+            spendingAmount = 23000,
+            sourceLedgerId = 1
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 23000
+            spendingAmount = 23000,
+            sourceLedgerId = 1
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 23000
+            spendingAmount = 23000,
+            sourceLedgerId = 1
         ),
         SpendingEntity(
             spendingId = 1,
             dateTime = ZonedDateTime.now(),
             spendingName = "Beli Terang bulan",
-            spendingAmount = 23000
+            spendingAmount = 23000,
+            sourceLedgerId = 1
         )
     )
     private fun loadSpendingListAndBalance(){

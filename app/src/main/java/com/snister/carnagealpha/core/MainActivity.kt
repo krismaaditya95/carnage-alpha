@@ -1,6 +1,7 @@
 package com.snister.carnagealpha.core
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
@@ -18,6 +21,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.snister.carnagealpha.config.ScreenRoutes
+import com.snister.carnagealpha.core.presentation.MainActivityEvents
+import com.snister.carnagealpha.core.presentation.MainActivityViewModel
 import com.snister.carnagealpha.core.presentation.shared.CustomBottomNav
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewScreen
@@ -25,6 +30,7 @@ import com.snister.carnagealpha.features.expense_tracker.presentation.spending_o
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_income.UpsertBalanceScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_spending.UpsertSpendingScreen
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +50,29 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainActivityCoreScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: MainActivityViewModel = koinViewModel()
 ) {
+
+    val currentContext = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.event.collect { event ->
+            when(event){
+                MainActivityEvents.UpsertSourceLedgerFailed -> {
+                    Toast.makeText(
+                        currentContext, "ERROR insert initial source ledger!", Toast.LENGTH_LONG
+                    ).show()
+                }
+                MainActivityEvents.UpsertSourceLedgerSuccess -> {
+                    Toast.makeText(
+                        currentContext, "Successfully inserted initial source ledger!", Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
     Scaffold(
         bottomBar = {
             CustomBottomNav(navController = navController)

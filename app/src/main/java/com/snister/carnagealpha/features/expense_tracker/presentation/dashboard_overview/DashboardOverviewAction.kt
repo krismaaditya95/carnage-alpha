@@ -3,6 +3,8 @@ package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard
 sealed interface DashboardOverviewAction {
     data object LoadSpendingOverviewAndBalance: DashboardOverviewAction
 
+    data object LoadSourceLedgerList: DashboardOverviewAction
+
     data class OnDateChange(val newDate: Int): DashboardOverviewAction
 
     data class OnDeleteSpending(val spendingId: Int): DashboardOverviewAction

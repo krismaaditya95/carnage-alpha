@@ -7,4 +7,5 @@ data class SpendingEntity(
     val spendingName: String,
     val spendingAmount: Long,
     val dateTime: ZonedDateTime,
+    val sourceLedgerId: Int
 )

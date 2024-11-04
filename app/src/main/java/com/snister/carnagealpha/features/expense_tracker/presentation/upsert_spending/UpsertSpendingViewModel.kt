@@ -67,7 +67,9 @@ class UpsertSpendingViewModel(
             spendingId = null,
             spendingName = state.spendingNameInput,
             spendingAmount = state.spendingAmountInput.toLong(),
-            dateTime = ZonedDateTime.now()
+            dateTime = ZonedDateTime.now(),
+            //sementara
+            sourceLedgerId = 1
         )
 
         return upsertSpendingUseCase(spending)

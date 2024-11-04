@@ -96,9 +96,9 @@ fun CustomBottomNav(
                 ),
                 onClick = {
                     isSelected = index
-                    Toast.makeText(
-                        currentContext, "Selected index = $index", Toast.LENGTH_LONG
-                    ).show()
+//                    Toast.makeText(
+//                        currentContext, "Selected index = $index", Toast.LENGTH_LONG
+//                    ).show()
                 },
                 icon = {
                     BadgedBox(

@@ -7,13 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 
 class DashboardOverviewViewModel(
     private val spendingDataRepository: SpendingDataRepository,
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
+    private val sourceLedgerRepository: SourceLedgerRepository
 ) : ViewModel(){
 
     var state by mutableStateOf(DashboardOverviewState())
@@ -25,6 +27,15 @@ class DashboardOverviewViewModel(
             DashboardOverviewAction.LoadSpendingOverviewAndBalance -> loadSpendingListAndBalance()
             is DashboardOverviewAction.OnDateChange -> TODO()
             is DashboardOverviewAction.OnDeleteSpending -> TODO()
+            DashboardOverviewAction.LoadSourceLedgerList -> loadSourceLedgerList()
+        }
+    }
+
+    private fun loadSourceLedgerList(){
+        viewModelScope.launch {
+            state = state.copy(
+                sourceLedgerList = sourceLedgerRepository.getAllSourceLedger()
+            )
         }
     }
 
