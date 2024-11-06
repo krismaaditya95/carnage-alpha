@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SourceLedgerEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.usecases.UpsertSourceLedgerUseCase
+import com.snister.carnagealpha.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -15,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
     private val localRepository: LocalRepository,
-    private val sourceLedgerUseCase: UpsertSourceLedgerUseCase
+    private val sourceLedgerUseCase: UpsertSourceLedgerUseCase,
+    private val sourceLedgerRepository: SourceLedgerRepository,
 ): ViewModel() {
 
     var state by mutableStateOf(MainActivityState())
@@ -34,6 +37,8 @@ class MainActivityViewModel(
             MainActivityAction.LoadSourceLedger -> TODO()
             MainActivityAction.ShowChangeSourceLedgerDialog -> showChangeSourceLedgerDialog()
             MainActivityAction.HideChangeSourceLedgerDialog -> hideChangeSourceLedgerDialog()
+            is MainActivityAction.OnSourceLedgerItemSelected -> onSourceLedgerSelected(action.selectedSourceLedgerId)
+            MainActivityAction.OnSaveSelectedSourceLedger -> onSaveSelectedSourceLedger()
         }
     }
 
@@ -76,9 +81,18 @@ class MainActivityViewModel(
     }
 
     private fun showChangeSourceLedgerDialog(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             state = state.copy(
-                isChangeSourceLedgerDialogVisible = true
+                isLoading = true
+            )
+            state = state.copy(
+                isChangeSourceLedgerDialogVisible = true,
+                // sourceLedgerList
+                sourceLedgerList = sourceLedgerRepository.getAllSourceLedger(),
+                currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
+            )
+            state = state.copy(
+                isLoading = false,
             )
         }
     }
@@ -86,7 +100,33 @@ class MainActivityViewModel(
     private fun hideChangeSourceLedgerDialog(){
         viewModelScope.launch {
             state = state.copy(
-                isChangeSourceLedgerDialogVisible = false
+                isChangeSourceLedgerDialogVisible = false,
+                selectedSourceLedgerIdFromList = 0
+            )
+        }
+    }
+
+    private fun onSourceLedgerSelected(id: Int){
+        viewModelScope.launch {
+            state = state.copy(
+                selectedSourceLedgerIdFromList = id,
+            )
+//            if(state.selectedSourceLedgerIdFromList == id){
+//                state = state.copy(
+//                    selectedSourceLedgerColor = cDC5F00
+//                )
+//            }else{
+//                state = state.copy(
+//                    selectedSourceLedgerColor = c373A40
+//                )
+//            }
+        }
+    }
+
+    private fun onSaveSelectedSourceLedger(){
+        viewModelScope.launch(Dispatchers.IO) {
+            localRepository.setCurrentSelectedSourceLedgerId(
+                state.selectedSourceLedgerIdFromList
             )
         }
     }

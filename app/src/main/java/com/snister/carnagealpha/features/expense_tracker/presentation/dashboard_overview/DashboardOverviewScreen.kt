@@ -37,8 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DashboardOverviewScreen(
-    modifier: Modifier = Modifier,
-    viewModel: DashboardOverviewViewModel = koinViewModel(),
+    viewModel: DashboardOverviewViewModel,
     onBalanceClick: () -> Unit,
     onAddSpendingClick: () -> Unit,
     onIncomeOverviewClick: () -> Unit,

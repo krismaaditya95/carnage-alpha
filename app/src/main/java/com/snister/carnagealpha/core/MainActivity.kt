@@ -7,13 +7,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DatePicker
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
@@ -44,15 +46,16 @@ import com.snister.carnagealpha.core.presentation.MainActivityEvents
 import com.snister.carnagealpha.core.presentation.MainActivityState
 import com.snister.carnagealpha.core.presentation.MainActivityViewModel
 import com.snister.carnagealpha.core.presentation.shared.CustomBottomNav
+import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewAction
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewScreen
+import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewViewModel
 import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewScreen
-import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewAction
+import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.SourceLedgerListWidget
 import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_income.UpsertBalanceScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_spending.UpsertSpendingScreen
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
-import com.snister.carnagealpha.ui.theme.cDC5F00
-import com.snister.carnagealpha.ui.theme.cmykGreen
+import com.snister.carnagealpha.ui.theme.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -75,15 +78,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainActivityCoreScreen(
     navController: NavHostController,
-    viewModel: MainActivityViewModel = koinViewModel(),
-    state: MainActivityState = viewModel.state,
-    onAction: (MainActivityAction) -> Unit = viewModel::onAction
+    mainActivityViewModel: MainActivityViewModel = koinViewModel(),
+    dashboardOverviewViewModel: DashboardOverviewViewModel = koinViewModel(),
+    mainActivityState: MainActivityState = mainActivityViewModel.state,
+    mainActivityOnAction: (MainActivityAction) -> Unit = mainActivityViewModel::onAction
 ) {
 
     val currentContext = LocalContext.current
 
     LaunchedEffect(key1 = true) {
-        viewModel.event.collect { event ->
+        mainActivityViewModel.event.collect { event ->
             when(event){
                 MainActivityEvents.UpsertSourceLedgerFailed -> {
                     Toast.makeText(
@@ -110,15 +114,19 @@ fun MainActivityCoreScreen(
                 .fillMaxSize()
                 .padding(bottom = paddingValues.calculateTopPadding()),
             navController = navController,
-            state = state,
-            onAction = onAction
+            mainActivityState = mainActivityState,
+            mainActivityOnAction = mainActivityOnAction,
+            dashboardOverviewViewModel = dashboardOverviewViewModel
         )
 
         when{
-            state.isChangeSourceLedgerDialogVisible -> {
+            mainActivityState.isChangeSourceLedgerDialogVisible -> {
                 ChangeSourceLedgerBottomSheetDialog(
-                    state = state,
-                    onAction = onAction
+                    mainActivityState = mainActivityState,
+                    mainActivityOnAction = mainActivityOnAction,
+                    mainActivityViewModel = mainActivityViewModel,
+
+                    dashboardOverviewOnAction = dashboardOverviewViewModel::onAction
                 )
             }
         }
@@ -129,8 +137,9 @@ fun MainActivityCoreScreen(
 fun Navigation(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    state: MainActivityState,
-    onAction: (MainActivityAction) -> Unit
+    mainActivityState: MainActivityState,
+    mainActivityOnAction: (MainActivityAction) -> Unit,
+    dashboardOverviewViewModel: DashboardOverviewViewModel
 ) {
 
 
@@ -147,6 +156,7 @@ fun Navigation(
 
         composable<ScreenRoutes.DashboardOverview>{
             DashboardOverviewScreen(
+                viewModel = dashboardOverviewViewModel,
                 onBalanceClick = {
                     navController.navigate(ScreenRoutes.Balance)
                 },
@@ -157,7 +167,7 @@ fun Navigation(
                     navController.navigate(ScreenRoutes.IncomeOverview)
                 },
                 onChangeSourceLedgerClick = {
-                    onAction(MainActivityAction.ShowChangeSourceLedgerDialog)
+                    mainActivityOnAction(MainActivityAction.ShowChangeSourceLedgerDialog)
                 }
             )
         }
@@ -207,8 +217,12 @@ fun Navigation(
 @Composable
 fun ChangeSourceLedgerBottomSheetDialog(
     modifier: Modifier = Modifier,
-    state: MainActivityState,
-    onAction: (MainActivityAction) -> Unit
+    mainActivityState: MainActivityState,
+    mainActivityViewModel: MainActivityViewModel,
+    mainActivityOnAction: (MainActivityAction) -> Unit,
+
+    // dashboard overview
+    dashboardOverviewOnAction: (DashboardOverviewAction) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -221,7 +235,7 @@ fun ChangeSourceLedgerBottomSheetDialog(
                 sheetState.hide()
             }.invokeOnCompletion {
                 if(!sheetState.isVisible){
-                    onAction(MainActivityAction.HideChangeSourceLedgerDialog)
+                    mainActivityOnAction(MainActivityAction.HideChangeSourceLedgerDialog)
                 }
             }
         },
@@ -231,23 +245,56 @@ fun ChangeSourceLedgerBottomSheetDialog(
     ) {
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(start = 20.dp, end = 20.dp)
+//                .border(1.dp, cC73659)
         ) {
             Text(
-                text = "Change Ledger",
+                text = "Change Ledger - Selected ID : ${mainActivityState.selectedSourceLedgerIdFromList}",
                 color = cDC5F00.copy(0.6f),
                 fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                 fontSize = 20.sp,
                 modifier = Modifier
-                    .border(1.dp, cmykGreen)
+//                    .border(1.dp, cmykGreen)
+                    .padding(top = 8.dp, bottom = 8.dp)
+            )
+            Text(
+                text = "[Current Active Ledger ID : ${mainActivityState.currentActiveSourceLedgerId}]",
+                color = cC73659,
+                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .padding(top = 8.dp, bottom = 8.dp)
             )
             HorizontalDivider(
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(top = 6.dp, bottom = 6.dp)
             )
             // LOAD LIST OF SOURCE LEDGER HERE
             // ...
+            when{
+                mainActivityState.isLoading ->{
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+//                            .border(1.dp, cDC5F00)
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .width(40.dp)
+                                .align(Alignment.Center),
+                            color = cC73659
+                        )
+                    }
+                }
 
+                !mainActivityState.isLoading ->{
+                    SourceLedgerListWidget(
+                        state = mainActivityState,
+                        onAction = mainActivityOnAction
+                    )
+                }
+            }
 
             Row(
                 modifier = modifier.align(Alignment.End),
@@ -258,7 +305,7 @@ fun ChangeSourceLedgerBottomSheetDialog(
                             sheetState.hide()
                         }.invokeOnCompletion {
                             if(!sheetState.isVisible){
-                                onAction(MainActivityAction.HideChangeSourceLedgerDialog)
+                                mainActivityOnAction(MainActivityAction.HideChangeSourceLedgerDialog)
                             }
                         }
                     }
@@ -268,20 +315,18 @@ fun ChangeSourceLedgerBottomSheetDialog(
 
                 TextButton(
                     onClick = {
-                        onAction(
-                            MainActivityAction.OnSourceLedgerChanged(
-                                selectedSourceLedgerId = 1
-                            )
-                        )
+                        mainActivityOnAction(MainActivityAction.OnSaveSelectedSourceLedger)
+                        dashboardOverviewOnAction(DashboardOverviewAction.LoadSpendingOverviewAndBalance)
 
                         sheetScope.launch {
                             sheetState.hide()
                         }.invokeOnCompletion {
                             if(!sheetState.isVisible){
-                                onAction(MainActivityAction.HideChangeSourceLedgerDialog)
+                                mainActivityOnAction(MainActivityAction.HideChangeSourceLedgerDialog)
                             }
                         }
-                    }
+                    },
+                    enabled = mainActivityState.selectedSourceLedgerIdFromList != 0
                 ) {
                     Text(text = "SAVE")
                 }

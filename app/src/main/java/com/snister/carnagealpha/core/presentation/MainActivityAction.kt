@@ -9,5 +9,7 @@ interface MainActivityAction {
 
     data object HideChangeSourceLedgerDialog: MainActivityAction
 
-    data class OnSourceLedgerChanged(val selectedSourceLedgerId: Int): MainActivityAction
+    data class OnSourceLedgerItemSelected(val selectedSourceLedgerId: Int): MainActivityAction
+
+    data object OnSaveSelectedSourceLedger: MainActivityAction
 }

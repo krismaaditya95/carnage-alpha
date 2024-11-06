@@ -73,6 +73,6 @@ val mainBindings = module {
         UpsertSourceLedgerUseCase(get())
     }
     viewModel {
-        MainActivityViewModel(get(), get())
+        MainActivityViewModel(get(), get(), get())
     }
 }
