@@ -39,6 +39,7 @@ import com.snister.carnagealpha.ui.theme.*
 @Composable
 fun MinimizedBalanceCard(
     onBalanceClick: () -> Unit,
+    onChangeSourceLedgerClick: () -> Unit,
     sourceLedgerName: String = "",
     balance: Long
 ) {
@@ -54,7 +55,8 @@ fun MinimizedBalanceCard(
             CardContent(
                 onBalanceClick = onBalanceClick,
                 balance = balance,
-                sourceLedgerName = sourceLedgerName
+                sourceLedgerName = sourceLedgerName,
+                onChangeSourceLedgerClick = onChangeSourceLedgerClick
             )
         }
     }
@@ -63,6 +65,7 @@ fun MinimizedBalanceCard(
 @Composable
 fun CardContent(
     onBalanceClick: () -> Unit,
+    onChangeSourceLedgerClick: () -> Unit,
     balance: Long,
     sourceLedgerName: String,
 ) {
@@ -107,7 +110,7 @@ fun CardContent(
                         .weight(0.3f),
 //                        .border(1.dp, cC73659),
                     onClick = {
-
+                        onChangeSourceLedgerClick()
                     }
                 ) {
                     Text(
@@ -151,6 +154,7 @@ fun CardContent(
 fun BalanceCardPreview(modifier: Modifier = Modifier) {
     MinimizedBalanceCard(
         onBalanceClick = {},
+        onChangeSourceLedgerClick = {},
         balance = 1000000,
         sourceLedgerName = "SourceLedgerName"
     )

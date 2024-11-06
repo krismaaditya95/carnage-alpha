@@ -147,7 +147,8 @@ fun SpendingOverviewCoreScreen(
         ){
             MinimizedBalanceCard(
                 onBalanceClick = onBalanceClick,
-                balance = state.balance
+                balance = state.balance,
+                onChangeSourceLedgerClick = {}
             )
 
             DatePickerWidget(

@@ -139,7 +139,8 @@ fun IncomeOverviewCoreScreen(
         ){
             MinimizedBalanceCard(
                 onBalanceClick = onBalanceClick,
-                balance = state.balance
+                balance = state.balance,
+                onChangeSourceLedgerClick = {}
             )
             IncomeDatePickerWidget(
                 onAction = onAction,

@@ -32,6 +32,8 @@ class MainActivityViewModel(
         when (action){
 //            MainActivityAction.InsertInitialDefaultSourceLedger -> TODO()
             MainActivityAction.LoadSourceLedger -> TODO()
+            MainActivityAction.ShowChangeSourceLedgerDialog -> showChangeSourceLedgerDialog()
+            MainActivityAction.HideChangeSourceLedgerDialog -> hideChangeSourceLedgerDialog()
         }
     }
 
@@ -73,5 +75,20 @@ class MainActivityViewModel(
         return sourceLedgerUseCase(sourceLedgerEntity)
     }
 
+    private fun showChangeSourceLedgerDialog(){
+        viewModelScope.launch {
+            state = state.copy(
+                isChangeSourceLedgerDialogVisible = true
+            )
+        }
+    }
+
+    private fun hideChangeSourceLedgerDialog(){
+        viewModelScope.launch {
+            state = state.copy(
+                isChangeSourceLedgerDialogVisible = false
+            )
+        }
+    }
 
 }

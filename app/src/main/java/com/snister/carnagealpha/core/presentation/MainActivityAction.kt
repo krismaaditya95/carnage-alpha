@@ -4,4 +4,10 @@ interface MainActivityAction {
 
 //    data object InsertInitialDefaultSourceLedger: MainActivityAction
     data object LoadSourceLedger: MainActivityAction
+
+    data object ShowChangeSourceLedgerDialog: MainActivityAction
+
+    data object HideChangeSourceLedgerDialog: MainActivityAction
+
+    data class OnSourceLedgerChanged(val selectedSourceLedgerId: Int): MainActivityAction
 }
