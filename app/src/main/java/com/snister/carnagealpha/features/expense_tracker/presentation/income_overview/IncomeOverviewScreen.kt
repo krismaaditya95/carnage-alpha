@@ -138,7 +138,6 @@ fun IncomeOverviewCoreScreen(
                 .fillMaxSize()
         ){
             MinimizedBalanceCard(
-                modifier = Modifier.fillMaxWidth(),
                 onBalanceClick = onBalanceClick,
                 balance = state.balance
             )

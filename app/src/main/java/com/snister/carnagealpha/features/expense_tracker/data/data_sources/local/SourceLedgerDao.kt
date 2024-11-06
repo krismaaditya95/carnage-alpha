@@ -15,6 +15,9 @@ interface SourceLedgerDao {
     @Query("SELECT * FROM sourceledgerdatamodel")
     suspend fun getAllSourceLedger(): List<SourceLedgerDataModel>
 
+    @Query("SELECT * FROM sourceledgerdatamodel WHERE sourceLedgerId = :id")
+    suspend fun getSourceLedgerById(id: Int): SourceLedgerDataModel
+
     @Transaction
     @Query("SELECT * FROM sourceledgerdatamodel")
     suspend fun getSourceLedgerWithSpendings(): List<LedgerAndSpendings>

@@ -10,5 +10,12 @@ data class DashboardOverviewState(
     val balance: Long = 0,
     val pickedDate: ZonedDateTime = ZonedDateTime.now(),
     val isDatePickerDropDownMenuVisible: Boolean = false,
-    val sourceLedgerList: List<SourceLedgerEntity> = emptyList()
+    val sourceLedgerList: List<SourceLedgerEntity> = emptyList(),
+
+    val currentSourceLedger: SourceLedgerEntity =
+        SourceLedgerEntity(
+            sourceLedgerId = 0,
+            sourceLedgerName = "",
+            sourceLedgerBalance = 0
+        )
 )

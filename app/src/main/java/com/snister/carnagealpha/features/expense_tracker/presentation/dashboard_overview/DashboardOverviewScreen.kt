@@ -44,8 +44,9 @@ fun DashboardOverviewScreen(
     onIncomeOverviewClick: () -> Unit
 ) {
     LaunchedEffect(key1 = true) {
-        viewModel.onAction(DashboardOverviewAction.LoadSourceLedgerList)
         viewModel.onAction(DashboardOverviewAction.LoadSpendingOverviewAndBalance)
+        //viewModel.onAction(DashboardOverviewAction.LoadSourceLedgerList)
+        //viewModel.onAction(DashboardOverviewAction.LoadSourceLedgerById)
     }
     
     DashboardOverviewCoreScreen(
@@ -90,9 +91,10 @@ fun DashboardOverviewCoreScreen(
                 .fillMaxSize()
         ){
             MinimizedBalanceCard(
-                modifier = Modifier.fillMaxWidth(),
+//                modifier = Modifier.fillMaxWidth(),
                 onBalanceClick = onBalanceClick,
-                balance = state.balance
+                balance = state.currentSourceLedger.sourceLedgerBalance,
+                sourceLedgerName = state.currentSourceLedger.sourceLedgerName
             )
             Spacer(modifier = Modifier.height(4.dp))
             MainMenuv2(

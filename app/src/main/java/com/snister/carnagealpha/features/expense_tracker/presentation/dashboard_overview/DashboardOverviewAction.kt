@@ -5,6 +5,8 @@ sealed interface DashboardOverviewAction {
 
     data object LoadSourceLedgerList: DashboardOverviewAction
 
+    data object LoadSourceLedgerById: DashboardOverviewAction
+
     data class OnDateChange(val newDate: Int): DashboardOverviewAction
 
     data class OnDeleteSpending(val spendingId: Int): DashboardOverviewAction

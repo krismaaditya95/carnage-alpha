@@ -8,4 +8,8 @@ interface LocalRepository {
     // for first time install setup
     suspend fun hasPerformedInitialSetup(): Boolean
     suspend fun initialSetupDone()
+
+    // set current selected or default sourceLedgerId
+    suspend fun setCurrentSelectedSourceLedgerId(sourceLedgerId: Int)
+    suspend fun getCurrentSelectedSourceLedgerId(): Int
 }

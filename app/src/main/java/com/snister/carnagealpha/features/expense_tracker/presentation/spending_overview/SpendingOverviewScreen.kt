@@ -146,7 +146,6 @@ fun SpendingOverviewCoreScreen(
                 .fillMaxSize()
         ){
             MinimizedBalanceCard(
-                modifier = Modifier.fillMaxWidth(),
                 onBalanceClick = onBalanceClick,
                 balance = state.balance
             )

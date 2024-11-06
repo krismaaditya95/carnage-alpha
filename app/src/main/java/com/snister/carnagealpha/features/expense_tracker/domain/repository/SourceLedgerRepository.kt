@@ -7,4 +7,6 @@ interface SourceLedgerRepository {
     suspend fun upsertSourceLedger(sourceLedgerEntity: SourceLedgerEntity)
 
     suspend fun getAllSourceLedger(): List<SourceLedgerEntity>
+
+    suspend fun getSourceLedgerById(id: Int): SourceLedgerEntity
 }

@@ -40,7 +40,7 @@ class MainActivityViewModel(
         val ledgerDebit = SourceLedgerEntity(
             sourceLedgerId = null,
             sourceLedgerName = "My Debit Card",
-            sourceLedgerBalance = 0
+            sourceLedgerBalance = 100000
         )
 
         val ledgerWallet = SourceLedgerEntity(
@@ -61,6 +61,7 @@ class MainActivityViewModel(
                 if(saveSourceLedger(ledgerDebit) && saveSourceLedger(ledgerWallet) && saveSourceLedger(ledgerSavings)){
                     _mainActivityEventChannel.send(MainActivityEvents.UpsertSourceLedgerSuccess)
                     localRepository.initialSetupDone()
+                    localRepository.setCurrentSelectedSourceLedgerId(1)
                 }else{
                     _mainActivityEventChannel.send(MainActivityEvents.UpsertSourceLedgerFailed)
                 }

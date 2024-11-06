@@ -18,4 +18,8 @@ class SourceLedgerRepositoryImpl(
         return sourceLedgerDao.getAllSourceLedger()
             .map { it.toSourceLedgerEntity() }
     }
+
+    override suspend fun getSourceLedgerById(id: Int): SourceLedgerEntity {
+        return sourceLedgerDao.getSourceLedgerById(id).toSourceLedgerEntity()
+    }
 }
