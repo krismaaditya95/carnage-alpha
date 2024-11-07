@@ -1,5 +1,6 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview
 
+import com.snister.carnagealpha.features.expense_tracker.domain.entities.SourceLedgerEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -13,4 +14,11 @@ data class SpendingOverviewState(
     val totalSpendingByDate: Long = 0,
     val pickedDate: ZonedDateTime = ZonedDateTime.now(),
     val isDatePickerVisible: Boolean = false,
+
+    val currentSourceLedger: SourceLedgerEntity =
+        SourceLedgerEntity(
+            sourceLedgerId = 0,
+            sourceLedgerName = "",
+            sourceLedgerBalance = 0
+        )
 )

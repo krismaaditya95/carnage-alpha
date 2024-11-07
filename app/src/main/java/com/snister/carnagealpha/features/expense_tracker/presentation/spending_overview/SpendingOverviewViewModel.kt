@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -16,7 +17,8 @@ import java.time.format.DateTimeFormatter
 
 class SpendingOverviewViewModel(
     private val spendingDataRepository: SpendingDataRepository,
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
+    private val sourceLedgerRepository: SourceLedgerRepository
 ) : ViewModel(){
 
     var state by mutableStateOf(SpendingOverviewState())
@@ -109,16 +111,16 @@ class SpendingOverviewViewModel(
         viewModelScope.launch {
             val allDates = spendingDataRepository.getAllDates()
             state = state.copy(
-                // nanti ini diuncomment
-//                spendingList = getSpendingListByDate(
-//                    allDates.lastOrNull() ?: ZonedDateTime.now()
-//                ),
-                spendingList = getSpendingListByDate(ZonedDateTime.now()),
-                // sementara pakai data dummy
-//                spendingList = dummySpendingList,
-                balance = localRepository.getBalance(),
 
-//                pickedDate = allDates.lastOrNull() ?: ZonedDateTime.now(),
+                spendingList = getSpendingListByDate(ZonedDateTime.now()),
+
+                // balance yang disimpan di shared preferences, diganti dengan
+                balance = localRepository.getBalance(),
+                // -> diganti dengan current source ledger
+                currentSourceLedger = sourceLedgerRepository.getSourceLedgerById(
+                    localRepository.getCurrentSelectedSourceLedgerId()
+                ),
+
                 pickedDate = ZonedDateTime.now(),
                 datesList = allDates.reversed()
             )

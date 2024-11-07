@@ -42,9 +42,10 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun IncomeOverviewScreen(
-    viewModel: IncomeOverviewViewModel = koinViewModel(),
+    viewModel: IncomeOverviewViewModel,
     onBalanceClick: () -> Unit,
     onAddIncomeClick: () -> Unit,
+    onChangeSourceLedgerClick: () -> Unit
 ) {
     LaunchedEffect(key1 = true) {
         viewModel.onAction(IncomeOverviewAction.LoadIncomeOverviewAndBalance)
@@ -57,7 +58,8 @@ fun IncomeOverviewScreen(
         onAddIncomeClick = onAddIncomeClick,
         onDeleteIncome = {
             viewModel.onAction(IncomeOverviewAction.OnDeleteIncome(it))
-        }
+        },
+        onChangeSourceLedgerClick = onChangeSourceLedgerClick
     )
 }
 
@@ -68,7 +70,8 @@ fun IncomeOverviewCoreScreen(
     onAction: (IncomeOverviewAction) -> Unit,
     onBalanceClick: () -> Unit,
     onAddIncomeClick: () -> Unit,
-    onDeleteIncome: (Int) -> Unit
+    onDeleteIncome: (Int) -> Unit,
+    onChangeSourceLedgerClick: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
         state = rememberTopAppBarState()
@@ -139,8 +142,9 @@ fun IncomeOverviewCoreScreen(
         ){
             MinimizedBalanceCard(
                 onBalanceClick = onBalanceClick,
-                balance = state.balance,
-                onChangeSourceLedgerClick = {}
+                balance = state.currentSourceLedger.sourceLedgerBalance,
+                sourceLedgerName = state.currentSourceLedger.sourceLedgerName,
+                onChangeSourceLedgerClick = onChangeSourceLedgerClick
             )
             IncomeDatePickerWidget(
                 onAction = onAction,
@@ -167,7 +171,8 @@ fun UpsertCoreScreenPreview(modifier: Modifier = Modifier) {
             onAction = {  },
             onBalanceClick = {},
             onAddIncomeClick = {},
-            onDeleteIncome = {}
+            onDeleteIncome = {},
+            onChangeSourceLedgerClick = {}
         )
     }
 }

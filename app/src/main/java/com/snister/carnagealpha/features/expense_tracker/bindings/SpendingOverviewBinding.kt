@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val spendingOverviewBinding = module {
     viewModel {
-        SpendingOverviewViewModel(get(), get())
+        SpendingOverviewViewModel(get(), get(), get())
     }
 }

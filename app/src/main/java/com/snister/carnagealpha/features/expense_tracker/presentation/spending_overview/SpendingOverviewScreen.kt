@@ -46,9 +46,10 @@ import java.time.ZonedDateTime
 @Composable
 fun SpendingOverviewScreen(
     modifier: Modifier = Modifier,
-    viewModel: SpendingOverviewViewModel = koinViewModel(),
+    viewModel: SpendingOverviewViewModel,
     onBalanceClick: () -> Unit,
     onAddSpendingClick: () -> Unit,
+    onChangeSourceLedgerClick: () -> Unit
 ) {
     LaunchedEffect(key1 = true) {
         viewModel.onAction(SpendingOverviewAction.LoadSpendingOverviewAndBalance)
@@ -61,7 +62,8 @@ fun SpendingOverviewScreen(
         onAddSpendingClick = onAddSpendingClick,
         onDeleteSpending = {
             viewModel.onAction(SpendingOverviewAction.OnDeleteSpending(it))
-        }
+        },
+        onChangeSourceLedgerClick = onChangeSourceLedgerClick
     )
 }
 
@@ -73,7 +75,8 @@ fun SpendingOverviewCoreScreen(
     onAction: (SpendingOverviewAction) -> Unit,
     onBalanceClick: () -> Unit,
     onAddSpendingClick: () -> Unit,
-    onDeleteSpending: (Int) -> Unit
+    onDeleteSpending: (Int) -> Unit,
+    onChangeSourceLedgerClick: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
         state = rememberTopAppBarState()
@@ -147,8 +150,9 @@ fun SpendingOverviewCoreScreen(
         ){
             MinimizedBalanceCard(
                 onBalanceClick = onBalanceClick,
-                balance = state.balance,
-                onChangeSourceLedgerClick = {}
+                balance = state.currentSourceLedger.sourceLedgerBalance,
+                sourceLedgerName = state.currentSourceLedger.sourceLedgerName,
+                onChangeSourceLedgerClick = onChangeSourceLedgerClick
             )
 
             DatePickerWidget(
@@ -176,6 +180,7 @@ fun SpendingOverviewScreenPreview(modifier: Modifier = Modifier) {
         onAction = {},
         onBalanceClick = {},
         onAddSpendingClick = {},
-        onDeleteSpending = {}
+        onDeleteSpending = {},
+        onChangeSourceLedgerClick = {}
     )
 }

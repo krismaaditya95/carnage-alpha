@@ -9,6 +9,7 @@ import com.snister.carnagealpha.features.expense_tracker.domain.entities.IncomeE
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.IncomeDataRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -18,7 +19,8 @@ import java.time.format.DateTimeFormatter
 
 class IncomeOverviewViewModel(
     private val incomeDataRepository: IncomeDataRepository,
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
+    private val sourceLedgerRepository: SourceLedgerRepository
 ) : ViewModel(){
 
     var state by mutableStateOf(IncomeOverviewState())
@@ -71,8 +73,14 @@ class IncomeOverviewViewModel(
 //                incomeList = getIncomeListByDate(ZonedDateTime.now()),
                 selectedDateRangeFromDateRangePicker = convertZonedDateTimeRangeToString(Pair(defaultStartDate, defaultEndDate)),
                 incomeList = getIncomeListByDateRange(Pair(defaultStartDate, defaultEndDate)),
-                balance = localRepository.getBalance(), /*incomeDataRepository.getTotalIncome(),*/
-                datesList = allDates.reversed()
+                datesList = allDates.reversed(),
+                // balance yang disimpan di shared preferences, diganti dengan
+                balance = localRepository.getBalance(),
+                // -> diganti dengan current source ledger
+                currentSourceLedger = sourceLedgerRepository.getSourceLedgerById(
+                    localRepository.getCurrentSelectedSourceLedgerId()
+                ),
+
             )
 
             state = state.copy(

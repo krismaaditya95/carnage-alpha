@@ -1,6 +1,7 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.income_overview
 
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.IncomeEntity
+import com.snister.carnagealpha.features.expense_tracker.domain.entities.SourceLedgerEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -21,4 +22,11 @@ data class IncomeOverviewState(
     ),
     val totalIncomesBySelectedDateRange: Long = 0,
     val isDatePickerVisible: Boolean = false,
+
+    val currentSourceLedger: SourceLedgerEntity =
+        SourceLedgerEntity(
+            sourceLedgerId = 0,
+            sourceLedgerName = "",
+            sourceLedgerBalance = 0
+        )
 )

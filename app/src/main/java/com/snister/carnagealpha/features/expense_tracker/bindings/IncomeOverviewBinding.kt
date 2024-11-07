@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 val incomeOverviewBinding = module {
     viewModel {
-        IncomeOverviewViewModel(get(), get())
+        IncomeOverviewViewModel(get(), get(), get())
     }
 }

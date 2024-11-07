@@ -49,9 +49,13 @@ import com.snister.carnagealpha.core.presentation.shared.CustomBottomNav
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewAction
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewViewModel
+import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewAction
 import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewScreen
+import com.snister.carnagealpha.features.expense_tracker.presentation.income_overview.IncomeOverviewViewModel
 import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.SourceLedgerListWidget
+import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewAction
 import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewScreen
+import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingOverviewViewModel
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_income.UpsertBalanceScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_spending.UpsertSpendingScreen
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
@@ -80,6 +84,9 @@ fun MainActivityCoreScreen(
     navController: NavHostController,
     mainActivityViewModel: MainActivityViewModel = koinViewModel(),
     dashboardOverviewViewModel: DashboardOverviewViewModel = koinViewModel(),
+    spendingOverviewModel: SpendingOverviewViewModel = koinViewModel(),
+    incomeOverviewModel: IncomeOverviewViewModel = koinViewModel(),
+
     mainActivityState: MainActivityState = mainActivityViewModel.state,
     mainActivityOnAction: (MainActivityAction) -> Unit = mainActivityViewModel::onAction
 ) {
@@ -116,7 +123,9 @@ fun MainActivityCoreScreen(
             navController = navController,
             mainActivityState = mainActivityState,
             mainActivityOnAction = mainActivityOnAction,
-            dashboardOverviewViewModel = dashboardOverviewViewModel
+            dashboardOverviewViewModel = dashboardOverviewViewModel,
+            spendingOverviewModel = spendingOverviewModel,
+            incomeOverviewModel = incomeOverviewModel
         )
 
         when{
@@ -126,7 +135,9 @@ fun MainActivityCoreScreen(
                     mainActivityOnAction = mainActivityOnAction,
                     mainActivityViewModel = mainActivityViewModel,
 
-                    dashboardOverviewOnAction = dashboardOverviewViewModel::onAction
+                    dashboardOverviewOnAction = dashboardOverviewViewModel::onAction,
+                    spendingOverviewOnAction = spendingOverviewModel::onAction,
+                    incomeOverviewOnAction = incomeOverviewModel::onAction
                 )
             }
         }
@@ -139,7 +150,9 @@ fun Navigation(
     navController: NavHostController,
     mainActivityState: MainActivityState,
     mainActivityOnAction: (MainActivityAction) -> Unit,
-    dashboardOverviewViewModel: DashboardOverviewViewModel
+    dashboardOverviewViewModel: DashboardOverviewViewModel,
+    spendingOverviewModel: SpendingOverviewViewModel,
+    incomeOverviewModel: IncomeOverviewViewModel
 ) {
 
 
@@ -174,23 +187,31 @@ fun Navigation(
 
         composable<ScreenRoutes.SpendingOverview>{
             SpendingOverviewScreen(
+                viewModel = spendingOverviewModel,
                 onBalanceClick = {
                     navController.navigate(ScreenRoutes.Balance)
                 },
                 onAddSpendingClick = {
                     navController.navigate(ScreenRoutes.SpendingDetails(-1))
+                },
+                onChangeSourceLedgerClick = {
+                    mainActivityOnAction(MainActivityAction.ShowChangeSourceLedgerDialog)
                 }
             )
         }
 
         composable<ScreenRoutes.IncomeOverview>{
             IncomeOverviewScreen(
+                viewModel = incomeOverviewModel,
                 onBalanceClick = {
                     navController.navigate(ScreenRoutes.Balance)
                 },
                 onAddIncomeClick = {
 //                    navController.navigate(ScreenRoutes.IncomeDetails(-1))
                     navController.navigate(ScreenRoutes.Balance)
+                },
+                onChangeSourceLedgerClick = {
+                    mainActivityOnAction(MainActivityAction.ShowChangeSourceLedgerDialog)
                 }
             )
         }
@@ -222,7 +243,13 @@ fun ChangeSourceLedgerBottomSheetDialog(
     mainActivityOnAction: (MainActivityAction) -> Unit,
 
     // dashboard overview
-    dashboardOverviewOnAction: (DashboardOverviewAction) -> Unit
+    dashboardOverviewOnAction: (DashboardOverviewAction) -> Unit,
+
+    // spending overview
+    spendingOverviewOnAction: (SpendingOverviewAction) -> Unit,
+
+    // income overview
+    incomeOverviewOnAction: (IncomeOverviewAction) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -257,32 +284,40 @@ fun ChangeSourceLedgerBottomSheetDialog(
 //                    .border(1.dp, cmykGreen)
                     .padding(top = 8.dp, bottom = 8.dp)
             )
-            Text(
-                text = "[Current Active Ledger ID : ${mainActivityState.currentActiveSourceLedgerId}]",
-                color = cC73659,
-                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                fontSize = 16.sp,
-                modifier = Modifier
-                    .padding(top = 8.dp, bottom = 8.dp)
-            )
-            Text(
-                text = "Selected INDEX : ${mainActivityState.selectedSourceLedgerIndexFromList}",
-                color = cDC5F00.copy(0.6f),
-                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                fontSize = 20.sp,
-                modifier = Modifier
-//                    .border(1.dp, cmykGreen)
-                    .padding(top = 8.dp, bottom = 8.dp)
-            )
-            Text(
-                text = "Selected ID : ${mainActivityState.selectedSourceLedgerIdFromList}",
-                color = cDC5F00.copy(0.6f),
-                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                fontSize = 20.sp,
-                modifier = Modifier
-//                    .border(1.dp, cmykGreen)
-                    .padding(top = 8.dp, bottom = 8.dp)
-            )
+
+            // -------------------------
+            // FOR TESTING PURPOSE
+            // -------------------------
+//            Text(
+//                text = "[Current Active Ledger ID : ${mainActivityState.currentActiveSourceLedgerId}]",
+//                color = cC73659,
+//                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+//                fontSize = 16.sp,
+//                modifier = Modifier
+//                    .padding(top = 8.dp, bottom = 8.dp)
+//            )
+//            Text(
+//                text = "Selected INDEX : ${mainActivityState.selectedSourceLedgerIndexFromList}",
+//                color = cDC5F00.copy(0.6f),
+//                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+//                fontSize = 20.sp,
+//                modifier = Modifier
+////                    .border(1.dp, cmykGreen)
+//                    .padding(top = 8.dp, bottom = 8.dp)
+//            )
+//            Text(
+//                text = "Selected ID : ${mainActivityState.selectedSourceLedgerIdFromList}",
+//                color = cDC5F00.copy(0.6f),
+//                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+//                fontSize = 20.sp,
+//                modifier = Modifier
+////                    .border(1.dp, cmykGreen)
+//                    .padding(top = 8.dp, bottom = 8.dp)
+//            )
+            // -------------------------
+            // END OF - FOR TESTING PURPOSE
+            // -------------------------
+
             HorizontalDivider(
                 modifier = Modifier
                     .padding(top = 6.dp, bottom = 6.dp)
@@ -335,6 +370,8 @@ fun ChangeSourceLedgerBottomSheetDialog(
                     onClick = {
                         mainActivityOnAction(MainActivityAction.OnSaveSelectedSourceLedger)
                         dashboardOverviewOnAction(DashboardOverviewAction.LoadSpendingOverviewAndBalance)
+                        spendingOverviewOnAction(SpendingOverviewAction.LoadSpendingOverviewAndBalance)
+                        incomeOverviewOnAction(IncomeOverviewAction.LoadIncomeOverviewAndBalance)
 
                         sheetScope.launch {
                             sheetState.hide()
