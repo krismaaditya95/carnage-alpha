@@ -50,6 +50,7 @@ fun SourceLedgerListWidget(
                 sourceLedgerEntity = item,
                 onAction = onAction,
                 state = state,
+                index = index
             )
         }
     }
@@ -60,21 +61,39 @@ fun SourceLedgerItemWidget(
     sourceLedgerEntity: SourceLedgerEntity,
     onAction: (MainActivityAction) -> Unit,
     state: MainActivityState,
+    index: Int
 ) {
 
     ElevatedCard(
         onClick = {
             sourceLedgerEntity.sourceLedgerId?.let {
                 onAction(MainActivityAction.OnSourceLedgerItemSelected(
-                    selectedSourceLedgerId = it
+                    selectedSourceLedgerIndex = index,
+                    selectedSourceLedgerId = it,
                 ))
             }
         },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp)
-            .padding(bottom = 14.dp)
-            .border(1.dp, state.selectedSourceLedgerColor, RoundedCornerShape(4.dp)),
+
+        modifier = when{
+            state.selectedSourceLedgerIndexFromList == index -> {
+                Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(bottom = 14.dp)
+                    .border(1.dp, cDC5F00, RoundedCornerShape(4.dp))
+            }
+            else -> {
+                Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(bottom = 14.dp)
+                    .border(1.dp, c373A40, RoundedCornerShape(4.dp))
+            }
+
+
+        },
+
+
         shape = RoundedCornerShape(4.dp),
     ) {
         Row(
@@ -113,6 +132,7 @@ fun SourceLedgerItemWidgetPreview(modifier: Modifier = Modifier) {
             sourceLedgerBalance = 100000,
         ),
         onAction = {},
-        state = MainActivityState()
+        state = MainActivityState(),
+        index = 1
     )
 }

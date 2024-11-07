@@ -249,7 +249,7 @@ fun ChangeSourceLedgerBottomSheetDialog(
 //                .border(1.dp, cC73659)
         ) {
             Text(
-                text = "Change Ledger - Selected ID : ${mainActivityState.selectedSourceLedgerIdFromList}",
+                text = "Change Ledger",
                 color = cDC5F00.copy(0.6f),
                 fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                 fontSize = 20.sp,
@@ -263,6 +263,24 @@ fun ChangeSourceLedgerBottomSheetDialog(
                 fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                 fontSize = 16.sp,
                 modifier = Modifier
+                    .padding(top = 8.dp, bottom = 8.dp)
+            )
+            Text(
+                text = "Selected INDEX : ${mainActivityState.selectedSourceLedgerIndexFromList}",
+                color = cDC5F00.copy(0.6f),
+                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+                fontSize = 20.sp,
+                modifier = Modifier
+//                    .border(1.dp, cmykGreen)
+                    .padding(top = 8.dp, bottom = 8.dp)
+            )
+            Text(
+                text = "Selected ID : ${mainActivityState.selectedSourceLedgerIdFromList}",
+                color = cDC5F00.copy(0.6f),
+                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+                fontSize = 20.sp,
+                modifier = Modifier
+//                    .border(1.dp, cmykGreen)
                     .padding(top = 8.dp, bottom = 8.dp)
             )
             HorizontalDivider(
@@ -326,7 +344,8 @@ fun ChangeSourceLedgerBottomSheetDialog(
                             }
                         }
                     },
-                    enabled = mainActivityState.selectedSourceLedgerIdFromList != 0
+                    enabled = mainActivityState.selectedSourceLedgerIdFromList != 0 ||
+                            mainActivityState.selectedSourceLedgerIdFromList != mainActivityState.currentActiveSourceLedgerId
                 ) {
                     Text(text = "SAVE")
                 }

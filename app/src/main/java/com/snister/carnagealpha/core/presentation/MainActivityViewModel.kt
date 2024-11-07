@@ -37,7 +37,10 @@ class MainActivityViewModel(
             MainActivityAction.LoadSourceLedger -> TODO()
             MainActivityAction.ShowChangeSourceLedgerDialog -> showChangeSourceLedgerDialog()
             MainActivityAction.HideChangeSourceLedgerDialog -> hideChangeSourceLedgerDialog()
-            is MainActivityAction.OnSourceLedgerItemSelected -> onSourceLedgerSelected(action.selectedSourceLedgerId)
+            is MainActivityAction.OnSourceLedgerItemSelected -> onSourceLedgerSelected(
+                action.selectedSourceLedgerIndex,
+                action.selectedSourceLedgerId
+            )
             MainActivityAction.OnSaveSelectedSourceLedger -> onSaveSelectedSourceLedger()
         }
     }
@@ -101,25 +104,18 @@ class MainActivityViewModel(
         viewModelScope.launch {
             state = state.copy(
                 isChangeSourceLedgerDialogVisible = false,
-                selectedSourceLedgerIdFromList = 0
+                selectedSourceLedgerIdFromList = 0,
+                selectedSourceLedgerIndexFromList = 0
             )
         }
     }
 
-    private fun onSourceLedgerSelected(id: Int){
+    private fun onSourceLedgerSelected(index: Int, id: Int){
         viewModelScope.launch {
             state = state.copy(
+                selectedSourceLedgerIndexFromList = index,
                 selectedSourceLedgerIdFromList = id,
             )
-//            if(state.selectedSourceLedgerIdFromList == id){
-//                state = state.copy(
-//                    selectedSourceLedgerColor = cDC5F00
-//                )
-//            }else{
-//                state = state.copy(
-//                    selectedSourceLedgerColor = c373A40
-//                )
-//            }
         }
     }
 

@@ -9,10 +9,7 @@ data class MainActivityState(
     val isChangeSourceLedgerDialogVisible: Boolean = false,
     val isLoading: Boolean = false,
     val sourceLedgerList: List<SourceLedgerEntity> = emptyList(),
+    val selectedSourceLedgerIndexFromList: Int = 0,
     val selectedSourceLedgerIdFromList: Int = 0,
     val currentActiveSourceLedgerId: Int = 0,
-
-    // color
-//    val currentSourceLedgerColor: Color = c373A40,
-    val selectedSourceLedgerColor: Color = c373A40
 )
