@@ -92,7 +92,9 @@ class MainActivityViewModel(
                 isChangeSourceLedgerDialogVisible = true,
                 // sourceLedgerList
                 sourceLedgerList = sourceLedgerRepository.getAllSourceLedger(),
-                currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
+                currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId(),
+                selectedSourceLedgerIdFromList = localRepository.getCurrentSelectedSourceLedgerId(),
+                selectedSourceLedgerIndexFromList = -1
             )
             state = state.copy(
                 isLoading = false,

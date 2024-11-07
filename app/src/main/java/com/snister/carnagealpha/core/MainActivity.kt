@@ -344,8 +344,8 @@ fun ChangeSourceLedgerBottomSheetDialog(
                             }
                         }
                     },
-                    enabled = mainActivityState.selectedSourceLedgerIdFromList != 0 ||
-                            mainActivityState.selectedSourceLedgerIdFromList != mainActivityState.currentActiveSourceLedgerId
+                    enabled = (
+                            mainActivityState.selectedSourceLedgerIdFromList != mainActivityState.currentActiveSourceLedgerId)
                 ) {
                     Text(text = "SAVE")
                 }

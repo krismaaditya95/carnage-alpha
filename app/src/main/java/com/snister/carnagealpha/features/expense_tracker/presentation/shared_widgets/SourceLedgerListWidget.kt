@@ -2,6 +2,7 @@ package com.snister.carnagealpha.features.expense_tracker.presentation.shared_wi
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -75,6 +76,15 @@ fun SourceLedgerItemWidget(
         },
 
         modifier = when{
+            // this first condition is OPTIONAL, uncomment anytime
+//            state.selectedSourceLedgerIndexFromList == index &&
+//                    state.selectedSourceLedgerIdFromList == state.currentActiveSourceLedgerId -> {
+//                Modifier
+//                    .fillMaxWidth()
+//                    .height(80.dp)
+//                    .padding(bottom = 14.dp)
+//                    .border(1.dp, cmykGreen, RoundedCornerShape(4.dp))
+//            }
             state.selectedSourceLedgerIndexFromList == index -> {
                 Modifier
                     .fillMaxWidth()
@@ -87,13 +97,9 @@ fun SourceLedgerItemWidget(
                     .fillMaxWidth()
                     .height(80.dp)
                     .padding(bottom = 14.dp)
-                    .border(1.dp, c373A40, RoundedCornerShape(4.dp))
+                    .border(1.dp, cEEEEEE, RoundedCornerShape(4.dp))
             }
-
-
         },
-
-
         shape = RoundedCornerShape(4.dp),
     ) {
         Row(
@@ -103,13 +109,39 @@ fun SourceLedgerItemWidget(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = sourceLedgerEntity.sourceLedgerName,
-                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
-                fontSize = 16.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Column {
+                Text(
+                    text = sourceLedgerEntity.sourceLedgerName,
+                    fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+                    fontSize = 16.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                when{
+                    state.currentActiveSourceLedgerId == sourceLedgerEntity.sourceLedgerId -> {
+                        Row{
+                            Text(
+                                text = "●  Current Active Ledger",
+                                fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+                                fontSize = 10.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = cmykGreen
+                            )
+                        }
+                    }
+                }
+//                Row{
+//                    Text(
+//                        text = "●  Current Active Ledger",
+//                        fontFamily = Font(R.font.roboto_regular).toFontFamily(),
+//                        fontSize = 10.sp,
+//                        maxLines = 1,
+//                        overflow = TextOverflow.Ellipsis,
+//                        color = cmykGreen
+//                    )
+//                }
+            }
 
             Text(
                 text = CurrencyFormatter.formatToRupiah(sourceLedgerEntity.sourceLedgerBalance),
