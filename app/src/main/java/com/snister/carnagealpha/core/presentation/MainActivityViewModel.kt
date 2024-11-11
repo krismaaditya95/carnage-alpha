@@ -50,7 +50,7 @@ class MainActivityViewModel(
         val ledgerDebit = SourceLedgerEntity(
             sourceLedgerId = null,
             sourceLedgerName = "Debit Card",
-            sourceLedgerBalance = 100000
+            sourceLedgerBalance = 0
         )
 
         val ledgerWallet = SourceLedgerEntity(

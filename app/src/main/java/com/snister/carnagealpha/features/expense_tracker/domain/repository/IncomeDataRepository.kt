@@ -20,7 +20,8 @@ interface IncomeDataRepository {
     ): List<IncomeEntity>
 
     suspend fun getIncomesByDateRange(
-        dateTimeRange: Pair<ZonedDateTime, ZonedDateTime>
+        dateTimeRange: Pair<ZonedDateTime, ZonedDateTime>,
+        sourceLedgerId: Int
     ): List<IncomeEntity>
 
     suspend fun getAllDates(): List<ZonedDateTime>

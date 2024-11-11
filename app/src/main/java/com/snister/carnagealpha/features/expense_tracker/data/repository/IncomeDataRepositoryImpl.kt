@@ -48,7 +48,10 @@ class IncomeDataRepositoryImpl(
 
     }
 
-    override suspend fun getIncomesByDateRange(dateTimeRange: Pair<ZonedDateTime, ZonedDateTime>): List<IncomeEntity> {
+    override suspend fun getIncomesByDateRange(
+        dateTimeRange: Pair<ZonedDateTime, ZonedDateTime>,
+        sourceLedgerId: Int
+    ): List<IncomeEntity> {
         Log.d("dateTimeRange COMPARE | first.dayOfMonth => ", "${dateTimeRange.first.dayOfMonth}")
         Log.d("dateTimeRange COMPARE | second.dayOfMonth => ", "${dateTimeRange.second.dayOfMonth}")
 
@@ -61,7 +64,8 @@ class IncomeDataRepositoryImpl(
                         incomeEntity.dateTime.month >= dateTimeRange.first.month &&
                         incomeEntity.dateTime.month <= dateTimeRange.second.month &&
                         incomeEntity.dateTime.year >= dateTimeRange.first.year &&
-                        incomeEntity.dateTime.year <= dateTimeRange.second.year
+                        incomeEntity.dateTime.year <= dateTimeRange.second.year &&
+                        incomeEntity.sourceLedgerId == sourceLedgerId
 
             }
     }

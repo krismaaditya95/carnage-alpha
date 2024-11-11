@@ -34,13 +34,17 @@ class SpendingDataRepositoryImpl(
         dao.deleteSpending(id)
     }
 
-    override suspend fun getSpendingsByDate(dateTimeUtc: ZonedDateTime): List<SpendingEntity> {
+    override suspend fun getSpendingsByDate(
+        dateTimeUtc: ZonedDateTime,
+        sourceLedgerId: Int
+    ): List<SpendingEntity> {
         return dao.getAllSpendings()
             .map{ it.toSpendingEntity() }
             .filter { spendingEntity ->
                 spendingEntity.dateTime.dayOfMonth == dateTimeUtc.dayOfMonth &&
                         spendingEntity.dateTime.month == dateTimeUtc.month &&
-                        spendingEntity.dateTime.year == dateTimeUtc.year
+                        spendingEntity.dateTime.year == dateTimeUtc.year &&
+                        spendingEntity.sourceLedgerId == sourceLedgerId
             }
     }
 

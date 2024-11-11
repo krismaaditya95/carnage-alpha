@@ -9,6 +9,7 @@ import com.snister.carnagealpha.features.expense_tracker.domain.entities.Spendin
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -35,90 +36,24 @@ class SpendingOverviewViewModel(
         }
     }
 
-    val dummySpendingList = listOf(
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli Seblak",
-            spendingAmount = 10000,
-            sourceLedgerId = 1
-        ),
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli martabak",
-            spendingAmount = 30000,
-            sourceLedgerId = 1
-        ),
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli Terang bulan",
-            spendingAmount = 23000,
-            sourceLedgerId = 1
-        ),
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli Terang bulan",
-            spendingAmount = 23000,
-            sourceLedgerId = 1
-        ),
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli Terang bulan",
-            spendingAmount = 23000,
-            sourceLedgerId = 1
-        ),
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli Terang bulan",
-            spendingAmount = 23000,
-            sourceLedgerId = 1
-        ),
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli Terang bulan",
-            spendingAmount = 23000,
-            sourceLedgerId = 1
-        ),
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli Terang bulan",
-            spendingAmount = 23000,
-            sourceLedgerId = 1
-        ),
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli Terang bulan",
-            spendingAmount = 23000,
-            sourceLedgerId = 1
-        ),
-        SpendingEntity(
-            spendingId = 1,
-            dateTime = ZonedDateTime.now(),
-            spendingName = "Beli Terang bulan",
-            spendingAmount = 23000,
-            sourceLedgerId = 1
-        )
-    )
+
     private fun loadSpendingListAndBalance(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val allDates = spendingDataRepository.getAllDates()
+
+            state = state.copy(
+                currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
+            )
+
             state = state.copy(
 
-                spendingList = getSpendingListByDate(ZonedDateTime.now()),
+                spendingList = getSpendingListByDate(ZonedDateTime.now(), state.currentActiveSourceLedgerId),
 
                 // balance yang disimpan di shared preferences, diganti dengan
                 balance = localRepository.getBalance(),
                 // -> diganti dengan current source ledger
                 currentSourceLedger = sourceLedgerRepository.getSourceLedgerById(
-                    localRepository.getCurrentSelectedSourceLedgerId()
+                    state.currentActiveSourceLedgerId
                 ),
 
                 pickedDate = ZonedDateTime.now(),
@@ -147,12 +82,12 @@ class SpendingOverviewViewModel(
     }
 
     private fun onDatePickerSelected(millis: Long){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val millisToZonedDateTime = convertMillisToZonedDateTime(millis)
             state = state.copy(
                 selectedDateFromDatePicker = convertMillisToZonedDateTimeString(millis),
                 pickedDate = millisToZonedDateTime,
-                spendingList = getSpendingListByDate(millisToZonedDateTime)
+                spendingList = getSpendingListByDate(millisToZonedDateTime, state.currentActiveSourceLedgerId)
             )
             // calculate total spending from state.spendingList
             state = state.copy(
@@ -177,9 +112,12 @@ class SpendingOverviewViewModel(
         return formattedZonedDateTime.toString()
     }
 
-    private suspend fun getSpendingListByDate(date: ZonedDateTime): List<SpendingEntity>{
+    private suspend fun getSpendingListByDate(
+        date: ZonedDateTime,
+        sourceLedgerId: Int
+    ): List<SpendingEntity>{
         return spendingDataRepository
-            .getSpendingsByDate(date)
+            .getSpendingsByDate(date, sourceLedgerId)
             .reversed()
     }
 
@@ -195,9 +133,9 @@ class SpendingOverviewViewModel(
 
     private suspend fun deleteSpendingById(id: Int){
         spendingDataRepository.deleteSpending(id)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             state = state.copy(
-                spendingList = getSpendingListByDate(state.pickedDate),
+                spendingList = getSpendingListByDate(state.pickedDate, state.currentActiveSourceLedgerId),
                 balance = localRepository.getBalance() - spendingDataRepository.getTotalSpend(),
             )
         }

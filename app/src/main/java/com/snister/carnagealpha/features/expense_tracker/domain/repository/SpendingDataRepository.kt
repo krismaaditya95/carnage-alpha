@@ -16,7 +16,8 @@ interface SpendingDataRepository {
     suspend fun deleteSpending(id: Int)
 
     suspend fun getSpendingsByDate(
-        dateTimeUtc: ZonedDateTime
+        dateTimeUtc: ZonedDateTime,
+        sourceLedgerId: Int
     ): List<SpendingEntity>
 
     suspend fun getAllDates(): List<ZonedDateTime>

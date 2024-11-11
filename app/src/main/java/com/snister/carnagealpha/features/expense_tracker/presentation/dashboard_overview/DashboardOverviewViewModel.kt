@@ -56,10 +56,16 @@ class DashboardOverviewViewModel(
     private fun loadSpendingListAndBalance(){
         viewModelScope.launch(Dispatchers.IO) {
             val allDates = spendingDataRepository.getAllDates()
+
+            state = state.copy(
+                currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
+            )
+
             state = state.copy(
                 //note: spendingList belum dipake dimanapun
                 spendingList = getSpendingListByDate(
-                    allDates.lastOrNull() ?: ZonedDateTime.now()
+                    allDates.lastOrNull() ?: ZonedDateTime.now(),
+                    state.currentActiveSourceLedgerId
                 ),
 
                 //note: balance localrepository dipake sebelumnya di MinimizedBalanceCard
@@ -67,7 +73,7 @@ class DashboardOverviewViewModel(
                 balance = localRepository.getBalance(),
                 // -> balance diganti dengan currentSourceLedger
                 currentSourceLedger = sourceLedgerRepository.getSourceLedgerById(
-                    localRepository.getCurrentSelectedSourceLedgerId()
+                    state.currentActiveSourceLedgerId
                 ),
                 // ini sourceLedgerList. optinal untuk ngetest
                 sourceLedgerList = sourceLedgerRepository.getAllSourceLedger(),
@@ -81,9 +87,12 @@ class DashboardOverviewViewModel(
         }
     }
 
-    private suspend fun getSpendingListByDate(date: ZonedDateTime): List<SpendingEntity>{
+    private suspend fun getSpendingListByDate(
+        date: ZonedDateTime,
+        sourceLedgerId: Int
+    ): List<SpendingEntity>{
         return spendingDataRepository
-            .getSpendingsByDate(date)
+            .getSpendingsByDate(date, sourceLedgerId)
             .reversed()
     }
 }

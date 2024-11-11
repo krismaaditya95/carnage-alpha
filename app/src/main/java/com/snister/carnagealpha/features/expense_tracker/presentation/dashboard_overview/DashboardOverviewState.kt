@@ -12,6 +12,7 @@ data class DashboardOverviewState(
     val isDatePickerDropDownMenuVisible: Boolean = false,
     val sourceLedgerList: List<SourceLedgerEntity> = emptyList(),
 
+    val currentActiveSourceLedgerId: Int = 0,
     val currentSourceLedger: SourceLedgerEntity =
         SourceLedgerEntity(
             sourceLedgerId = 0,

@@ -11,6 +11,7 @@ import com.snister.carnagealpha.features.expense_tracker.domain.repository.Incom
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -38,7 +39,7 @@ class IncomeOverviewViewModel(
     }
 
     private fun loadIncomeListAndBalance(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val allDates = incomeDataRepository.getAllDates()
             val defaultStartDate = ZonedDateTime.of(
                 ZonedDateTime.now().year,
@@ -48,17 +49,20 @@ class IncomeOverviewViewModel(
             val defaultEndDate = ZonedDateTime.now()
 
             state = state.copy(
+                currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
+            )
+            state = state.copy(
 
 //                incomeList = dummyIncomeList,
 //                incomeList = getIncomeListByDate(ZonedDateTime.now()),
                 selectedDateRangeFromDateRangePicker = convertZonedDateTimeRangeToString(Pair(defaultStartDate, defaultEndDate)),
-                incomeList = getIncomeListByDateRange(Pair(defaultStartDate, defaultEndDate)),
+                incomeList = getIncomeListByDateRange(Pair(defaultStartDate, defaultEndDate), state.currentActiveSourceLedgerId),
                 datesList = allDates.reversed(),
                 // balance yang disimpan di shared preferences, diganti dengan
                 balance = localRepository.getBalance(),
                 // -> diganti dengan current source ledger
                 currentSourceLedger = sourceLedgerRepository.getSourceLedgerById(
-                    localRepository.getCurrentSelectedSourceLedgerId()
+                    state.currentActiveSourceLedgerId
                 ),
 
             )
@@ -95,11 +99,11 @@ class IncomeOverviewViewModel(
     }
 
     private fun onIncomeDateRangePickerChange(selectedDateRange: Pair<Long?, Long?>){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             state = state.copy(
                 selectedDateRangeFromDateRangePicker = convertDateRangeToZonedDateTimeString(selectedDateRange),
                 pickedDateRange = convertDateRangeToZonedDateTime(selectedDateRange),
-                incomeList = getIncomeListByDateRange(convertDateRangeToZonedDateTime(selectedDateRange))
+                incomeList = getIncomeListByDateRange(convertDateRangeToZonedDateTime(selectedDateRange), state.currentActiveSourceLedgerId)
             )
             state = state.copy(
                 totalIncomesBySelectedDateRange = getTotalIncomesBySelectedDateRange()
@@ -173,9 +177,9 @@ class IncomeOverviewViewModel(
             .reversed()
     }
 
-    private suspend fun getIncomeListByDateRange(dateRange: Pair<ZonedDateTime, ZonedDateTime>): List<IncomeEntity>{
+    private suspend fun getIncomeListByDateRange(dateRange: Pair<ZonedDateTime, ZonedDateTime>, sourceLedgerId: Int): List<IncomeEntity>{
         return incomeDataRepository
-            .getIncomesByDateRange(dateRange)
+            .getIncomesByDateRange(dateRange, sourceLedgerId)
             .reversed()
     }
 

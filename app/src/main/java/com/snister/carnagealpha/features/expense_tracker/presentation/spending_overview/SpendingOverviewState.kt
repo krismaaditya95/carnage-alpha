@@ -15,6 +15,7 @@ data class SpendingOverviewState(
     val pickedDate: ZonedDateTime = ZonedDateTime.now(),
     val isDatePickerVisible: Boolean = false,
 
+    val currentActiveSourceLedgerId: Int = 0,
     val currentSourceLedger: SourceLedgerEntity =
         SourceLedgerEntity(
             sourceLedgerId = 0,
