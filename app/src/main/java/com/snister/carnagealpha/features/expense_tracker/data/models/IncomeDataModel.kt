@@ -14,4 +14,6 @@ data class IncomeDataModel(
     val incomeAmount: Long,
 
     val dateTime: String,
+
+    val sourceLedgerId: Int
 )

@@ -9,12 +9,22 @@ fun IncomeDataModel.toIncomeEntity() : IncomeEntity = IncomeEntity(
     incomeId = incomeId ?: 0,
     incomeSourceName = incomeSourceName,
     incomeAmount = incomeAmount,
-    dateTime = Instant.parse(dateTime).atZone(ZoneId.systemDefault())
+    dateTime = Instant.parse(dateTime).atZone(ZoneId.systemDefault()),
+    sourceLedgerId = sourceLedgerId
 )
 
 fun IncomeEntity.toIncomeDataModel() : IncomeDataModel = IncomeDataModel(
     incomeSourceName = incomeSourceName,
     incomeAmount = incomeAmount,
-    dateTime = dateTime.toInstant().toString()
+    dateTime = dateTime.toInstant().toString(),
+    sourceLedgerId = sourceLedgerId
+)
+
+fun IncomeEntity.toEditIncomeDataModel() : IncomeDataModel = IncomeDataModel(
+    incomeId = incomeId,
+    incomeSourceName = incomeSourceName,
+    incomeAmount = incomeAmount,
+    dateTime = dateTime.toInstant().toString(),
+    sourceLedgerId = sourceLedgerId
 )
 

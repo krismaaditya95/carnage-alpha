@@ -37,26 +37,6 @@ class IncomeOverviewViewModel(
         }
     }
 
-    val dummyIncomeList = listOf(
-        IncomeEntity(
-            incomeId = 1,
-            incomeAmount = 4000000,
-            incomeSourceName = "Gaji bulan ini",
-            dateTime = ZonedDateTime.now()
-        ),
-        IncomeEntity(
-            incomeId = 1,
-            incomeAmount = 1000000,
-            incomeSourceName = "Dikasih tante",
-            dateTime = ZonedDateTime.now()
-        ),
-        IncomeEntity(
-            incomeId = 1,
-            incomeAmount = 500000,
-            incomeSourceName = "Ditransfer kakak",
-            dateTime = ZonedDateTime.now()
-        ),
-    )
     private fun loadIncomeListAndBalance(){
         viewModelScope.launch {
             val allDates = incomeDataRepository.getAllDates()

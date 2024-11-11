@@ -6,8 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.IncomeEntity
+import com.snister.carnagealpha.features.expense_tracker.domain.entities.SourceLedgerEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetSourceLedgerByIdUseCase
 import com.snister.carnagealpha.features.expense_tracker.domain.usecases.UpsertIncomeUseCase
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.UpsertSourceLedgerUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -15,7 +19,9 @@ import java.time.ZonedDateTime
 
 class UpsertIncomeViewModel(
     private val localRepository: LocalRepository,
-    private val upsertIncomeUseCase: UpsertIncomeUseCase
+    private val upsertIncomeUseCase: UpsertIncomeUseCase,
+    private val getSourceLedgerByIdUseCase: GetSourceLedgerByIdUseCase,
+    private val upsertSourceLedgerUseCase: UpsertSourceLedgerUseCase
 ) : ViewModel(){
 
     var state by mutableStateOf(UpsertIncomeState())
@@ -25,10 +31,17 @@ class UpsertIncomeViewModel(
     val event = _upsertBalanceEventChannel.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             state = state.copy(
-                initialBalance = localRepository.getBalance(),
-                tempBalance = localRepository.getBalance()
+                currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
+            )
+
+            state = state.copy(
+//                initialBalance = localRepository.getBalance(),
+//                tempBalance = localRepository.getBalance()
+                initialBalance = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerBalance,
+                tempBalance = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerBalance,
+                currentActiveSourceLedgerName = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerName,
             )
         }
     }
@@ -49,10 +62,10 @@ class UpsertIncomeViewModel(
             }
 
             UpsertIncomeAction.OnIncomeSaved -> {
-                viewModelScope.launch {
-                    if(saveIncome()){
+                viewModelScope.launch(Dispatchers.IO) {
+                    if(saveIncome() && updateSourceLedgerBalance(state.tempBalance)){
                         _upsertBalanceEventChannel.send(UpsertIncomeEvents.UpsertIncomeSuccess)
-                        localRepository.updateBalance(state.tempBalance)
+//                        localRepository.updateBalance(state.tempBalance)
                     }else{
                         _upsertBalanceEventChannel.send(UpsertIncomeEvents.UpsertIncomeFailed)
                     }
@@ -66,9 +79,20 @@ class UpsertIncomeViewModel(
             incomeId = null,
             incomeAmount = state.incomeAmountInput.toLong(),
             incomeSourceName = state.incomeSourceNameInput,
-            dateTime = ZonedDateTime.now()
+            dateTime = ZonedDateTime.now(),
+            sourceLedgerId = state.currentActiveSourceLedgerId
         )
 
         return upsertIncomeUseCase(income)
+    }
+
+    private suspend fun updateSourceLedgerBalance(updatedBalance: Long): Boolean{
+        val updatedSourceLedger = SourceLedgerEntity(
+            sourceLedgerId = state.currentActiveSourceLedgerId,
+            sourceLedgerName = state.currentActiveSourceLedgerName,
+            sourceLedgerBalance = updatedBalance
+        )
+
+        return upsertSourceLedgerUseCase(updatedSourceLedger)
     }
 }

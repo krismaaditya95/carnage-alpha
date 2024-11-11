@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val balanceBinding = module {
     single { UpsertIncomeUseCase(get()) }
-    viewModel { UpsertIncomeViewModel(get(), get()) }
+    viewModel { UpsertIncomeViewModel(get(), get(), get(), get()) }
 }

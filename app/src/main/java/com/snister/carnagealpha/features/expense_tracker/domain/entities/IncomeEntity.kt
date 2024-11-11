@@ -7,4 +7,5 @@ data class IncomeEntity(
     val incomeSourceName: String,
     val incomeAmount: Long,
     val dateTime: ZonedDateTime,
+    val sourceLedgerId: Int
 )

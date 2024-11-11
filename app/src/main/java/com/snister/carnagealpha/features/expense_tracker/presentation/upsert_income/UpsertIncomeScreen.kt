@@ -95,7 +95,8 @@ fun UpsertIncomeCoreScreen(
             TopBar(
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier.fillMaxWidth(),
-                appBarTitle = "Add Income"
+                appBarTitle = "Add Income",
+                navigationIcon = true
             )
         }
     ){ padding ->

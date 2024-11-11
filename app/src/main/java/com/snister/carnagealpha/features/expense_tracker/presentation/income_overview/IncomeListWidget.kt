@@ -84,7 +84,7 @@ fun IncomeItemWidget(
         ) {
             Column{
                 Text(
-                    text = incomeItem.incomeSourceName,
+                    text = "${incomeItem.incomeSourceName} | SLID = ${incomeItem.sourceLedgerId}",
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -120,7 +120,8 @@ fun IncomeItemWidgetPreview(modifier: Modifier = Modifier) {
             incomeId = 1,
             dateTime = ZonedDateTime.now(),
             incomeSourceName = "Gaji bulan ini",
-            incomeAmount = 4000000
+            incomeAmount = 4000000,
+            sourceLedgerId = 1
         )
     )
 }
