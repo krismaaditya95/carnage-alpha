@@ -8,5 +8,5 @@ import org.koin.dsl.module
 
 val upsertSpendingBinding = module {
     single { UpsertSpendingUseCase(get())}
-    viewModel { UpsertSpendingViewModel(get() , get()) }
+    viewModel { UpsertSpendingViewModel(get() , get(), get(), get()) }
 }

@@ -1,6 +1,7 @@
 package com.snister.carnagealpha.features.expense_tracker.data.repository
 
 import com.snister.carnagealpha.features.expense_tracker.data.data_sources.local.SourceLedgerDao
+import com.snister.carnagealpha.features.expense_tracker.data.mapper.toEditSourceLedgerDataModel
 import com.snister.carnagealpha.features.expense_tracker.data.mapper.toSourceLedgerDataModel
 import com.snister.carnagealpha.features.expense_tracker.data.mapper.toSourceLedgerEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SourceLedgerEntity
@@ -11,7 +12,7 @@ class SourceLedgerRepositoryImpl(
 ): SourceLedgerRepository {
 
     override suspend fun upsertSourceLedger(sourceLedgerEntity: SourceLedgerEntity) {
-        sourceLedgerDao.upsertSourceLedger(sourceLedgerEntity.toSourceLedgerDataModel())
+        sourceLedgerDao.upsertSourceLedger(sourceLedgerEntity.toEditSourceLedgerDataModel())
     }
 
     override suspend fun getAllSourceLedger(): List<SourceLedgerEntity> {

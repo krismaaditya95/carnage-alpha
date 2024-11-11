@@ -96,7 +96,8 @@ fun UpsertSpendingCoreScreen(
             TopBar(
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier.fillMaxWidth(),
-                appBarTitle = "Add Spending"
+                appBarTitle = "Add Spending",
+                navigationIcon = true
             )
         }
     ) { innerPadding ->
@@ -137,6 +138,7 @@ fun UpsertSpendingCoreScreen(
                             Text(
                                 modifier = Modifier
                                     .padding(20.dp),
+//                                text = "CURRENT LEDGER ID : ${state.currentActiveSourceLedgerId} - ",
                                 text = CurrencyFormatter.formatToRupiah(state.tempBalance),
                                 fontSize = 28.sp,
                                 fontWeight = FontWeight.SemiBold,

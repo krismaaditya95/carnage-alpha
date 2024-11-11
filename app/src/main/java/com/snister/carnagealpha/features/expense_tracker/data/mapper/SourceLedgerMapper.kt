@@ -13,3 +13,9 @@ fun SourceLedgerEntity.toSourceLedgerDataModel() : SourceLedgerDataModel = Sourc
     sourceLedgerName = sourceLedgerName,
     sourceLedgerBalance = sourceLedgerBalance
 )
+
+fun SourceLedgerEntity.toEditSourceLedgerDataModel() : SourceLedgerDataModel = SourceLedgerDataModel(
+    sourceLedgerId = sourceLedgerId,
+    sourceLedgerName = sourceLedgerName,
+    sourceLedgerBalance = sourceLedgerBalance,
+)

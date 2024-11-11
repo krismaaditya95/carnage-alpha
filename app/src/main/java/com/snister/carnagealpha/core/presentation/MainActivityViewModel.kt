@@ -49,19 +49,19 @@ class MainActivityViewModel(
 
         val ledgerDebit = SourceLedgerEntity(
             sourceLedgerId = null,
-            sourceLedgerName = "My Debit Card",
+            sourceLedgerName = "Debit Card",
             sourceLedgerBalance = 100000
         )
 
         val ledgerWallet = SourceLedgerEntity(
             sourceLedgerId = null,
-            sourceLedgerName = "My Wallet",
+            sourceLedgerName = "Wallet",
             sourceLedgerBalance = 0
         )
 
         val ledgerSavings = SourceLedgerEntity(
             sourceLedgerId = null,
-            sourceLedgerName = "My Savings",
+            sourceLedgerName = "Savings",
             sourceLedgerBalance = 0
         )
 

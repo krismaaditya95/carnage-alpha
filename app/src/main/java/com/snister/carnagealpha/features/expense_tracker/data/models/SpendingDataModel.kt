@@ -6,15 +6,15 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    foreignKeys = [
-        ForeignKey(
-            entity = SourceLedgerDataModel::class,
-            parentColumns = arrayOf("sourceLedgerId"),
-            childColumns = arrayOf("sourceLedgerId"),
-            onUpdate = ForeignKey.CASCADE,
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+//    foreignKeys = [
+//        ForeignKey(
+//            entity = SourceLedgerDataModel::class,
+//            parentColumns = arrayOf("sourceLedgerId"),
+//            childColumns = arrayOf("sourceLedgerId"),
+//            onUpdate = ForeignKey.CASCADE,
+//            onDelete = ForeignKey.CASCADE
+//        )
+//    ]
 )
 data class SpendingDataModel(
 
@@ -27,6 +27,6 @@ data class SpendingDataModel(
 
     val dateTime: String,
 
-    @ColumnInfo(index = true)
+//    @ColumnInfo(index = true)
     val sourceLedgerId: Int,
 )

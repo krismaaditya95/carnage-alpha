@@ -5,9 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.snister.carnagealpha.features.expense_tracker.domain.entities.SourceLedgerEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetSourceLedgerByIdUseCase
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.UpsertSourceLedgerUseCase
 import com.snister.carnagealpha.features.expense_tracker.domain.usecases.UpsertSpendingUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -15,7 +20,9 @@ import java.time.ZonedDateTime
 
 class UpsertSpendingViewModel(
     private val localRepository: LocalRepository,
-    private val upsertSpendingUseCase: UpsertSpendingUseCase
+    private val upsertSpendingUseCase: UpsertSpendingUseCase,
+    private val getSourceLedgerByIdUseCase: GetSourceLedgerByIdUseCase,
+    private val upsertSourceLedgerUseCase: UpsertSourceLedgerUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(UpsertSpendingState())
@@ -25,10 +32,16 @@ class UpsertSpendingViewModel(
     val event = _upsertSpendingEventChannel.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             state = state.copy(
-                initialBalance = localRepository.getBalance(),
-                tempBalance = localRepository.getBalance()
+                currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
+            )
+            state = state.copy(
+//                initialBalance = localRepository.getBalance(),
+//                tempBalance = localRepository.getBalance(),
+                initialBalance = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerBalance,
+                tempBalance = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerBalance,
+                currentActiveSourceLedgerName = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerName,
             )
         }
     }
@@ -49,11 +62,11 @@ class UpsertSpendingViewModel(
             }
 
             UpsertSpendingAction.OnSpendingSaved -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     // insert spending to database
-                    if(saveSpending()){
+                    if(saveSpending() && updateSourceLedgerBalance(state.tempBalance)){
                         _upsertSpendingEventChannel.send(UpsertSpendingEvents.UpsertSpendingSuccess)
-                        localRepository.updateBalance(state.tempBalance)
+//                        localRepository.updateBalance(state.tempBalance)
                     }else{
                         _upsertSpendingEventChannel.send(UpsertSpendingEvents.UpsertSpendingFailed)
                     }
@@ -69,9 +82,19 @@ class UpsertSpendingViewModel(
             spendingAmount = state.spendingAmountInput.toLong(),
             dateTime = ZonedDateTime.now(),
             //sementara
-            sourceLedgerId = 1
+            sourceLedgerId = state.currentActiveSourceLedgerId
         )
 
         return upsertSpendingUseCase(spending)
+    }
+
+    private suspend fun updateSourceLedgerBalance(updatedBalance: Long): Boolean{
+        val updatedSourceLedger = SourceLedgerEntity(
+            sourceLedgerId = state.currentActiveSourceLedgerId,
+            sourceLedgerName = state.currentActiveSourceLedgerName,
+            sourceLedgerBalance = updatedBalance
+        )
+
+        return upsertSourceLedgerUseCase(updatedSourceLedger)
     }
 }

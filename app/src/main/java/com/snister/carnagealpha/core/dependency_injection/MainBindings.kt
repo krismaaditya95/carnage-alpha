@@ -14,6 +14,8 @@ import com.snister.carnagealpha.features.expense_tracker.domain.repository.Incom
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetAllSourceLedgerUseCase
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetSourceLedgerByIdUseCase
 import com.snister.carnagealpha.features.expense_tracker.domain.usecases.UpsertSourceLedgerUseCase
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.singleOf
@@ -72,6 +74,13 @@ val mainBindings = module {
     single {
         UpsertSourceLedgerUseCase(get())
     }
+    single {
+        GetAllSourceLedgerUseCase(get())
+    }
+    single {
+        GetSourceLedgerByIdUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get(), get(), get())
     }

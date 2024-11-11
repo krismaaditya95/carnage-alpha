@@ -4,5 +4,7 @@ data class UpsertSpendingState(
     val initialBalance: Long = 0,
     val tempBalance: Long = 0,
     val spendingAmountInput: String = "",
-    val spendingNameInput: String = ""
+    val spendingNameInput: String = "",
+    val currentActiveSourceLedgerId: Int = 0,
+    val currentActiveSourceLedgerName: String = ""
 )
