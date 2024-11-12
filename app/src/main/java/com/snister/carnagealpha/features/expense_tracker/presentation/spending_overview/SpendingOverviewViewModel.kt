@@ -48,6 +48,7 @@ class SpendingOverviewViewModel(
 
             state = state.copy(
 
+                selectedDateFromDatePicker = convertZonedDateTimeToString(ZonedDateTime.now()),
                 spendingList = getSpendingListByDate(ZonedDateTime.now(), state.currentActiveSourceLedgerId),
 
                 // balance yang disimpan di shared preferences, diganti dengan
@@ -107,6 +108,17 @@ class SpendingOverviewViewModel(
                 totalSpendingByDate = getTotalSpendByDate()
             )
         }
+    }
+
+    // ---------------------------------
+    // Conversion for normal date picker
+    // ---------------------------------
+    private fun convertZonedDateTimeToString(
+        zonedDateTime: ZonedDateTime
+    ): String{
+        val formattedZonedDateTime = DateTimeFormatter
+            .ofPattern("dd-MMMM-yyyy").format(zonedDateTime)
+        return formattedZonedDateTime.toString()
     }
 
     private fun convertMillisToZonedDateTime(millis: Long): ZonedDateTime{
