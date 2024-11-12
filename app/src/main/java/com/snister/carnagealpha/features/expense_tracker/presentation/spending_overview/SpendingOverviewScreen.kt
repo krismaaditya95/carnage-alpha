@@ -128,7 +128,10 @@ fun SpendingOverviewCoreScreen(
 
                     FloatingActionButton(
                         onClick = {
-                            onAddSpendingClick()
+                            if(!state.disableButton){
+                                onAddSpendingClick()
+                                onAction(SpendingOverviewAction.DisableAddButton)
+                            }
                         },
                         containerColor = cC73659,
                     ) {

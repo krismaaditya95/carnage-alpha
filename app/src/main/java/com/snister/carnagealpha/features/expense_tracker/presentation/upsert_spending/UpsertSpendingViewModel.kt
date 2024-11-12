@@ -36,11 +36,18 @@ class UpsertSpendingViewModel(
             state = state.copy(
                 currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
             )
+//            state = state.copy(
+//                initialBalance = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerBalance,
+//                tempBalance = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerBalance,
+//                currentActiveSourceLedgerName = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerName,
+//            )
             state = state.copy(
-//                initialBalance = localRepository.getBalance(),
-//                tempBalance = localRepository.getBalance(),
                 initialBalance = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerBalance,
-                tempBalance = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerBalance,
+            )
+            state = state.copy(
+                tempBalance = state.initialBalance,
+            )
+            state = state.copy(
                 currentActiveSourceLedgerName = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId).sourceLedgerName,
             )
         }

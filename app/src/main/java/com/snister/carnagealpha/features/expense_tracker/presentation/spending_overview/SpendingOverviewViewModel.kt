@@ -33,6 +33,7 @@ class SpendingOverviewViewModel(
             is SpendingOverviewAction.OnDeleteSpending -> TODO()
             SpendingOverviewAction.ShowDatePicker -> showDatePicker()
             SpendingOverviewAction.HideDatePicker -> hideDatePicker()
+            SpendingOverviewAction.DisableAddButton -> disableAddButton()
         }
     }
 
@@ -63,6 +64,10 @@ class SpendingOverviewViewModel(
             state = state.copy(
                 totalSpendingByDate = getTotalSpendByDate()
             )
+
+            state = state.copy(
+                disableButton = false
+            )
         }
     }
 
@@ -77,6 +82,14 @@ class SpendingOverviewViewModel(
         viewModelScope.launch {
             state = state.copy(
                 isDatePickerVisible = false
+            )
+        }
+    }
+
+    private fun disableAddButton(){
+        viewModelScope.launch {
+            state = state.copy(
+                disableButton = true
             )
         }
     }

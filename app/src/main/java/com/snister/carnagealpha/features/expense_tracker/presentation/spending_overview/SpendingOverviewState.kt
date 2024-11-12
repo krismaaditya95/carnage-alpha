@@ -21,5 +21,7 @@ data class SpendingOverviewState(
             sourceLedgerId = 0,
             sourceLedgerName = "",
             sourceLedgerBalance = 0
-        )
+        ),
+
+    val disableButton: Boolean = false
 )
