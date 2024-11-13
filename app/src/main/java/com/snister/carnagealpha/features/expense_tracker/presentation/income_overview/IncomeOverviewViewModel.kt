@@ -6,11 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.IncomeEntity
-import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
-import com.snister.carnagealpha.features.expense_tracker.domain.repository.IncomeDataRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
-import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
-import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetIncomeByDateUseCase
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetSourceLedgerByIdUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -19,9 +17,9 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class IncomeOverviewViewModel(
-    private val incomeDataRepository: IncomeDataRepository,
     private val localRepository: LocalRepository,
-    private val sourceLedgerRepository: SourceLedgerRepository
+    private val getIncomeByDateUseCase: GetIncomeByDateUseCase,
+    private val getSourceLedgerByIdUseCase: GetSourceLedgerByIdUseCase
 ) : ViewModel(){
 
     var state by mutableStateOf(IncomeOverviewState())
@@ -30,7 +28,7 @@ class IncomeOverviewViewModel(
     fun onAction(action: IncomeOverviewAction){
         when (action){
             IncomeOverviewAction.LoadIncomeOverviewAndBalance -> loadIncomeListAndBalance()
-            is IncomeOverviewAction.OnIncomeDateChange -> onDatePickerSelected(action.selectedDate)
+//            is IncomeOverviewAction.OnIncomeDateChange -> onDatePickerSelected(action.selectedDate)
             is IncomeOverviewAction.OnDeleteIncome -> TODO()
             IncomeOverviewAction.ShowIncomeDatePicker -> showDatePicker()
             IncomeOverviewAction.HideIncomeDatePicker -> hideDatePicker()
@@ -40,7 +38,7 @@ class IncomeOverviewViewModel(
 
     private fun loadIncomeListAndBalance(){
         viewModelScope.launch(Dispatchers.IO) {
-            val allDates = incomeDataRepository.getAllDates()
+//            val allDates = incomeDataRepository.getAllDates()
             val defaultStartDate = ZonedDateTime.of(
                 ZonedDateTime.now().year,
                 ZonedDateTime.now().month.value,
@@ -53,17 +51,13 @@ class IncomeOverviewViewModel(
             )
             state = state.copy(
 
-//                incomeList = dummyIncomeList,
-//                incomeList = getIncomeListByDate(ZonedDateTime.now()),
                 selectedDateRangeFromDateRangePicker = convertZonedDateTimeRangeToString(Pair(defaultStartDate, defaultEndDate)),
                 incomeList = getIncomeListByDateRange(Pair(defaultStartDate, defaultEndDate), state.currentActiveSourceLedgerId),
-                datesList = allDates.reversed(),
+//                datesList = allDates.reversed(),
                 // balance yang disimpan di shared preferences, diganti dengan
-                balance = localRepository.getBalance(),
+//                balance = localRepository.getBalance(),
                 // -> diganti dengan current source ledger
-                currentSourceLedger = sourceLedgerRepository.getSourceLedgerById(
-                    state.currentActiveSourceLedgerId
-                ),
+                currentSourceLedger = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId),
 
             )
 
@@ -88,15 +82,15 @@ class IncomeOverviewViewModel(
         }
     }
 
-    private fun onDatePickerSelected(millis: Long){
-        viewModelScope.launch {
-            state = state.copy(
-                selectedDateFromDatePicker = convertMillisToZonedDateTimeString(millis),
-                pickedDate = convertMillisToZonedDateTime(millis),
-                incomeList = getIncomeListByDate(convertMillisToZonedDateTime(millis))
-            )
-        }
-    }
+//    private fun onDatePickerSelected(millis: Long){
+//        viewModelScope.launch {
+//            state = state.copy(
+//                selectedDateFromDatePicker = convertMillisToZonedDateTimeString(millis),
+//                pickedDate = convertMillisToZonedDateTime(millis),
+//                incomeList = getIncomeListByDate(convertMillisToZonedDateTime(millis))
+//            )
+//        }
+//    }
 
     private fun onIncomeDateRangePickerChange(selectedDateRange: Pair<Long?, Long?>){
         viewModelScope.launch(Dispatchers.IO) {
@@ -171,16 +165,18 @@ class IncomeOverviewViewModel(
         return "$formattedStartZonedDateTime - $formattedEndZonedDateTime"
     }
 
-    private suspend fun getIncomeListByDate(date: ZonedDateTime): List<IncomeEntity>{
-        return incomeDataRepository
-            .getIncomesByDate(date)
-            .reversed()
-    }
+//    private suspend fun getIncomeListByDate(date: ZonedDateTime): List<IncomeEntity>{
+//        return incomeDataRepository
+//            .getIncomesByDate(date)
+//            .reversed()
+//    }
 
     private suspend fun getIncomeListByDateRange(dateRange: Pair<ZonedDateTime, ZonedDateTime>, sourceLedgerId: Int): List<IncomeEntity>{
-        return incomeDataRepository
-            .getIncomesByDateRange(dateRange, sourceLedgerId)
-            .reversed()
+//        return incomeDataRepository
+//            .getIncomesByDateRange(dateRange, sourceLedgerId)
+//            .reversed()
+
+        return getIncomeByDateUseCase(dateRange, sourceLedgerId)
     }
 
     private fun getTotalIncomesBySelectedDateRange(): Long{

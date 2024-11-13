@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
-import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
-import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetSourceLedgerByIdUseCase
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetSpendingByDateUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -17,9 +17,9 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class SpendingOverviewViewModel(
-    private val spendingDataRepository: SpendingDataRepository,
     private val localRepository: LocalRepository,
-    private val sourceLedgerRepository: SourceLedgerRepository
+    private val getSpendingByDateUseCase: GetSpendingByDateUseCase,
+    private val getSourceLedgerByIdUseCase: GetSourceLedgerByIdUseCase
 ) : ViewModel(){
 
     var state by mutableStateOf(SpendingOverviewState())
@@ -40,7 +40,7 @@ class SpendingOverviewViewModel(
 
     private fun loadSpendingListAndBalance(){
         viewModelScope.launch(Dispatchers.IO) {
-            val allDates = spendingDataRepository.getAllDates()
+//            val allDates = spendingDataRepository.getAllDates()
 
             state = state.copy(
                 currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
@@ -54,12 +54,10 @@ class SpendingOverviewViewModel(
                 // balance yang disimpan di shared preferences, diganti dengan
                 balance = localRepository.getBalance(),
                 // -> diganti dengan current source ledger
-                currentSourceLedger = sourceLedgerRepository.getSourceLedgerById(
-                    state.currentActiveSourceLedgerId
-                ),
+                currentSourceLedger = getSourceLedgerByIdUseCase(state.currentActiveSourceLedgerId),
 
                 pickedDate = ZonedDateTime.now(),
-                datesList = allDates.reversed()
+//                datesList = allDates.reversed()
             )
 
             state = state.copy(
@@ -141,9 +139,11 @@ class SpendingOverviewViewModel(
         date: ZonedDateTime,
         sourceLedgerId: Int
     ): List<SpendingEntity>{
-        return spendingDataRepository
-            .getSpendingsByDate(date, sourceLedgerId)
-            .reversed()
+//        return spendingDataRepository
+//            .getSpendingsByDate(date, sourceLedgerId)
+//            .reversed()
+
+        return getSpendingByDateUseCase(date, sourceLedgerId)
     }
 
     private fun getTotalSpendByDate(): Long{
@@ -156,13 +156,13 @@ class SpendingOverviewViewModel(
         return totalSpendByDate
     }
 
-    private suspend fun deleteSpendingById(id: Int){
-        spendingDataRepository.deleteSpending(id)
-        viewModelScope.launch(Dispatchers.IO) {
-            state = state.copy(
-                spendingList = getSpendingListByDate(state.pickedDate, state.currentActiveSourceLedgerId),
-                balance = localRepository.getBalance() - spendingDataRepository.getTotalSpend(),
-            )
-        }
-    }
+//    private suspend fun deleteSpendingById(id: Int){
+//        spendingDataRepository.deleteSpending(id)
+//        viewModelScope.launch(Dispatchers.IO) {
+//            state = state.copy(
+//                spendingList = getSpendingListByDate(state.pickedDate, state.currentActiveSourceLedgerId),
+//                balance = localRepository.getBalance() - spendingDataRepository.getTotalSpend(),
+//            )
+//        }
+//    }
 }
