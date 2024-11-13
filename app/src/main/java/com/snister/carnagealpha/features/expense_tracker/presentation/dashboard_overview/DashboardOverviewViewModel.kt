@@ -10,14 +10,19 @@ import com.snister.carnagealpha.features.expense_tracker.domain.entities.Spendin
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.SpendingDataRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetAllSourceLedgerUseCase
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetSourceLedgerByIdUseCase
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetSpendingByDateUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 
 class DashboardOverviewViewModel(
-    private val spendingDataRepository: SpendingDataRepository,
+//    private val spendingDataRepository: SpendingDataRepository,
     private val localRepository: LocalRepository,
-    private val sourceLedgerRepository: SourceLedgerRepository
+    private val getAllSourceLedgerUseCase: GetAllSourceLedgerUseCase,
+    private val getSourceLedgerByIdUseCase: GetSourceLedgerByIdUseCase,
+    private val getSpendingByDateUseCase: GetSpendingByDateUseCase
 ) : ViewModel(){
 
     var state by mutableStateOf(DashboardOverviewState())
@@ -37,7 +42,7 @@ class DashboardOverviewViewModel(
     private fun loadSourceLedgerList(){
         viewModelScope.launch(Dispatchers.IO) {
             state = state.copy(
-                sourceLedgerList = sourceLedgerRepository.getAllSourceLedger()
+                sourceLedgerList = getAllSourceLedgerUseCase()
             )
         }
     }
@@ -46,7 +51,7 @@ class DashboardOverviewViewModel(
         viewModelScope.launch(Dispatchers.IO) {
 
             state = state.copy(
-                currentSourceLedger = sourceLedgerRepository.getSourceLedgerById(
+                currentSourceLedger = getSourceLedgerByIdUseCase(
                     localRepository.getCurrentSelectedSourceLedgerId()
                 )
             )
@@ -55,7 +60,7 @@ class DashboardOverviewViewModel(
 
     private fun loadSpendingListAndBalance(){
         viewModelScope.launch(Dispatchers.IO) {
-            val allDates = spendingDataRepository.getAllDates()
+//            val allDates = spendingDataRepository.getAllDates()
 
             state = state.copy(
                 currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId()
@@ -64,7 +69,7 @@ class DashboardOverviewViewModel(
             state = state.copy(
                 //note: spendingList belum dipake dimanapun
                 spendingList = getSpendingListByDate(
-                    allDates.lastOrNull() ?: ZonedDateTime.now(),
+                    ZonedDateTime.now(),
                     state.currentActiveSourceLedgerId
                 ),
 
@@ -72,17 +77,17 @@ class DashboardOverviewViewModel(
                 //yang ada di dashboard, ini akan diganti dengan SourceLedger.balance nantinya
                 balance = localRepository.getBalance(),
                 // -> balance diganti dengan currentSourceLedger
-                currentSourceLedger = sourceLedgerRepository.getSourceLedgerById(
+                currentSourceLedger = getSourceLedgerByIdUseCase(
                     state.currentActiveSourceLedgerId
                 ),
                 // ini sourceLedgerList. optinal untuk ngetest
-                sourceLedgerList = sourceLedgerRepository.getAllSourceLedger(),
+                sourceLedgerList = getAllSourceLedgerUseCase(),
 
                 //note: pickedDate belum dipake dimanapun
-                pickedDate = allDates.lastOrNull() ?: ZonedDateTime.now(),
+                //pickedDate = allDates.lastOrNull() ?: ZonedDateTime.now(),
 
                 //note: datesList belum dipake dimanapun
-                datesList = allDates.reversed()
+                //datesList = allDates.reversed()
             )
         }
     }
@@ -91,8 +96,6 @@ class DashboardOverviewViewModel(
         date: ZonedDateTime,
         sourceLedgerId: Int
     ): List<SpendingEntity>{
-        return spendingDataRepository
-            .getSpendingsByDate(date, sourceLedgerId)
-            .reversed()
+        return getSpendingByDateUseCase(date, sourceLedgerId)
     }
 }

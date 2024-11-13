@@ -15,6 +15,6 @@ class GetSpendingByDateUseCase(
 
         return spendingDataRepository.getSpendingsByDate(
             date, sourceLedgerId
-        )
+        ).reversed()
     }
 }

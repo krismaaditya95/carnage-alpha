@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SourceLedgerEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
-import com.snister.carnagealpha.features.expense_tracker.domain.repository.SourceLedgerRepository
+import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetAllSourceLedgerUseCase
 import com.snister.carnagealpha.features.expense_tracker.domain.usecases.UpsertSourceLedgerUseCase
-import com.snister.carnagealpha.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -18,7 +17,7 @@ import kotlinx.coroutines.launch
 class MainActivityViewModel(
     private val localRepository: LocalRepository,
     private val sourceLedgerUseCase: UpsertSourceLedgerUseCase,
-    private val sourceLedgerRepository: SourceLedgerRepository,
+    private val getAllSourceLedgerUseCase: GetAllSourceLedgerUseCase
 ): ViewModel() {
 
     var state by mutableStateOf(MainActivityState())
@@ -91,7 +90,7 @@ class MainActivityViewModel(
             state = state.copy(
                 isChangeSourceLedgerDialogVisible = true,
                 // sourceLedgerList
-                sourceLedgerList = sourceLedgerRepository.getAllSourceLedger(),
+                sourceLedgerList = getAllSourceLedgerUseCase(),
                 currentActiveSourceLedgerId = localRepository.getCurrentSelectedSourceLedgerId(),
                 selectedSourceLedgerIdFromList = localRepository.getCurrentSelectedSourceLedgerId(),
                 selectedSourceLedgerIndexFromList = -1

@@ -15,6 +15,6 @@ class GetIncomeByDateUseCase(
         return incomeDataRepository.getIncomesByDateRange(
             dateTimeRange,
             sourceLedgerId
-        )
+        ).reversed()
     }
 }
