@@ -1,14 +1,12 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
@@ -25,15 +23,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.snister.carnagealpha.core.presentation.shared.BalanceCard
-import com.snister.carnagealpha.core.presentation.shared.MainMenu
 import com.snister.carnagealpha.core.presentation.shared.MainMenuv2
-import com.snister.carnagealpha.core.presentation.shared.SpendingHighlights
 import com.snister.carnagealpha.core.presentation.shared.TopBar
 import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.MinimizedBalanceCard
-import com.snister.carnagealpha.features.expense_tracker.presentation.spending_overview.SpendingItemWidget
 import com.snister.carnagealpha.ui.theme.*
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DashboardOverviewScreen(
@@ -115,12 +108,12 @@ fun DashboardOverviewCoreScreen(
                     .padding(start = 20.dp, end = 20.dp),
                 contentPadding = PaddingValues(top = 14.dp)
             ) {
-                itemsIndexed(state.sourceLedgerList){
+                itemsIndexed(state.incomeList){
                         index, item ->
                     Text(
                         color = cDC5F00,
                         fontSize = 16.sp,
-                        text = "INDEX:${index} ID:${item.sourceLedgerId} | Name:${item.sourceLedgerName} | Balance:${item.sourceLedgerBalance}"
+                        text = "INDEX:${index} SLID:${item.sourceLedgerId} | Name:${item.incomeSourceName} | Amount:${item.incomeAmount}"
                     )
 
                 }

@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 val dashboardOverviewBinding = module {
     viewModel {
-        DashboardOverviewViewModel(get(), get(), get(), get())
+        DashboardOverviewViewModel(get(), get(), get(), get(), get())
     }
 }

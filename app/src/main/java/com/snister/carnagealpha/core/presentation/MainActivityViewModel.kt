@@ -102,7 +102,7 @@ class MainActivityViewModel(
     }
 
     private fun hideChangeSourceLedgerDialog(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             state = state.copy(
                 isChangeSourceLedgerDialogVisible = false,
                 selectedSourceLedgerIdFromList = 0,
@@ -112,7 +112,7 @@ class MainActivityViewModel(
     }
 
     private fun onSourceLedgerSelected(index: Int, id: Int){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             state = state.copy(
                 selectedSourceLedgerIndexFromList = index,
                 selectedSourceLedgerIdFromList = id,

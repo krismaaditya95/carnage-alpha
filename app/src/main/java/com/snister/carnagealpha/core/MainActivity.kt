@@ -60,6 +60,7 @@ import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_inc
 import com.snister.carnagealpha.features.expense_tracker.presentation.upsert_spending.UpsertSpendingScreen
 import com.snister.carnagealpha.ui.theme.CarnageAlphaTheme
 import com.snister.carnagealpha.ui.theme.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -368,17 +369,22 @@ fun ChangeSourceLedgerBottomSheetDialog(
 
                 TextButton(
                     onClick = {
-                        mainActivityOnAction(MainActivityAction.OnSaveSelectedSourceLedger)
-                        dashboardOverviewOnAction(DashboardOverviewAction.LoadSpendingOverviewAndBalance)
-                        spendingOverviewOnAction(SpendingOverviewAction.LoadSpendingOverviewAndBalance)
-                        incomeOverviewOnAction(IncomeOverviewAction.LoadIncomeOverviewAndBalance)
+//                        mainActivityOnAction(MainActivityAction.OnSaveSelectedSourceLedger)
+//                        dashboardOverviewOnAction(DashboardOverviewAction.LoadSpendingOverviewAndBalance)
+//                        spendingOverviewOnAction(SpendingOverviewAction.LoadSpendingOverviewAndBalance)
+//                        incomeOverviewOnAction(IncomeOverviewAction.LoadIncomeOverviewAndBalance)
 
-                        sheetScope.launch {
+                        sheetScope.launch(Dispatchers.IO) {
                             sheetState.hide()
+                            mainActivityOnAction(MainActivityAction.OnSaveSelectedSourceLedger)
                         }.invokeOnCompletion {
                             if(!sheetState.isVisible){
                                 mainActivityOnAction(MainActivityAction.HideChangeSourceLedgerDialog)
                             }
+
+                            dashboardOverviewOnAction(DashboardOverviewAction.LoadSpendingOverviewAndBalance)
+                            spendingOverviewOnAction(SpendingOverviewAction.LoadSpendingOverviewAndBalance)
+                            incomeOverviewOnAction(IncomeOverviewAction.LoadIncomeOverviewAndBalance)
                         }
                     },
                     enabled = (
