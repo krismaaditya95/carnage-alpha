@@ -84,7 +84,7 @@ fun IncomeItemWidget(
         ) {
             Column{
                 Text(
-                    text = "${incomeItem.incomeSourceName} | SLID = ${incomeItem.sourceLedgerId}",
+                    text = incomeItem.incomeSourceName,
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 16.sp,
                     maxLines = 1,

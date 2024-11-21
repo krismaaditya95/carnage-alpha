@@ -93,7 +93,7 @@ fun SpendingItemWidget(
         ) {
             Column{
                 Text(
-                    text = "${spendingItem.spendingName} | SourceLedgerID = ${spendingItem.sourceLedgerId}",
+                    text = spendingItem.spendingName,
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 16.sp,
                     maxLines = 1,
