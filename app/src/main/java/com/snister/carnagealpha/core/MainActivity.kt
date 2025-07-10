@@ -172,13 +172,19 @@ fun Navigation(
             DashboardOverviewScreen(
                 viewModel = dashboardOverviewViewModel,
                 onBalanceClick = {
-                    navController.navigate(ScreenRoutes.Balance)
+                    navController.navigate(ScreenRoutes.Balance){
+                        launchSingleTop = true
+                    }
                 },
                 onAddSpendingClick = {
-                    navController.navigate(ScreenRoutes.SpendingOverview)
+                    navController.navigate(ScreenRoutes.SpendingOverview){
+                        launchSingleTop = true
+                    }
                 },
                 onIncomeOverviewClick = {
-                    navController.navigate(ScreenRoutes.IncomeOverview)
+                    navController.navigate(ScreenRoutes.IncomeOverview){
+                        launchSingleTop = true
+                    }
                 },
                 onChangeSourceLedgerClick = {
                     mainActivityOnAction(MainActivityAction.ShowChangeSourceLedgerDialog)
@@ -190,10 +196,14 @@ fun Navigation(
             SpendingOverviewScreen(
                 viewModel = spendingOverviewModel,
                 onBalanceClick = {
-                    navController.navigate(ScreenRoutes.Balance)
+                    navController.navigate(ScreenRoutes.Balance){
+                        launchSingleTop = true
+                    }
                 },
                 onAddSpendingClick = {
-                    navController.navigate(ScreenRoutes.SpendingDetails(-1))
+                    navController.navigate(ScreenRoutes.SpendingDetails(-1)){
+                        launchSingleTop = true
+                    }
                 },
                 onChangeSourceLedgerClick = {
                     mainActivityOnAction(MainActivityAction.ShowChangeSourceLedgerDialog)
@@ -205,11 +215,15 @@ fun Navigation(
             IncomeOverviewScreen(
                 viewModel = incomeOverviewModel,
                 onBalanceClick = {
-                    navController.navigate(ScreenRoutes.Balance)
+                    navController.navigate(ScreenRoutes.Balance){
+                        launchSingleTop = true
+                    }
                 },
                 onAddIncomeClick = {
 //                    navController.navigate(ScreenRoutes.IncomeDetails(-1))
-                    navController.navigate(ScreenRoutes.Balance)
+                    navController.navigate(ScreenRoutes.Balance){
+                        launchSingleTop = true
+                    }
                 },
                 onChangeSourceLedgerClick = {
                     mainActivityOnAction(MainActivityAction.ShowChangeSourceLedgerDialog)
