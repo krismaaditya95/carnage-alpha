@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.toFontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.R
@@ -118,4 +119,22 @@ fun CardContent(
             )
         }
     }
+}
+
+@Composable
+@Preview
+fun BalanceCardPreview(){
+    BalanceCard(
+        onBalanceClick = {},
+        balance = 500000
+    )
+}
+
+@Composable
+@Preview
+fun CardContentPreview(){
+    CardContent(
+        onBalanceClick = {},
+        balance = 1000000
+    )
 }

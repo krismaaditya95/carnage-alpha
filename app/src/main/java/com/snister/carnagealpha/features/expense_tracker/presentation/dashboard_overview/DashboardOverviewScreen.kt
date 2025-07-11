@@ -23,6 +23,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.snister.carnagealpha.core.presentation.shared.BalanceCardV3
 import com.snister.carnagealpha.core.presentation.shared.MainMenuv2
 import com.snister.carnagealpha.core.presentation.shared.TopBar
 import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.MinimizedBalanceCard
@@ -85,7 +86,7 @@ fun DashboardOverviewCoreScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ){
-            MinimizedBalanceCard(
+            BalanceCardV3(
 //                modifier = Modifier.fillMaxWidth(),
                 onBalanceClick = onBalanceClick,
                 balance = state.currentSourceLedger.sourceLedgerBalance,
