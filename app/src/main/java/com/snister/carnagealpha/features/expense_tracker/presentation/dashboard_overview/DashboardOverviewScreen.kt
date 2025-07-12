@@ -24,9 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.core.presentation.shared.BalanceCardV3
+import com.snister.carnagealpha.core.presentation.shared.BalanceCardV4
+import com.snister.carnagealpha.core.presentation.shared.BorderedBalanceCard
 import com.snister.carnagealpha.core.presentation.shared.MainMenuv2
 import com.snister.carnagealpha.core.presentation.shared.TopBar
-import com.snister.carnagealpha.features.expense_tracker.presentation.shared_widgets.MinimizedBalanceCard
 import com.snister.carnagealpha.ui.theme.*
 
 @Composable
@@ -92,6 +93,35 @@ fun DashboardOverviewCoreScreen(
                 balance = state.currentSourceLedger.sourceLedgerBalance,
                 sourceLedgerName = state.currentSourceLedger.sourceLedgerName,
                 onChangeSourceLedgerClick = onChangeSourceLedgerClick
+            )
+            BalanceCardV4(
+                onBalanceClick = onBalanceClick,
+                balance = state.currentSourceLedger.sourceLedgerBalance,
+                sourceLedgerName = state.currentSourceLedger.sourceLedgerName,
+                onChangeSourceLedgerClick = onChangeSourceLedgerClick
+            )
+            // DEFAULT
+            BorderedBalanceCard(
+                onBalanceClick = onBalanceClick,
+                balance = state.currentSourceLedger.sourceLedgerBalance,
+                sourceLedgerName = state.currentSourceLedger.sourceLedgerName,
+                onChangeSourceLedgerClick = onChangeSourceLedgerClick
+            )
+            // MODIFIED
+            BorderedBalanceCard(
+                onBalanceClick = onBalanceClick,
+                balance = state.currentSourceLedger.sourceLedgerBalance,
+                sourceLedgerName = state.currentSourceLedger.sourceLedgerName,
+                onChangeSourceLedgerClick = onChangeSourceLedgerClick,
+                cardBorderColor = cA91D3A
+            )
+            BorderedBalanceCard(
+                onBalanceClick = onBalanceClick,
+                balance = state.currentSourceLedger.sourceLedgerBalance,
+                sourceLedgerName = state.currentSourceLedger.sourceLedgerName,
+                onChangeSourceLedgerClick = onChangeSourceLedgerClick,
+                sourceLedgerFontColor = cA91D3A,
+                balanceFontColor = cmykBlue
             )
             Spacer(modifier = Modifier.height(4.dp))
             MainMenuv2(

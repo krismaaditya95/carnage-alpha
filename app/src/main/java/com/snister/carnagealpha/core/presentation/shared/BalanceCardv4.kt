@@ -28,20 +28,19 @@ import com.snister.carnagealpha.core.utils.CurrencyFormatter
 import com.snister.carnagealpha.ui.theme.*
 
 @Composable
-fun BalanceCardV3(
+fun BalanceCardV4(
     onBalanceClick: () -> Unit,
     onChangeSourceLedgerClick: () -> Unit,
     sourceLedgerName: String = "",
     balance: Long
 ) {
     ElevatedCard(
-//        onClick = { },
         modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
             .padding(horizontal = 20.dp, vertical = 10.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(8.dp)
+        elevation = CardDefaults.elevatedCardElevation(0.dp),
+        shape = RoundedCornerShape(8.dp),
     ){
         Column(
             modifier = Modifier
@@ -105,9 +104,21 @@ fun BalanceCardV3(
 // ==================================================
 @Composable
 @Preview(showBackground = true)
-fun BalanceCardV3Preview(modifier: Modifier = Modifier) {
+fun BalanceCardV4Preview(modifier: Modifier = Modifier) {
     Column{
-        BalanceCardV3(
+        BalanceCardV4(
+            onBalanceClick = {},
+            onChangeSourceLedgerClick = {},
+            balance = 1000000,
+            sourceLedgerName = "SourceLedgerName"
+        )
+        BalanceCardV4(
+            onBalanceClick = {},
+            onChangeSourceLedgerClick = {},
+            balance = 1000000,
+            sourceLedgerName = "SourceLedgerName"
+        )
+        BalanceCardV4(
             onBalanceClick = {},
             onChangeSourceLedgerClick = {},
             balance = 1000000,
