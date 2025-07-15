@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.R
 import com.snister.carnagealpha.core.utils.CurrencyFormatter
 import com.snister.carnagealpha.core.utils.StringDateFormatter
-import com.snister.carnagealpha.features.expense_tracker.domain.entities.IncomeEntity
 import com.snister.carnagealpha.ui.theme.*
 import java.time.ZonedDateTime
 
@@ -56,9 +55,11 @@ fun TransactionType.getWording(nominal: Long): String {
 @Composable
 fun TransactionItemWidget(
     modifier: Modifier = Modifier,
-    incomeItem: IncomeEntity,
     onDeleteIncome: (Int) -> Unit,
-    transactionType: TransactionType = TransactionType.Default
+    transactionType: TransactionType = TransactionType.Default,
+    sourceName: String = "SourceName",
+    transactionTimeStamp: ZonedDateTime = ZonedDateTime.now(),
+    nominal: Long = 100000
 ) {
     ElevatedCard(
         onClick = {  },
@@ -66,8 +67,8 @@ fun TransactionItemWidget(
             .fillMaxWidth()
 //            .height(IntrinsicSize.Min)
             .wrapContentHeight()
-            .padding(all = 14.dp)
-            .border(1.2.dp, transactionType.getColor(), RoundedCornerShape(6.dp)),
+//            .padding(all = 14.dp)
+            .border(1.dp, transactionType.getColor(), RoundedCornerShape(6.dp)),
         shape = RoundedCornerShape(6.dp),
     ) {
         Row(
@@ -80,7 +81,7 @@ fun TransactionItemWidget(
         ) {
             Column{
                 Text(
-                    text = incomeItem.incomeSourceName,
+                    text = sourceName,
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -89,14 +90,14 @@ fun TransactionItemWidget(
                         .padding(bottom = 4.dp)
                 )
                 Text(
-                    text = StringDateFormatter.toDayMonthYearAtHourMinute(incomeItem.dateTime),
+                    text = StringDateFormatter.toDayMonthYearAtHourMinute(transactionTimeStamp),
                     fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     fontSize = 11.sp
                 )
             }
 
             Text(
-                text = transactionType.getWording(incomeItem.incomeAmount),
+                text = transactionType.getWording(nominal),
                 color = transactionType.getColor(),
                 fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                 fontWeight = FontWeight.Bold,
@@ -107,17 +108,10 @@ fun TransactionItemWidget(
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview
 fun TransactionItemWidgetPreview(modifier: Modifier = Modifier) {
     TransactionItemWidget(
         transactionType = TransactionType.Income,
-        onDeleteIncome = {},
-        incomeItem = IncomeEntity(
-            incomeId = 1,
-            dateTime = ZonedDateTime.now(),
-            incomeSourceName = "Gaji bulan ini",
-            incomeAmount = 4000000,
-            sourceLedgerId = 1
-        )
+        onDeleteIncome = {}
     )
 }

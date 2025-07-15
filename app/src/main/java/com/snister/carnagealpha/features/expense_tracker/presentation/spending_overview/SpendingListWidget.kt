@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.R
 import com.snister.carnagealpha.core.presentation.shared.SpendingItem
+import com.snister.carnagealpha.core.presentation.shared.TransactionItemWidget
+import com.snister.carnagealpha.core.presentation.shared.TransactionType
 import com.snister.carnagealpha.core.utils.CurrencyFormatter
 import com.snister.carnagealpha.core.utils.StringDateFormatter
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SpendingEntity
@@ -57,9 +59,18 @@ fun SpendingListWidget(
     ) {
         itemsIndexed(state.spendingList){
                 index, item ->
-            SpendingItemWidget(
-                spendingItem = item,
-                onDeleteSpending = {
+//            SpendingItemWidget(
+//                spendingItem = item,
+//                onDeleteSpending = {
+//                    onDeleteSpending(index)
+//                }
+//            )
+            TransactionItemWidget(
+                transactionType = TransactionType.Expense,
+                sourceName = item.spendingName,
+                transactionTimeStamp = item.dateTime,
+                nominal = item.spendingAmount,
+                onDeleteIncome = {
                     onDeleteSpending(index)
                 }
             )

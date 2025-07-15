@@ -27,6 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.R
+import com.snister.carnagealpha.core.presentation.shared.TransactionItemWidget
+import com.snister.carnagealpha.core.presentation.shared.TransactionType
 import com.snister.carnagealpha.core.utils.CurrencyFormatter
 import com.snister.carnagealpha.core.utils.StringDateFormatter
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.IncomeEntity
@@ -45,12 +47,22 @@ fun IncomeListWidget(
             .fillMaxWidth()
             .height(500.dp)
             .padding(start = 20.dp, end = 20.dp),
-        contentPadding = PaddingValues(top = 14.dp)
+        contentPadding = PaddingValues(top = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         itemsIndexed(state.incomeList){
             index, item ->
-            IncomeItemWidget(
-                incomeItem = item,
+//            IncomeItemWidget(
+//                incomeItem = item,
+//                onDeleteIncome = {
+//                    onDeleteIncome(index)
+//                }
+//            )
+            TransactionItemWidget(
+                transactionType = TransactionType.Income,
+                sourceName = item.incomeSourceName,
+                transactionTimeStamp = item.dateTime,
+                nominal = item.incomeAmount,
                 onDeleteIncome = {
                     onDeleteIncome(index)
                 }

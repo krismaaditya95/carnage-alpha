@@ -1,5 +1,6 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -22,11 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.snister.carnagealpha.core.presentation.shared.BalanceCardV3
 import com.snister.carnagealpha.core.presentation.shared.MainMenuv2
 import com.snister.carnagealpha.core.presentation.shared.TopBar
-import com.snister.carnagealpha.ui.theme.*
+import com.snister.carnagealpha.core.presentation.shared.TransactionItemWidget
+import com.snister.carnagealpha.core.presentation.shared.TransactionType
 
 @Composable
 fun DashboardOverviewScreen(
@@ -80,10 +80,11 @@ fun DashboardOverviewCoreScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+//                .border(1.dp, cmykGreen)
         ){
             BalanceCardV3(
 //                modifier = Modifier.fillMaxWidth(),
@@ -104,18 +105,21 @@ fun DashboardOverviewCoreScreen(
             LazyColumn(
                 modifier = modifier
                     .fillMaxWidth()
-                    .height(140.dp)
+                    .height(160.dp)
                     .padding(start = 20.dp, end = 20.dp),
-                contentPadding = PaddingValues(top = 14.dp)
+//                    .border(1.dp, cmykRed),
+                contentPadding = PaddingValues(top = 14.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 itemsIndexed(state.incomeList){
                         index, item ->
-                    Text(
-                        color = cDC5F00,
-                        fontSize = 16.sp,
-                        text = "INDEX:${index} SLID:${item.sourceLedgerId} | Name:${item.incomeSourceName} | Amount:${item.incomeAmount}"
+                    TransactionItemWidget(
+                        transactionType = TransactionType.Income,
+                        sourceName = item.incomeSourceName,
+                        transactionTimeStamp = item.dateTime,
+                        nominal = item.incomeAmount,
+                        onDeleteIncome = { }
                     )
-
                 }
             }
 //            SpendingHighlights(
