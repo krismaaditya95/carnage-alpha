@@ -23,10 +23,13 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.snister.carnagealpha.core.presentation.shared.BalanceCardV3
+import com.snister.carnagealpha.core.presentation.shared.DashboardSection
+import com.snister.carnagealpha.core.presentation.shared.MainMenuV3
 import com.snister.carnagealpha.core.presentation.shared.MainMenuv2
 import com.snister.carnagealpha.core.presentation.shared.TopBar
 import com.snister.carnagealpha.core.presentation.shared.TransactionItemWidget
 import com.snister.carnagealpha.core.presentation.shared.TransactionType
+import java.time.ZonedDateTime
 
 @Composable
 fun DashboardOverviewScreen(
@@ -94,39 +97,83 @@ fun DashboardOverviewCoreScreen(
                 onChangeSourceLedgerClick = onChangeSourceLedgerClick
             )
             Spacer(modifier = Modifier.height(4.dp))
-            MainMenuv2(
+            MainMenuV3(
                 modifier = Modifier.fillMaxWidth(),
                 onAddSpendingClick = {onAddSpendingClick()},
-                onAddIncomeClick = {onIncomeOverviewClick()},
-                onOtherClick = {}
+                onAddIncomeClick = {onIncomeOverviewClick()}
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(160.dp)
-                    .padding(start = 20.dp, end = 20.dp),
-//                    .border(1.dp, cmykRed),
-                contentPadding = PaddingValues(top = 14.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                itemsIndexed(state.incomeList){
-                        index, item ->
-                    TransactionItemWidget(
-                        transactionType = TransactionType.Income,
-                        sourceName = item.incomeSourceName,
-                        transactionTimeStamp = item.dateTime,
-                        nominal = item.incomeAmount,
-                        onDeleteIncome = { }
-                    )
-                }
-            }
+//            LazyColumn(
+//                modifier = modifier
+//                    .fillMaxWidth()
+//                    .height(160.dp)
+//                    .padding(start = 20.dp, end = 20.dp),
+////                    .border(1.dp, cmykRed),
+//                contentPadding = PaddingValues(top = 14.dp),
+//                verticalArrangement = Arrangement.spacedBy(14.dp)
+//            ) {
+//                itemsIndexed(state.incomeList){
+//                        index, item ->
+//                    TransactionItemWidget(
+//                        transactionType = TransactionType.Income,
+//                        sourceName = item.incomeSourceName,
+//                        transactionTimeStamp = item.dateTime,
+//                        nominal = item.incomeAmount,
+//                        onDeleteIncome = { }
+//                    )
+//                }
+//            }
 //            SpendingHighlights(
 //                modifier = Modifier
 //                    .fillMaxWidth()
 //                    .padding(20.dp)
 //            )
+
+            DashboardSection(
+                sectionTitle = "Recent Transactions",
+                onSeeAllClick = {
+
+                },
+                content = {
+//                    Column {
+//                        TransactionItemWidget(
+//                            transactionType = TransactionType.Income,
+//                            sourceName = "Gaji bulan ini",
+//                            transactionTimeStamp = ZonedDateTime.now(),
+//                            nominal = 4000000,
+//                            onDeleteIncome = { }
+//                        )
+//                        TransactionItemWidget(
+//                            transactionType = TransactionType.Income,
+//                            sourceName = "Gaji bulan ini",
+//                            transactionTimeStamp = ZonedDateTime.now(),
+//                            nominal = 4000000,
+//                            onDeleteIncome = { }
+//                        )
+//                    }
+
+                    LazyColumn(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .height(400.dp),
+//                            .padding(start = 20.dp, end = 20.dp),
+                        contentPadding = PaddingValues(top = 14.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        itemsIndexed(state.incomeList){
+                                index, item ->
+                            TransactionItemWidget(
+                                transactionType = TransactionType.Income,
+                                sourceName = item.incomeSourceName,
+                                transactionTimeStamp = item.dateTime,
+                                nominal = item.incomeAmount,
+                                onDeleteIncome = { }
+                            )
+                        }
+                    }
+                }
+            )
         }
     }
 }

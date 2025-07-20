@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "5925707790",
+    "project_id": "carnage-alpha",
+    "storage_bucket": "carnage-alpha.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5925707790:android:1948eac532f694d5f8dc5f",
+        "android_client_info": {
+          "package_name": "com.snister.carnagealpha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCALwEw8CC5mDC16mAW5UOY6Do7ipxXQkw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
