@@ -1,6 +1,7 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -27,6 +28,21 @@ class DashboardOverviewViewModel(
 
     var state by mutableStateOf(DashboardOverviewState())
         private set
+
+    val visiblePermissionDialogQueue = mutableStateListOf<String>()
+
+    fun dismissDialog(){
+        visiblePermissionDialogQueue.removeLast()
+    }
+
+    fun onPermissionResult(
+        permission: String,
+        isGranted: Boolean
+    ){
+        if(!isGranted){
+            visiblePermissionDialogQueue.add(0,permission)
+        }
+    }
 
     fun onAction(action: DashboardOverviewAction){
         when (action){

@@ -1,5 +1,14 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,17 +29,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import com.snister.carnagealpha.core.presentation.shared.BalanceCardV3
+import com.snister.carnagealpha.core.presentation.shared.CallPhonePermissionTextProvider
+import com.snister.carnagealpha.core.presentation.shared.CameraPermissionTextProvider
+import com.snister.carnagealpha.core.presentation.shared.CarnageButton
 import com.snister.carnagealpha.core.presentation.shared.DashboardSection
 import com.snister.carnagealpha.core.presentation.shared.MainMenuV3
-import com.snister.carnagealpha.core.presentation.shared.MainMenuv2
+import com.snister.carnagealpha.core.presentation.shared.NotificationPermissionTextProvider
+import com.snister.carnagealpha.core.presentation.shared.PermissionDialog
 import com.snister.carnagealpha.core.presentation.shared.TopBar
 import com.snister.carnagealpha.core.presentation.shared.TransactionItemWidget
 import com.snister.carnagealpha.core.presentation.shared.TransactionType
-import java.time.ZonedDateTime
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun DashboardOverviewScreen(
     viewModel: DashboardOverviewViewModel,
@@ -44,7 +59,7 @@ fun DashboardOverviewScreen(
         //viewModel.onAction(DashboardOverviewAction.LoadSourceLedgerList)
         //viewModel.onAction(DashboardOverviewAction.LoadSourceLedgerById)
     }
-    
+
     DashboardOverviewCoreScreen(
         state = viewModel.state,
         onAction = viewModel::onAction,
@@ -54,10 +69,13 @@ fun DashboardOverviewScreen(
         onDeleteSpending = {
             viewModel.onAction(DashboardOverviewAction.OnDeleteSpending(it))
         },
-        onChangeSourceLedgerClick = onChangeSourceLedgerClick
+        onChangeSourceLedgerClick = onChangeSourceLedgerClick,
+        dialogQueue = viewModel.visiblePermissionDialogQueue,
+        viewModel = viewModel
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardOverviewCoreScreen(
@@ -68,11 +86,38 @@ fun DashboardOverviewCoreScreen(
     onAddSpendingClick: () -> Unit,
     onIncomeOverviewClick: () -> Unit,
     onDeleteSpending: (Int) -> Unit,
-    onChangeSourceLedgerClick: () -> Unit
+    onChangeSourceLedgerClick: () -> Unit,
+    dialogQueue: List<String>? = null,
+    viewModel: DashboardOverviewViewModel? = null
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
         state = rememberTopAppBarState()
     )
+
+    val currentActivity = LocalContext.current as Activity
+
+//    val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.RequestPermission(),
+//        onResult = { isGranted ->
+//            viewModel?.onPermissionResult(
+//                permission = Manifest.permission.POST_NOTIFICATIONS,
+//                isGranted = isGranted
+//            )
+//        }
+//    )
+
+    val multiplePermissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissions ->
+            permissions.keys.forEach { permission ->
+                viewModel?.onPermissionResult(
+                    permission = permission,
+                    isGranted = permissions[permission] == true
+                )
+            }
+        }
+    )
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -96,7 +141,59 @@ fun DashboardOverviewCoreScreen(
                 sourceLedgerName = state.currentSourceLedger.sourceLedgerName,
                 onChangeSourceLedgerClick = onChangeSourceLedgerClick
             )
-            Spacer(modifier = Modifier.height(4.dp))
+//            Spacer(modifier = Modifier.height(4.dp))
+//            CarnageButton(
+//                modifier = Modifier.padding(start = 20.dp),
+//                buttonTitle = "Request One Permission",
+//                onClick = {
+//                    notificationPermissionResultLauncher.launch(
+//                        Manifest.permission.POST_NOTIFICATIONS
+//                    )
+//                }
+//            )
+            Spacer(modifier = Modifier.height(14.dp))
+            CarnageButton(
+                modifier = Modifier.padding(start = 20.dp),
+                buttonTitle = "Request Multiple Permission",
+                onClick = {
+                    multiplePermissionResultLauncher.launch(
+                        arrayOf(
+                            Manifest.permission.POST_NOTIFICATIONS,
+                            Manifest.permission.CALL_PHONE,
+//                            Manifest.permission.CAMERA,
+                        )
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            dialogQueue
+                ?.forEach { permission ->
+                    PermissionDialog(
+                        permissionTextProvider = when(permission){
+                            Manifest.permission.POST_NOTIFICATIONS -> {
+                                NotificationPermissionTextProvider()
+                            }
+                            Manifest.permission.CAMERA -> {
+                                CameraPermissionTextProvider()
+                            }
+                            Manifest.permission.CALL_PHONE -> {
+                                CallPhonePermissionTextProvider()
+                            }
+                            else -> return@forEach
+                        },
+                        isDeclined = !shouldShowRequestPermissionRationale(currentActivity, permission),
+                        onDismiss = viewModel!!::dismissDialog,
+                        onGrantedClick = {
+                            viewModel.dismissDialog()
+                            multiplePermissionResultLauncher.launch(
+                                arrayOf(permission)
+                            )
+                        },
+                        onGoToAppSettingsClick = currentActivity::openAppSettings
+                    )
+                }
             MainMenuV3(
                 modifier = Modifier.fillMaxWidth(),
                 onAddSpendingClick = {onAddSpendingClick()},
@@ -178,7 +275,15 @@ fun DashboardOverviewCoreScreen(
     }
 }
 
+fun Activity.openAppSettings(){
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", packageName, null)
+    ).also(::startActivity)
+}
 
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview(showBackground = true)
 @Composable
 fun DashboardOverviewScreenPreview(modifier: Modifier = Modifier) {
