@@ -1,10 +1,19 @@
 package com.snister.carnagealpha.core
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
@@ -34,6 +43,7 @@ import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -45,7 +55,12 @@ import com.snister.carnagealpha.core.presentation.MainActivityAction
 import com.snister.carnagealpha.core.presentation.MainActivityEvents
 import com.snister.carnagealpha.core.presentation.MainActivityState
 import com.snister.carnagealpha.core.presentation.MainActivityViewModel
+import com.snister.carnagealpha.core.presentation.shared.CallPhonePermissionTextProvider
+import com.snister.carnagealpha.core.presentation.shared.CameraPermissionTextProvider
 import com.snister.carnagealpha.core.presentation.shared.CustomBottomNav
+import com.snister.carnagealpha.core.presentation.shared.NotificationPermissionTextProvider
+import com.snister.carnagealpha.core.presentation.shared.PermissionDialog
+import com.snister.carnagealpha.core.presentation.shared.RecordAudioPermissionTextProvider
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewAction
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewScreen
 import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewViewModel
@@ -64,6 +79,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +96,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun MainActivityCoreScreen(
     navController: NavHostController,
@@ -93,6 +110,17 @@ fun MainActivityCoreScreen(
 ) {
 
     val currentContext = LocalContext.current
+    val currentActivity = LocalContext.current as Activity
+
+    val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            mainActivityViewModel.onPermissionResult(
+                permission = Manifest.permission.POST_NOTIFICATIONS,
+                isGranted = isGranted
+            )
+        }
+    )
 
     LaunchedEffect(key1 = true) {
         mainActivityViewModel.event.collect { event ->
@@ -106,6 +134,14 @@ fun MainActivityCoreScreen(
                     Toast.makeText(
                         currentContext, "Successfully inserted initial source ledger!", Toast.LENGTH_LONG
                     ).show()
+                }
+                MainActivityEvents.AskForNotificationPermission -> {
+                    Toast.makeText(
+                        currentContext, "Notification Permission ask event received!", Toast.LENGTH_LONG
+                    ).show()
+                    notificationPermissionResultLauncher.launch(
+                        Manifest.permission.POST_NOTIFICATIONS
+                    )
                 }
             }
         }
@@ -142,9 +178,48 @@ fun MainActivityCoreScreen(
                 )
             }
         }
+
+        mainActivityViewModel.visiblePermissionDialogQueue
+            .forEach { permission ->
+                PermissionDialog(
+                    permissionTextProvider = when (permission) {
+                        Manifest.permission.POST_NOTIFICATIONS -> {
+                            NotificationPermissionTextProvider()
+                        }
+
+                        Manifest.permission.CAMERA -> {
+                            CameraPermissionTextProvider()
+                        }
+
+                        Manifest.permission.RECORD_AUDIO -> {
+                            RecordAudioPermissionTextProvider()
+                        }
+
+                        Manifest.permission.CALL_PHONE -> {
+                            CallPhonePermissionTextProvider()
+                        }
+
+                        else -> return@forEach
+                    },
+                    isDeclined = !shouldShowRequestPermissionRationale(currentActivity, permission),
+                    onDismiss = mainActivityViewModel::dismissDialog,
+                    onGrantedClick = {
+                        mainActivityViewModel.dismissDialog()
+                    },
+                    onGoToAppSettingsClick = currentActivity::openAppSettings
+                )
+            }
     }
 }
 
+fun Activity.openAppSettings(){
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", packageName, null)
+    ).also(::startActivity)
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun Navigation(
     modifier: Modifier = Modifier,
@@ -411,6 +486,7 @@ fun ChangeSourceLedgerBottomSheetDialog(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview(showBackground = true)
 @Composable
 fun MainActivityPreview() {

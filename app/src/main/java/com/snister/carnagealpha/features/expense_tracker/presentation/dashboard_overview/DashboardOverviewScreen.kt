@@ -2,10 +2,7 @@ package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -33,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import com.snister.carnagealpha.core.openAppSettings
 import com.snister.carnagealpha.core.presentation.shared.BalanceCardV3
 import com.snister.carnagealpha.core.presentation.shared.CallPhonePermissionTextProvider
 import com.snister.carnagealpha.core.presentation.shared.CameraPermissionTextProvider
@@ -41,6 +39,7 @@ import com.snister.carnagealpha.core.presentation.shared.DashboardSection
 import com.snister.carnagealpha.core.presentation.shared.MainMenuV3
 import com.snister.carnagealpha.core.presentation.shared.NotificationPermissionTextProvider
 import com.snister.carnagealpha.core.presentation.shared.PermissionDialog
+import com.snister.carnagealpha.core.presentation.shared.RecordAudioPermissionTextProvider
 import com.snister.carnagealpha.core.presentation.shared.TopBar
 import com.snister.carnagealpha.core.presentation.shared.TransactionItemWidget
 import com.snister.carnagealpha.core.presentation.shared.TransactionType
@@ -96,15 +95,15 @@ fun DashboardOverviewCoreScreen(
 
     val currentActivity = LocalContext.current as Activity
 
-//    val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
-//        contract = ActivityResultContracts.RequestPermission(),
-//        onResult = { isGranted ->
-//            viewModel?.onPermissionResult(
-//                permission = Manifest.permission.POST_NOTIFICATIONS,
-//                isGranted = isGranted
-//            )
-//        }
-//    )
+    val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            viewModel?.onPermissionResult(
+                permission = Manifest.permission.POST_NOTIFICATIONS,
+                isGranted = isGranted
+            )
+        }
+    )
 
     val multiplePermissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
@@ -123,7 +122,12 @@ fun DashboardOverviewCoreScreen(
         topBar = {
             TopBar(
                 scrollBehavior = scrollBehavior,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onNotificationClick = {
+                    notificationPermissionResultLauncher.launch(
+                        Manifest.permission.POST_NOTIFICATIONS
+                    )
+                }
             )
         }
     ) { innerPadding ->
@@ -158,9 +162,10 @@ fun DashboardOverviewCoreScreen(
                 onClick = {
                     multiplePermissionResultLauncher.launch(
                         arrayOf(
-                            Manifest.permission.POST_NOTIFICATIONS,
-                            Manifest.permission.CALL_PHONE,
-//                            Manifest.permission.CAMERA,
+//                            Manifest.permission.POST_NOTIFICATIONS,
+//                            Manifest.permission.CALL_PHONE,
+                            Manifest.permission.RECORD_AUDIO,
+                            Manifest.permission.CAMERA
                         )
                     )
                 }
@@ -177,6 +182,9 @@ fun DashboardOverviewCoreScreen(
                             }
                             Manifest.permission.CAMERA -> {
                                 CameraPermissionTextProvider()
+                            }
+                            Manifest.permission.RECORD_AUDIO -> {
+                                RecordAudioPermissionTextProvider()
                             }
                             Manifest.permission.CALL_PHONE -> {
                                 CallPhonePermissionTextProvider()
@@ -274,14 +282,6 @@ fun DashboardOverviewCoreScreen(
         }
     }
 }
-
-fun Activity.openAppSettings(){
-    Intent(
-        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.fromParts("package", packageName, null)
-    ).also(::startActivity)
-}
-
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview(showBackground = true)

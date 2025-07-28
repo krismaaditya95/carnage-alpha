@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,7 +39,8 @@ fun TopBar (
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior?,
     appBarTitle: String = "",
-    navigationIcon: Boolean = false
+    navigationIcon: Boolean = false,
+    onNotificationClick: () -> Unit = {}
 ){
 
     var notificationCount by remember {
@@ -53,6 +55,7 @@ fun TopBar (
                 Text(
                     text = appBarTitle,
                     fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
                     //fontFamily = Font(R.font.roboto_regular).toFontFamily(),
                     color = cDC5F00,
                     modifier = Modifier
@@ -76,7 +79,9 @@ fun TopBar (
         },
         actions = {
             IconButton(
-                onClick = {}
+                onClick = {
+                    onNotificationClick()
+                }
             ) {
                 BadgedBox(
                     badge = {
@@ -124,6 +129,7 @@ fun TopBar (
 fun TopBarPreview(){
     TopBar(
         scrollBehavior = null,
-        
+        appBarTitle = "Catetin",
+        onNotificationClick = {}
     )
 }

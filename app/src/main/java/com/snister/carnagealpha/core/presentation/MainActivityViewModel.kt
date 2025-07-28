@@ -1,6 +1,7 @@
 package com.snister.carnagealpha.core.presentation
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -27,7 +28,23 @@ class MainActivityViewModel(
     val event = _mainActivityEventChannel.receiveAsFlow()
 
     init {
+        askForNotificationPermission()
         insertInitialDefaultSourceLedger()
+    }
+
+    val visiblePermissionDialogQueue = mutableStateListOf<String>()
+
+    fun dismissDialog(){
+        visiblePermissionDialogQueue.removeLast()
+    }
+
+    fun onPermissionResult(
+        permission: String,
+        isGranted: Boolean
+    ){
+        if(!isGranted){
+            visiblePermissionDialogQueue.add(0,permission)
+        }
     }
 
     fun onAction(action: MainActivityAction){
@@ -41,6 +58,12 @@ class MainActivityViewModel(
                 action.selectedSourceLedgerId
             )
             MainActivityAction.OnSaveSelectedSourceLedger -> onSaveSelectedSourceLedger()
+        }
+    }
+
+    private fun askForNotificationPermission(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _mainActivityEventChannel.send(MainActivityEvents.AskForNotificationPermission)
         }
     }
 

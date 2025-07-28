@@ -111,6 +111,17 @@ class CameraPermissionTextProvider: PermissionTextProvider{
     }
 }
 
+class RecordAudioPermissionTextProvider: PermissionTextProvider{
+    override fun getDescription(isDeclined: Boolean): String {
+        return if(isDeclined){
+            "You permanently declined the RECORD_AUDIO permission. " +
+                    "Now You have to go to app settings to grant the permission."
+        }else{
+            "This App needs to access the RECORD_AUDIO permission to be able record audio, Hermano."
+        }
+    }
+}
+
 class CallPhonePermissionTextProvider: PermissionTextProvider{
     override fun getDescription(isDeclined: Boolean): String {
         return if(isDeclined){
