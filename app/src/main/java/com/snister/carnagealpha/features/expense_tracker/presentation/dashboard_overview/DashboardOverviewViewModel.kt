@@ -1,5 +1,6 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview
 
+import android.Manifest
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,17 +31,21 @@ class DashboardOverviewViewModel(
         private set
 
     val visiblePermissionDialogQueue = mutableStateListOf<String>()
+    val permissionsToRequest = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO
+    )
 
     fun dismissDialog(){
-        visiblePermissionDialogQueue.removeLast()
+        visiblePermissionDialogQueue.removeFirst()
     }
 
     fun onPermissionResult(
         permission: String,
         isGranted: Boolean
     ){
-        if(!isGranted){
-            visiblePermissionDialogQueue.add(0,permission)
+        if(!isGranted && !visiblePermissionDialogQueue.contains(permission)){
+            visiblePermissionDialogQueue.add(permission)
         }
     }
 

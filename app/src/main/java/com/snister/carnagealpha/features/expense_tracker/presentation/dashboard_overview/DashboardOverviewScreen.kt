@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import com.snister.carnagealpha.core.openAppSettings
 import com.snister.carnagealpha.core.presentation.shared.BalanceCardV3
-import com.snister.carnagealpha.core.presentation.shared.CallPhonePermissionTextProvider
 import com.snister.carnagealpha.core.presentation.shared.CameraPermissionTextProvider
 import com.snister.carnagealpha.core.presentation.shared.CarnageButton
 import com.snister.carnagealpha.core.presentation.shared.DashboardSection
@@ -108,8 +107,8 @@ fun DashboardOverviewCoreScreen(
     val multiplePermissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { permissions ->
-            permissions.keys.forEach { permission ->
-                viewModel?.onPermissionResult(
+            viewModel?.permissionsToRequest?.forEach { permission ->
+                viewModel.onPermissionResult(
                     permission = permission,
                     isGranted = permissions[permission] == true
                 )
@@ -145,35 +144,18 @@ fun DashboardOverviewCoreScreen(
                 sourceLedgerName = state.currentSourceLedger.sourceLedgerName,
                 onChangeSourceLedgerClick = onChangeSourceLedgerClick
             )
-//            Spacer(modifier = Modifier.height(4.dp))
-//            CarnageButton(
-//                modifier = Modifier.padding(start = 20.dp),
-//                buttonTitle = "Request One Permission",
-//                onClick = {
-//                    notificationPermissionResultLauncher.launch(
-//                        Manifest.permission.POST_NOTIFICATIONS
-//                    )
-//                }
-//            )
             Spacer(modifier = Modifier.height(14.dp))
             CarnageButton(
                 modifier = Modifier.padding(start = 20.dp),
                 buttonTitle = "Request Multiple Permission",
                 onClick = {
-                    multiplePermissionResultLauncher.launch(
-                        arrayOf(
-//                            Manifest.permission.POST_NOTIFICATIONS,
-//                            Manifest.permission.CALL_PHONE,
-                            Manifest.permission.RECORD_AUDIO,
-                            Manifest.permission.CAMERA
-                        )
-                    )
+                    multiplePermissionResultLauncher.launch(viewModel!!.permissionsToRequest)
                 }
             )
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            dialogQueue
+            dialogQueue?.reversed()
                 ?.forEach { permission ->
                     PermissionDialog(
                         permissionTextProvider = when(permission){
@@ -186,9 +168,9 @@ fun DashboardOverviewCoreScreen(
                             Manifest.permission.RECORD_AUDIO -> {
                                 RecordAudioPermissionTextProvider()
                             }
-                            Manifest.permission.CALL_PHONE -> {
-                                CallPhonePermissionTextProvider()
-                            }
+//                            Manifest.permission.CALL_PHONE -> {
+//                                CallPhonePermissionTextProvider()
+//                            }
                             else -> return@forEach
                         },
                         isDeclined = !shouldShowRequestPermissionRationale(currentActivity, permission),
