@@ -2,7 +2,10 @@ package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard
 
 import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -29,7 +32,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.content.ContextCompat
 import com.snister.carnagealpha.core.openAppSettings
 import com.snister.carnagealpha.core.presentation.shared.BalanceCardV3
 import com.snister.carnagealpha.core.presentation.shared.CameraPermissionTextProvider
@@ -42,6 +47,7 @@ import com.snister.carnagealpha.core.presentation.shared.RecordAudioPermissionTe
 import com.snister.carnagealpha.core.presentation.shared.TopBar
 import com.snister.carnagealpha.core.presentation.shared.TransactionItemWidget
 import com.snister.carnagealpha.core.presentation.shared.TransactionType
+import com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview.DashboardOverviewViewModel.Companion.CAMERA_PERMISSION
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
@@ -149,7 +155,56 @@ fun DashboardOverviewCoreScreen(
                 modifier = Modifier.padding(start = 20.dp),
                 buttonTitle = "Request Multiple Permission",
                 onClick = {
-                    multiplePermissionResultLauncher.launch(viewModel!!.permissionsToRequest)
+                    // METHOD 1 =======================================================
+//                    if(!viewModel!!.arePermissionGranted(currentActivity)){
+//
+//                        Log.d("ARE PERMISSION GRANTED = ", viewModel.arePermissionGranted(currentActivity).toString())
+//                        Toast.makeText(
+//                            currentActivity, "CAMERA and RECORD AUDIO permission is NOT GRANTED, You CAN'T use this feature!", Toast.LENGTH_LONG
+//                        ).show()
+//                        ActivityCompat.requestPermissions(currentActivity, CAMERA_PERMISSION, 10)
+//                    }else{
+//                        Log.d("[MASUK KE ELSE] ARE PERMISSION GRANTED = ", viewModel.arePermissionGranted(currentActivity).toString())
+//                        Toast.makeText(
+//                            currentActivity, "CAMERA and RECORD AUDIO permission is GRANTED, Continue use the feature...", Toast.LENGTH_LONG
+//                        ).show()
+//                        //navController.navigate(ScreenRoutes.CameraScreen)
+//                    }
+                    // END OF METHOD 1 =================================================
+
+
+                    // METHOD 2 =======================================================
+//                    if(ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+//                        ContextCompat.checkSelfPermission(currentActivity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+//                        // USE THE FEATURE THAT REQUIRES THE PERMISSION
+//                        Toast.makeText(
+//                            currentActivity, "CAMERA and RECORD AUDIO permission is GRANTED, Continue use the feature...", Toast.LENGTH_LONG
+//                        ).show()
+//                    }else{
+//                        Toast.makeText(
+//                            currentActivity, "CAMERA and RECORD AUDIO permission is NOT GRANTED, You CAN'T use this feature!", Toast.LENGTH_LONG
+//                        ).show()
+//                        multiplePermissionResultLauncher.launch(viewModel!!.permissionsToRequest)
+//                    }
+                    // END OF METHOD 2 =================================================
+//                    multiplePermissionResultLauncher.launch(viewModel!!.permissionsToRequest)
+
+
+                    // METHOD 3 (COMBINATION OF METHOD 1 & 2) =======================================================
+                    if(!viewModel!!.arePermissionGranted(currentActivity)){
+
+                        Log.d("ARE PERMISSION GRANTED = ", viewModel.arePermissionGranted(currentActivity).toString())
+                        Toast.makeText(
+                            currentActivity, "CAMERA and RECORD AUDIO permission is NOT GRANTED, You CAN'T use this feature!", Toast.LENGTH_LONG
+                        ).show()
+                        multiplePermissionResultLauncher.launch(viewModel.permissionsToRequest)
+                    }else{
+                        Log.d("[MASUK KE ELSE] ARE PERMISSION GRANTED = ", viewModel.arePermissionGranted(currentActivity).toString())
+                        Toast.makeText(
+                            currentActivity, "CAMERA and RECORD AUDIO permission is GRANTED, Continue use the feature...", Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    // END OF METHOD 3 =================================================
                 }
             )
 

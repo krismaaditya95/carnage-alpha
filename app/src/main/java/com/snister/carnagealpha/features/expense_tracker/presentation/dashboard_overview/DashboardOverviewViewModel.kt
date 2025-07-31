@@ -1,10 +1,14 @@
 package com.snister.carnagealpha.features.expense_tracker.presentation.dashboard_overview
 
 import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.IncomeEntity
@@ -29,6 +33,28 @@ class DashboardOverviewViewModel(
 
     var state by mutableStateOf(DashboardOverviewState())
         private set
+
+    // METHOD 1 =======================================================
+    companion object {
+        val CAMERA_PERMISSION = mutableListOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
+        ).apply {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+        }.toTypedArray()
+    }
+
+    fun arePermissionGranted(activity: Activity): Boolean{
+        return CAMERA_PERMISSION.all { permission ->
+            ContextCompat.checkSelfPermission(
+                activity.applicationContext,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+    // END OF METHOD 1 =================================================
 
     val visiblePermissionDialogQueue = mutableStateListOf<String>()
     val permissionsToRequest = arrayOf(
