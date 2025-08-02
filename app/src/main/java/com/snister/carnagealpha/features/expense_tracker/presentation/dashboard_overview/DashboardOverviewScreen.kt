@@ -191,18 +191,17 @@ fun DashboardOverviewCoreScreen(
 
 
                     // METHOD 3 (COMBINATION OF METHOD 1 & 2) =======================================================
-                    if(!viewModel!!.arePermissionGranted(currentActivity)){
-
+                    if(viewModel!!.arePermissionGranted(currentActivity)){
+                        Log.d("[MASUK KE ELSE] ARE PERMISSION GRANTED = ", viewModel.arePermissionGranted(currentActivity).toString())
+                        Toast.makeText(
+                            currentActivity, "CAMERA and RECORD AUDIO permission is GRANTED, Continue use the feature...", Toast.LENGTH_LONG
+                        ).show()
+                    }else{
                         Log.d("ARE PERMISSION GRANTED = ", viewModel.arePermissionGranted(currentActivity).toString())
                         Toast.makeText(
                             currentActivity, "CAMERA and RECORD AUDIO permission is NOT GRANTED, You CAN'T use this feature!", Toast.LENGTH_LONG
                         ).show()
                         multiplePermissionResultLauncher.launch(viewModel.permissionsToRequest)
-                    }else{
-                        Log.d("[MASUK KE ELSE] ARE PERMISSION GRANTED = ", viewModel.arePermissionGranted(currentActivity).toString())
-                        Toast.makeText(
-                            currentActivity, "CAMERA and RECORD AUDIO permission is GRANTED, Continue use the feature...", Toast.LENGTH_LONG
-                        ).show()
                     }
                     // END OF METHOD 3 =================================================
                 }

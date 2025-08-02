@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -123,6 +124,22 @@ fun MainActivityCoreScreen(
     )
 
     LaunchedEffect(key1 = true) {
+        val isPermissionGranted = mainActivityViewModel.arePermissionGranted(currentActivity)
+
+        if(isPermissionGranted){
+            Log.d("[MASUK KE ELSE] ARE PERMISSION GRANTED = ", isPermissionGranted.toString())
+            Toast.makeText(
+                currentActivity, "NOTIFICATION permission is GRANTED, Continue use the feature...", Toast.LENGTH_LONG
+            ).show()
+        }else{
+            Log.d("ARE PERMISSION GRANTED = ", isPermissionGranted.toString())
+            Toast.makeText(
+                currentActivity, "NOTIFICATION permission is NOT GRANTED, You CAN'T use this feature!", Toast.LENGTH_LONG
+            ).show()
+
+            notificationPermissionResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+
         mainActivityViewModel.event.collect { event ->
             when(event){
                 MainActivityEvents.UpsertSourceLedgerFailed -> {
@@ -134,14 +151,6 @@ fun MainActivityCoreScreen(
                     Toast.makeText(
                         currentContext, "Successfully inserted initial source ledger!", Toast.LENGTH_LONG
                     ).show()
-                }
-                MainActivityEvents.AskForNotificationPermission -> {
-                    Toast.makeText(
-                        currentContext, "Notification Permission ask event received!", Toast.LENGTH_LONG
-                    ).show()
-                    notificationPermissionResultLauncher.launch(
-                        Manifest.permission.POST_NOTIFICATIONS
-                    )
                 }
             }
         }
