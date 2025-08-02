@@ -1,5 +1,6 @@
 package com.snister.carnagealpha.core.services
 
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
@@ -15,7 +16,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d("FirebaseNotificationService.kt | onNewToken ==> ", "The new token is : $token")
+        Log.d("[LOG.D] debug :)", "[FirebaseNotificationService] New Token : $token")
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -40,6 +41,9 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val channelName = "FCM_00"
 
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+        notificationManager.createNotificationChannel(channel)
+
         val intent = Intent(this, MainActivity::class.java).apply{
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
@@ -57,11 +61,6 @@ class FirebaseNotificationService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
-
-//        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
-//            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
-//            notificationManager.createNotificationChannel(channel)
-//        }
 
         notificationManager.notify(Random.nextInt(), notificationBuilder)
     }

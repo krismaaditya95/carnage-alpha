@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -12,6 +13,8 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.snister.carnagealpha.features.expense_tracker.domain.entities.SourceLedgerEntity
 import com.snister.carnagealpha.features.expense_tracker.domain.repository.LocalRepository
 import com.snister.carnagealpha.features.expense_tracker.domain.usecases.GetAllSourceLedgerUseCase
@@ -50,6 +53,8 @@ class MainActivityViewModel(
     ){
         if(!isGranted){
             visiblePermissionDialogQueue.add(0,permission)
+        }else{
+            retrieveFCMToken()
         }
     }
 
@@ -73,6 +78,16 @@ class MainActivityViewModel(
             activity.applicationContext,
             Manifest.permission.POST_NOTIFICATIONS
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun retrieveFCMToken(){
+        Log.d("[LOG.D] debug :)", "retrieveFCMToken() dipanggil cuy...")
+        Firebase.messaging.token.addOnCompleteListener {
+            if(it.isSuccessful){
+                val fcmToken = it.result
+                Log.d("[LOG.D] debug :)", "Retrieved FCM Token : $fcmToken")
+            }
+        }
     }
 
     private fun askForNotificationPermission(){

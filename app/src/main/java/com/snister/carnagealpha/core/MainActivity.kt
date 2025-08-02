@@ -127,12 +127,13 @@ fun MainActivityCoreScreen(
         val isPermissionGranted = mainActivityViewModel.arePermissionGranted(currentActivity)
 
         if(isPermissionGranted){
-            Log.d("[MASUK KE ELSE] ARE PERMISSION GRANTED = ", isPermissionGranted.toString())
+            Log.d("[LOG.D] debug :)", "[MainActivity] is Permission Granted = $isPermissionGranted" )
             Toast.makeText(
                 currentActivity, "NOTIFICATION permission is GRANTED, Continue use the feature...", Toast.LENGTH_LONG
             ).show()
+            mainActivityViewModel.retrieveFCMToken()
         }else{
-            Log.d("ARE PERMISSION GRANTED = ", isPermissionGranted.toString())
+            Log.d("[LOG.D] debug :)", "[MainActivity] is Permission Granted = $isPermissionGranted")
             Toast.makeText(
                 currentActivity, "NOTIFICATION permission is NOT GRANTED, You CAN'T use this feature!", Toast.LENGTH_LONG
             ).show()
